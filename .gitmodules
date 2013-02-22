@@ -1,0 +1,9 @@
+[submodule "dependencies/parse-ecma"]
+	path = dependencies/parse-ecma
+	url = https://github.com/mattbierner/parse-ecma
+[submodule "dependencies/parse"]
+	path = dependencies/parse
+	url = https://github.com/mattbierner/parse.js
+[submodule "dependencies/stream"]
+	path = dependencies/stream
+	url = https://github.com/mattbierner/stream.js
