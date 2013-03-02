@@ -7,3 +7,6 @@
 [submodule "dependencies/stream"]
 	path = dependencies/stream
 	url = https://github.com/mattbierner/stream.js
+[submodule "dependencies/amulet"]
+	path = dependencies/amulet
+	url = https://github.com/mattbierner/amulet.git
