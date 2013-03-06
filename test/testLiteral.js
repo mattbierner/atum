@@ -10,10 +10,21 @@ function(value,
         'tests': [
             ["Number Literal",
             function(){
-                var root = new value.Literal(null, 10, "number");
-                var result = interpret.interpret(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 10);
+                ([10, -10, 1e6, -1e6, 1.5, -1.5])
+                    .forEach(function(x) {
+                        var result = interpret.interpret(new value.Literal(null, x, "number"));
+                        assert.equal(result.type, 'number');
+                        assert.equal(result.value, x);
+                    });
+            }],
+            ["String Literal",
+            function(){
+                (["", "abc"])
+                    .forEach(function(x) {
+                        var result = interpret.interpret(new value.Literal(null, x, "string"));
+                        assert.equal(result.type, 'string');
+                        assert.deepEqual(result.value, x);
+                    });
             }],
         ],
     };

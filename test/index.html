@@ -23,7 +23,7 @@
             }
         });
         require(
-            ['testLiteral'],
+            ['testLiteral', 'testUnary'],
             function() {
                 Array.prototype.forEach.call(arguments, function(m) {
                     m.module && module(m.module);
