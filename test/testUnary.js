@@ -15,7 +15,7 @@ function(value,
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
             }],
-             ["Void Side Effects",
+            ["Void Side Effects",
             function(){
                 var root = new expression.SequenceExpression([
                   new expression.AssignmentExpression('=',
@@ -29,8 +29,30 @@ function(value,
                   new value.Identifier(null, 'a')]);
                 
                 var result = interpret.interpret(root);
-                assert.equal(result.type, '1');
-                assert.equal(result.value, 'number');
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, '1');
+            }],
+            
+            ["Unary Plus Number",
+            function(){
+                 ([10, -10, 1e6, -1e6, 1.5, -1.5])
+                    .forEach(function(x) {
+                        var root = new expression.UnaryExpression('+', new value.Literal(null, x, "number"));
+                        var result = interpret.interpret(root);
+                        assert.equal(result.type, 'number');
+                        assert.equal(result.value, x);
+                    });
+            }],
+            
+           ["Unary Minus Number",
+            function(){
+                 ([10, -10, 1e6, -1e6, 1.5, -1.5])
+                    .forEach(function(x) {
+                        var root = new expression.UnaryExpression('-', new value.Literal(null, x, "number"));
+                        var result = interpret.interpret(root);
+                        assert.equal(result.type, 'number');
+                        assert.equal(result.value, -x);
+                    });
             }],
         ],
     };
