@@ -14,7 +14,14 @@ Project Goals:
 * Minimal direct reliance on host language features.
 
 
-
 ## Modules ##
 
 ### semantics 'atum/semantics' ###
+Defines computations for the semantics of an ECMAScript program. 
+
+### value 'atum/value' ###
+Defines primitive value data structures and operations.
+
+### context 'atum/context' ###
+Defines data structures and operations for working with ECMAScript execution
+contexts.
