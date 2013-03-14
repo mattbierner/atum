@@ -11,6 +11,9 @@ function(value,
         statement,
         interpret){
     
+    var a = new value.Identifier(null, 'a');
+    var b = new value.Identifier(null, 'b');
+    
     return {
         'module': "Binding Tests",
         'tests': [
@@ -18,8 +21,9 @@ function(value,
             function(){
                 var root = new program.Program([
                     new declaration.VariableDeclaration([
-                         new declaration.VariableDeclarator(new value.Identifier(null, 'a'))]),
-                    new statement.ExpressionStatement(new value.Identifier(null, 'a'))]);
+                         new declaration.VariableDeclarator(a)]),
+                    new statement.ExpressionStatement(a)]);
+                
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
@@ -29,9 +33,9 @@ function(value,
                 var root = new program.Program([
                     new declaration.VariableDeclaration([
                          new declaration.VariableDeclarator(
-                             new value.Identifier(null, 'a'),
+                             a,
                              new value.Literal(null, 10, "number"))]),
-                    new statement.ExpressionStatement(new value.Identifier(null, 'a'))]);
+                    new statement.ExpressionStatement(a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -42,14 +46,14 @@ function(value,
                 var root = new program.Program([
                     new declaration.VariableDeclaration([
                          new declaration.VariableDeclarator(
-                             new value.Identifier(null, 'a'),
+                             a,
                              new value.Literal(null, 1, "number")),
                          new declaration.VariableDeclarator(
-                             new value.Identifier(null, 'b'),
+                             b,
                              new value.Literal(null, 2, "number"))]),
                     new statement.ExpressionStatement(new expression.BinaryExpression('+',
-                        new value.Identifier(null, 'a'),
-                        new value.Identifier(null, 'b')))]);
+                        a,
+                        b))]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -60,19 +64,33 @@ function(value,
                 var root = new program.Program([
                     new declaration.VariableDeclaration([
                          new declaration.VariableDeclarator(
-                             new value.Identifier(null, 'a'),
+                             a,
                              new value.Literal(null, 1, "number"))]),
                      new declaration.VariableDeclaration([
                          new declaration.VariableDeclarator(
-                             new value.Identifier(null, 'b'),
+                             b,
                              new value.Literal(null, 2, "number"))]),
                     new statement.ExpressionStatement(new expression.BinaryExpression('+',
-                        new value.Identifier(null, 'a'),
-                        new value.Identifier(null, 'b')))]);
+                        a,
+                        b))]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 3);
+            }],
+            
+            ["Var Declaration init to undefined",
+            function(){
+                var root = new program.Program([
+                    new declaration.VariableDeclaration([
+                        new declaration.VariableDeclarator(a, b)]),
+                     new declaration.VariableDeclaration([
+                         new declaration.VariableDeclarator(b)]),
+                    new statement.ExpressionStatement(a)]);
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'undefined');
+                assert.equal(result.value, undefined);
             }],
         ]
     };
