@@ -70,9 +70,8 @@ function(value,
                          new declaration.VariableDeclarator(
                              b,
                              new value.Literal(null, 2, "number"))]),
-                    new statement.ExpressionStatement(new expression.BinaryExpression('+',
-                        a,
-                        b))]);
+                    new statement.ExpressionStatement(
+                        new expression.BinaryExpression('+', a, b))]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -91,6 +90,19 @@ function(value,
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
+            }],
+            
+        // Global
+            ["Global assignment",
+            function(){
+                var root = new program.Program([
+                    new statement.ExpressionStatement(
+                        new expression.AssignmentExpression('=', a, new value.Literal(null, 1, "number"))),
+                    new statement.ExpressionStatement(a)]);
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 1);
             }],
         ]
     };
