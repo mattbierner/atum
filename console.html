@@ -79,15 +79,15 @@
                     $('.ParseError').text('');
                     $('#text_out').text('');
                     
-                   // try {
+                    try {
                         var lex = lexer.lex(input);
                         var ast = parser.parseStream(lex);
                         var out = interpret.interpret(ast);
                         
                         $('#text_out').text(out);
-                  //  } catch (e) {
-                   //     $('.ParseError').text(e);
-                   // }
+                    } catch (e) {
+                        $('.ParseError').text(e);
+                    }
                 });
             });
         });
