@@ -69,14 +69,17 @@ function(value,
             }],
         
         // Bitwise Not
-            ["Bitwise Not Number",
+            ["Bitwise Not",
              function(){
-                 ([0, 1, 1.5, -1, -1.5])
-                    .forEach(function(x) {
-                        var root = new expression.UnaryExpression('~', new value.Literal(null, x, "number"));
+                ([new value.Literal(null, 1, "number"),
+                   new value.Literal(null, 1.5, "number"),
+                   new value.Literal(null, -1, "number"),
+                   new value.Literal(null, "1", "string")])
+                   .forEach(function(x) {
+                        var root = new expression.UnaryExpression('~', x);
                         var result = interpret.interpret(root);
                         assert.equal(result.type, 'number');
-                        assert.equal(result.value, ~x);
+                        assert.equal(result.value, ~x.value);
                     });
             }],
             
