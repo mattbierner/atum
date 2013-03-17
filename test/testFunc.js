@@ -125,7 +125,7 @@ function(value,
             ["Dynamic Resolution In Scope Check",
             function(){
                 // Check that variables in function scope are resolved to current
-                // values not values when function declared.
+                // values, not values when function declared.
                 var root = new program.Program([
                     new declaration.VariableDeclaration([
                          new declaration.VariableDeclarator(b)]),
@@ -148,6 +148,27 @@ function(value,
                 assert.equal(result.value, 4);
             }],
             
+            ["Closure Argument Check",
+            function(){
+                var root = new program.Program([
+                    new declaration.FunctionDeclaration(
+                        a,
+                        [b],
+                        new statement.BlockStatement([
+                          new statement.ReturnStatement(
+                              new expression.FunctionExpression(
+                                  null,
+                                  [],
+                                  new statement.BlockStatement([
+                                      new statement.ReturnStatement(b)])))])),
+                    new expression.CallExpression(
+                        new expression.CallExpression(a, [new value.Literal(null, 1, "number")]),
+                        [])]);
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 1);
+            }],
         ]
     };
 });
