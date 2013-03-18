@@ -170,6 +170,31 @@ function(value,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
+            ["Closure Variable Check",
+            function(){
+                // Checks that variable defines in function scope is accessible in closure.
+                var root = new program.Program([
+                    new declaration.FunctionDeclaration(
+                        a,
+                        [],
+                        new statement.BlockStatement([
+                            new declaration.VariableDeclaration([
+                                new declaration.VariableDeclarator(b,
+                                    new value.Literal(null, 1, "number"))]),
+                          new statement.ReturnStatement(
+                              new expression.FunctionExpression(
+                                  null,
+                                  [],
+                                  new statement.BlockStatement([
+                                      new statement.ReturnStatement(b)])))])),
+                    new expression.CallExpression(
+                        new expression.CallExpression(a, []),
+                        [])]);
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 1);
+            }],
             
             ["External Assignment Check",
             function(){
