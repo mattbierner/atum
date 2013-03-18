@@ -150,6 +150,7 @@ function(value,
             
             ["Closure Argument Check",
             function(){
+                // Checks that argument passed in can be used in returned function.
                 var root = new program.Program([
                     new declaration.FunctionDeclaration(
                         a,
@@ -168,6 +169,26 @@ function(value,
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
+            }],
+            
+            ["External Assignment Check",
+            function(){
+                // Checks that variable assignment for external scope modifies
+                // that variable.
+                var root = new program.Program([
+                    new statement.ExpressionStatement(
+                        new expression.AssignmentExpression('=', b, new value.Literal(null, 0, "number"))),
+                    new declaration.FunctionDeclaration(
+                        a,
+                        [],
+                        new statement.BlockStatement([
+                           new expression.AssignmentExpression('=', b, new value.Literal(null, 10, "number"))])),
+                        new expression.CallExpression(a, []),
+                        new statement.ExpressionStatement(b)]);
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 10);
             }],
         ]
     };
