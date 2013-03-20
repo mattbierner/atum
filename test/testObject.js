@@ -143,6 +143,31 @@ function(value,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
+            
+            ["Objects passed by reference",
+            function(){
+                var root = new program.Program([
+                    new declaration.VariableDeclaration([
+                        new declaration.VariableDeclarator(a,
+                            new expression.ObjectExpression([
+                                 {
+                                     'kind': 'init',
+                                     'key': new value.Literal(null, 'c', 'string'),
+                                     'value': new value.Literal(null, 1, 'number')
+                                 }
+                             ])),
+                             new declaration.VariableDeclarator(b, a)]),
+                     new statement.ExpressionStatement(
+                         new expression.AssignmentExpression('=',
+                             new expression.MemberExpression(a, c, false),
+                             new value.Literal(null, 2, 'number'))),
+                    new statement.ExpressionStatement(
+                        new expression.MemberExpression(b, c, false))]);
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 2);
+            }],
         ]
     };
 });

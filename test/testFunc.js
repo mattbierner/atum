@@ -215,6 +215,61 @@ function(value,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
+            
+             
+            ["Values passed by value",
+            function(){
+                // Checks that arguments primitive values are passed by value
+                var root = new program.Program([
+                    new declaration.FunctionDeclaration(
+                        a,
+                        [b],
+                        new statement.BlockStatement([
+                           new expression.AssignmentExpression('=', b, new value.Literal(null, 10, "number"))])),
+                    new statement.ExpressionStatement(
+                        new expression.AssignmentExpression('=', b, new value.Literal(null, 2, "number"))),
+                    new expression.CallExpression(a, [b]),
+                    new statement.ExpressionStatement(b)]);
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 2);
+            }],
+            
+            ["Objects passed by reference",
+            function(){
+                // Checks that argument object values are passed by reference
+                // but that environment binding still acts correctly.
+                var root = new program.Program([
+                    new declaration.FunctionDeclaration(
+                        a,
+                        [b],
+                        new statement.BlockStatement([
+                           new expression.AssignmentExpression('=',
+                               new expression.MemberExpression(b, c),
+                               new value.Literal(null, 10, "number")),
+                           new expression.AssignmentExpression('=',
+                               b,
+                               new value.Literal(null, 1, "number"))])),
+                    new statement.ExpressionStatement(
+                        new expression.AssignmentExpression('=',
+                            b,
+                            new expression.ObjectExpression([
+                                 {
+                                     'kind': 'init',
+                                     'key': new value.Literal(null, 'c', 'string'),
+                                     'value': new value.Literal(null, 1, 'number')
+                                 }
+                             ]))),
+                    new expression.CallExpression(a, [b]),
+                    new statement.ExpressionStatement(
+                        new expression.MemberExpression(b, c))]);
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 10);
+            }],
+            
         ]
     };
 });
