@@ -7,3 +7,6 @@
 [submodule "dependencies/amulet"]
 	path = dependencies/amulet
 	url = https://github.com/mattbierner/amulet.git
+[submodule "dependencies/nu"]
+	path = dependencies/nu
+	url = https://github.com/mattbierner/nu.git

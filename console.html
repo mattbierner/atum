@@ -59,14 +59,14 @@
                 'atum': 'lib',
                 'amulet': 'dependencies/amulet/lib',
                 'parse': 'dependencies/parse/lib',
-                'stream': 'dependencies/stream/lib',
+                'nu': 'dependencies/nu/lib',
                 'ecma': 'dependencies/parse-ecma/lib',
             }
         });
 
         $(function () {
             require(['parse/parse',
-               'stream/stream',
+               'nu/stream',
                'atum/interpret',
                'ecma/lex/lexer', 'ecma/parse/parser'],
             function(parse,
