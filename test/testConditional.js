@@ -16,7 +16,7 @@ function(value,
     var c = new value.Identifier(null, 'c');
 
     return {
-        'module': "Object Tests",
+        'module': "Conditional Tests",
         'tests': [
             ["Simple If True Statement",
             function(){
