@@ -11,7 +11,7 @@ function(value,
         // void
             ["Void",
             function(){
-                var root = new expression.UnaryExpression('void', new value.Literal(null, 10, "number"));
+                var root = new expression.UnaryExpression(null, 'void', new value.Literal(null, 10, "number"));
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
