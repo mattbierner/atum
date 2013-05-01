@@ -18,12 +18,13 @@ function(value,
             }],
             ["Void Side Effects",
             function(){
-                var root = new expression.SequenceExpression([
-                  new expression.AssignmentExpression('=',
+                var root = new expression.SequenceExpression(null, [
+                  new expression.AssignmentExpression(null, '=',
                       new value.Identifier(null, 'a'),
                       new value.Literal(null, 0, 'number')),
-                  new expression.UnaryExpression('void',
+                  new expression.UnaryExpression(null, 'void',
                       new expression.UpdateExpression(
+                          null,
                           '++',
                           new value.Identifier(null, 'a')),
                           true),
@@ -38,7 +39,7 @@ function(value,
             function(){
                  ([10, -10, 1e6, -1e6, 1.5, -1.5])
                     .forEach(function(x) {
-                        var root = new expression.UnaryExpression('+', new value.Literal(null, x, "number"));
+                        var root = new expression.UnaryExpression(null, '+', new value.Literal(null, x, "number"));
                         var result = interpret.interpret(root);
                         assert.equal(result.type, 'number');
                         assert.equal(result.value, x);
@@ -49,7 +50,7 @@ function(value,
            function(){
                  ([10, -10, 1e6, -1e6, 1.5, -1.5])
                     .forEach(function(x) {
-                        var root = new expression.UnaryExpression('-', new value.Literal(null, x, "number"));
+                        var root = new expression.UnaryExpression(null, '-', new value.Literal(null, x, "number"));
                         var result = interpret.interpret(root);
                         assert.equal(result.type, 'number');
                         assert.equal(result.value, -x);
@@ -61,7 +62,7 @@ function(value,
              function(){
                  ([true, false])
                     .forEach(function(x) {
-                        var root = new expression.UnaryExpression('!', new value.Literal(null, x, "boolean"));
+                        var root = new expression.UnaryExpression(null, '!', new value.Literal(null, x, "boolean"));
                         var result = interpret.interpret(root);
                         assert.equal(result.type, 'boolean');
                         assert.equal(result.value, !x);
@@ -76,7 +77,7 @@ function(value,
                    new value.Literal(null, -1, "number"),
                    new value.Literal(null, "1", "string")])
                    .forEach(function(x) {
-                        var root = new expression.UnaryExpression('~', x);
+                        var root = new expression.UnaryExpression(null, '~', x);
                         var result = interpret.interpret(root);
                         assert.equal(result.type, 'number');
                         assert.equal(result.value, ~x.value);
@@ -86,7 +87,7 @@ function(value,
         // Typeof 
             ["Typeof string",
              function(){
-                var root = new expression.UnaryExpression('typeof', new value.Literal(null, "", "string"));
+                var root = new expression.UnaryExpression(null, 'typeof', new value.Literal(null, "", "string"));
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'string');
                 assert.equal(result.value, "string");

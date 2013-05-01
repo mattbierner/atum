@@ -28,12 +28,12 @@ function(value,
             ["Prefix Increment Changes Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program([
-                        new declaration.VariableDeclaration([
-                             new declaration.VariableDeclarator(a, x)]),
-                        new statement.ExpressionStatement(
-                            new expression.UpdateExpression('++', a, true)),
-                        new statement.ExpressionStatement(a)]);
+                    var root = new program.Program(null, [
+                        new declaration.VariableDeclaration(null, [
+                             new declaration.VariableDeclarator(null, a, x)]),
+                        new statement.ExpressionStatement(null, 
+                            new expression.UpdateExpression(null, '++', a, true)),
+                        new statement.ExpressionStatement(null, a)]);
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -43,11 +43,11 @@ function(value,
             ["Prefix Increment Return Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program([
-                        new declaration.VariableDeclaration([
-                             new declaration.VariableDeclarator(a, x)]),
-                        new statement.ExpressionStatement(
-                            new expression.UpdateExpression('++', a, true))]);
+                    var root = new program.Program(null, [
+                        new declaration.VariableDeclaration(null, [
+                             new declaration.VariableDeclarator(null, a, x)]),
+                        new statement.ExpressionStatement(null, 
+                            new expression.UpdateExpression(null, '++', a, true))]);
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -59,12 +59,12 @@ function(value,
             ["Prefix Decrement Changes Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program([
-                        new declaration.VariableDeclaration([
-                             new declaration.VariableDeclarator(a, x)]),
-                        new statement.ExpressionStatement(
-                            new expression.UpdateExpression('--', a, true)),
-                        new statement.ExpressionStatement(a)]);
+                    var root = new program.Program(null, [
+                        new declaration.VariableDeclaration(null, [
+                             new declaration.VariableDeclarator(null, a, x)]),
+                        new statement.ExpressionStatement(null, 
+                            new expression.UpdateExpression(null, '--', a, true)),
+                        new statement.ExpressionStatement(null, a)]);
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -74,11 +74,11 @@ function(value,
             ["Prefix Decrement Return Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program([
-                        new declaration.VariableDeclaration([
-                             new declaration.VariableDeclarator(a, x)]),
-                        new statement.ExpressionStatement(
-                            new expression.UpdateExpression('--', a, true))]);
+                    var root = new program.Program(null, [
+                        new declaration.VariableDeclaration(null, [
+                             new declaration.VariableDeclarator(null, a, x)]),
+                        new statement.ExpressionStatement(null, 
+                            new expression.UpdateExpression(null, '--', a, true))]);
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -90,12 +90,12 @@ function(value,
             ["Postfix Increment Changes Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program([
-                        new declaration.VariableDeclaration([
-                             new declaration.VariableDeclarator(a, x)]),
-                        new statement.ExpressionStatement(
-                            new expression.UpdateExpression('++', a, false)),
-                        new statement.ExpressionStatement(a)]);
+                    var root = new program.Program(null, [
+                        new declaration.VariableDeclaration(null, [
+                             new declaration.VariableDeclarator(null, a, x)]),
+                        new statement.ExpressionStatement(null, 
+                            new expression.UpdateExpression(null, '++', a, false)),
+                        new statement.ExpressionStatement(null, a)]);
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -105,11 +105,11 @@ function(value,
             ["Postfix Increment Return Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program([
-                        new declaration.VariableDeclaration([
-                             new declaration.VariableDeclarator(a, x)]),
-                        new statement.ExpressionStatement(
-                            new expression.UpdateExpression('++', a, false))]);
+                    var root = new program.Program(null, [
+                        new declaration.VariableDeclaration(null, [
+                             new declaration.VariableDeclarator(null, a, x)]),
+                        new statement.ExpressionStatement(null, 
+                            new expression.UpdateExpression(null, '++', a, false))]);
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -121,12 +121,12 @@ function(value,
             ["Postfix Decrement Changes Value",
             function(){
                set.forEach(function(x){
-                    var root = new program.Program([
-                        new declaration.VariableDeclaration([
-                             new declaration.VariableDeclarator(a, x)]),
-                        new statement.ExpressionStatement(
-                            new expression.UpdateExpression('--', a, false)),
-                        new statement.ExpressionStatement(a)]);
+                    var root = new program.Program(null, [
+                        new declaration.VariableDeclaration(null, [
+                             new declaration.VariableDeclarator(null, a, x)]),
+                        new statement.ExpressionStatement(null, 
+                            new expression.UpdateExpression(null, '--', a, false)),
+                        new statement.ExpressionStatement(null, a)]);
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -136,11 +136,11 @@ function(value,
             ["Postfix Decrement Return Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program([
-                        new declaration.VariableDeclaration([
-                             new declaration.VariableDeclarator(a, x)]),
-                        new statement.ExpressionStatement(
-                            new expression.UpdateExpression('--', a, false))]);
+                    var root = new program.Program(null, [
+                        new declaration.VariableDeclaration(null, [
+                             new declaration.VariableDeclarator(null, a, x)]),
+                        new statement.ExpressionStatement(null,
+                            new expression.UpdateExpression(null, '--', a, false))]);
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');

@@ -20,16 +20,16 @@ function(value,
         'tests': [
             ["Simple If True Statement",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
-                        new declaration.VariableDeclarator(a)]),
-                    new statement.IfStatement(
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
+                        new declaration.VariableDeclarator(null, a)]),
+                    new statement.IfStatement(null,
                         new value.Literal(null, true, 'boolean'),
-                        new statement.ExpressionStatement(
-                            new expression.AssignmentExpression('=',
+                        new statement.ExpressionStatement(null, 
+                            new expression.AssignmentExpression(null, '=',
                                 a,
                                 new value.Literal(null, 1, 'number')))),
-                    new statement.ExpressionStatement(a)]);
+                    new statement.ExpressionStatement(null, a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -37,36 +37,36 @@ function(value,
             }],
             ["Simple If false Statement",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
-                        new declaration.VariableDeclarator(a)]),
-                    new statement.IfStatement(
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
+                        new declaration.VariableDeclarator(null, a)]),
+                    new statement.IfStatement(null,
                         new value.Literal(null, false, 'boolean'),
-                        new statement.ExpressionStatement(
-                            new expression.AssignmentExpression('=',
+                        new statement.ExpressionStatement(null, 
+                            new expression.AssignmentExpression(null, '=',
                                 a,
                                 new value.Literal(null, 1, 'number')))),
-                    new statement.ExpressionStatement(a)]);
+                    new statement.ExpressionStatement(null, a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
             }],
             ["Simple If True Else Statement",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
-                        new declaration.VariableDeclarator(a)]),
-                    new statement.IfStatement(
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
+                        new declaration.VariableDeclarator(null, a)]),
+                    new statement.IfStatement(null,
                         new value.Literal(null, true, 'boolean'),
-                        new statement.ExpressionStatement(
-                            new expression.AssignmentExpression('=',
+                        new statement.ExpressionStatement(null, 
+                            new expression.AssignmentExpression(null, '=',
                                 a,
                                 new value.Literal(null, 1, 'number'))),
-                        new statement.ExpressionStatement(
-                            new expression.AssignmentExpression('=',
+                        new statement.ExpressionStatement(null, 
+                            new expression.AssignmentExpression(null, '=',
                                 a,
                                 new value.Literal(null, 10, 'number')))),
-                    new statement.ExpressionStatement(a)]);
+                    new statement.ExpressionStatement(null, a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -74,20 +74,20 @@ function(value,
             }],
             ["Simple If False Else Statement",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
-                        new declaration.VariableDeclarator(a)]),
-                    new statement.IfStatement(
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
+                        new declaration.VariableDeclarator(null, a)]),
+                    new statement.IfStatement(null,
                         new value.Literal(null, false, 'boolean'),
-                        new statement.ExpressionStatement(
-                            new expression.AssignmentExpression('=',
+                        new statement.ExpressionStatement(null, 
+                            new expression.AssignmentExpression(null, '=',
                                 a,
                                 new value.Literal(null, 1, 'number'))),
-                        new statement.ExpressionStatement(
-                            new expression.AssignmentExpression('=',
+                        new statement.ExpressionStatement(null, 
+                            new expression.AssignmentExpression(null, '=',
                                 a,
                                 new value.Literal(null, 10, 'number')))),
-                    new statement.ExpressionStatement(a)]);
+                    new statement.ExpressionStatement(null, a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -95,24 +95,24 @@ function(value,
             }],
             ["If Statement True Test Side Effects",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
-                        new declaration.VariableDeclarator(
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
+                        new declaration.VariableDeclarator(null, 
                             a,
                             new value.Literal(null, 0, 'number'))]),
-                    new statement.IfStatement(
-                        new expression.UpdateExpression('++',
+                    new statement.IfStatement(null,
+                        new expression.UpdateExpression(null, '++',
                             a,
                             true),
-                        new statement.ExpressionStatement(
-                            new expression.AssignmentExpression('+=',
+                        new statement.ExpressionStatement(null, 
+                            new expression.AssignmentExpression(null, '+=',
                                 a,
                                 new value.Literal(null, 1, 'number'))),
-                        new statement.ExpressionStatement(
-                            new expression.AssignmentExpression('+=',
+                        new statement.ExpressionStatement(null, 
+                            new expression.AssignmentExpression(null, '+=',
                                 a,
                                 new value.Literal(null, 10, 'number')))),
-                    new statement.ExpressionStatement(a)]);
+                    new statement.ExpressionStatement(null, a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -120,24 +120,24 @@ function(value,
             }],
             ["If Statement False Test Side Effects",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
-                        new declaration.VariableDeclarator(
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
+                        new declaration.VariableDeclarator(null, 
                             a,
                             new value.Literal(null, 0, 'number'))]),
-                    new statement.IfStatement(
-                        new expression.UpdateExpression('++',
+                    new statement.IfStatement(null,
+                        new expression.UpdateExpression(null, '++',
                             a,
                             false),
-                        new statement.ExpressionStatement(
-                            new expression.AssignmentExpression('+=',
+                        new statement.ExpressionStatement(null, 
+                            new expression.AssignmentExpression(null, '+=',
                                 a,
                                 new value.Literal(null, 1, 'number'))),
-                        new statement.ExpressionStatement(
-                            new expression.AssignmentExpression('+=',
+                        new statement.ExpressionStatement(null, 
+                            new expression.AssignmentExpression(null, '+=',
                                 a,
                                 new value.Literal(null, 10, 'number')))),
-                    new statement.ExpressionStatement(a)]);
+                    new statement.ExpressionStatement(null, a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');

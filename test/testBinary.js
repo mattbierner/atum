@@ -13,7 +13,7 @@ function(value,
             function(){
                  ([10, -10, 1e6, -1e6, 1.5, -1.5])
                     .forEach(function(x) {
-                        var root = new expression.BinaryExpression('+',
+                        var root = new expression.BinaryExpression(null, '+',
                             new value.Literal(null, x, "number"),
                             new value.Literal(null, 10, "number"));
                         var result = interpret.interpret(root);

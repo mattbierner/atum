@@ -19,10 +19,10 @@ function(value,
         'tests': [
             ["Simple Undefined Var",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
-                         new declaration.VariableDeclarator(a)]),
-                    new statement.ExpressionStatement(a)]);
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
+                         new declaration.VariableDeclarator(null, a)]),
+                    new statement.ExpressionStatement(null, a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
@@ -30,12 +30,13 @@ function(value,
             }],
             ["Simple Init Var",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
                          new declaration.VariableDeclarator(
+                             null,
                              a,
                              new value.Literal(null, 10, "number"))]),
-                    new statement.ExpressionStatement(a)]);
+                    new statement.ExpressionStatement(null, a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -43,15 +44,17 @@ function(value,
             }],
             ["Multiple Variable Declaration",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
                          new declaration.VariableDeclarator(
+                             null,
                              a,
                              new value.Literal(null, 1, "number")),
                          new declaration.VariableDeclarator(
+                             null,
                              b,
                              new value.Literal(null, 2, "number"))]),
-                    new statement.ExpressionStatement(new expression.BinaryExpression('+',
+                    new statement.ExpressionStatement(null, new expression.BinaryExpression(null, '+',
                         a,
                         b))]);
                 
@@ -61,17 +64,20 @@ function(value,
             }],
             ["Multiple Variable Declaration",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
                          new declaration.VariableDeclarator(
+                             null,
                              a,
                              new value.Literal(null, 1, "number"))]),
-                     new declaration.VariableDeclaration([
+                     new declaration.VariableDeclaration(null, [
                          new declaration.VariableDeclarator(
+                             null,
                              b,
                              new value.Literal(null, 2, "number"))]),
                     new statement.ExpressionStatement(
-                        new expression.BinaryExpression('+', a, b))]);
+                        null,
+                        new expression.BinaryExpression(null, '+', a, b))]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -80,12 +86,12 @@ function(value,
             
             ["Var Declaration init to undefined",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
-                        new declaration.VariableDeclarator(a, b)]),
-                     new declaration.VariableDeclaration([
-                         new declaration.VariableDeclarator(b)]),
-                    new statement.ExpressionStatement(a)]);
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
+                        new declaration.VariableDeclarator(null, a, b)]),
+                     new declaration.VariableDeclaration(null, [
+                         new declaration.VariableDeclarator(null, b)]),
+                    new statement.ExpressionStatement(null, a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
@@ -95,10 +101,10 @@ function(value,
         // Global
             ["Global assignment",
             function(){
-                var root = new program.Program([
-                    new statement.ExpressionStatement(
-                        new expression.AssignmentExpression('=', a, new value.Literal(null, 1, "number"))),
-                    new statement.ExpressionStatement(a)]);
+                var root = new program.Program(null, [
+                    new statement.ExpressionStatement(null,
+                        new expression.AssignmentExpression(null, '=', a, new value.Literal(null, 1, "number"))),
+                    new statement.ExpressionStatement(null, a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');

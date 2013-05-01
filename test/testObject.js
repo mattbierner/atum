@@ -20,9 +20,9 @@ function(value,
         'tests': [
             ["Simple Object Expression",
             function(){
-                var decl = new declaration.VariableDeclaration([
-                    new declaration.VariableDeclarator(a,
-                        new expression.ObjectExpression([
+                var decl = new declaration.VariableDeclaration(null, [
+                    new declaration.VariableDeclarator(null, a,
+                        new expression.ObjectExpression(null, [
                              {
                                  'kind': 'init',
                                  'key': new value.Literal(null, 'b', 'string'),
@@ -30,19 +30,19 @@ function(value,
                              }
                          ]))]);
                 
-                var nonComputedRoot = new program.Program([
+                var nonComputedRoot = new program.Program(null, [
                     decl,
-                    new statement.ExpressionStatement(
-                        new expression.MemberExpression(a, b, false))]);
+                    new statement.ExpressionStatement(null,
+                        new expression.MemberExpression(null, a, b, false))]);
                 
                 var nonComputedresult = interpret.interpret(nonComputedRoot);
                 assert.equal(nonComputedresult.type, 'number');
                 assert.equal(nonComputedresult.value, 1);
                 
-                var computedRoot = new program.Program([
+                var computedRoot = new program.Program(null, [
                     decl,
-                    new statement.ExpressionStatement(
-                        new expression.MemberExpression(a, new value.Literal(null, 'b', 'string'), true))]);
+                    new statement.ExpressionStatement(null,
+                        new expression.MemberExpression(null, a, new value.Literal(null, 'b', 'string'), true))]);
                 
                 var computedResult = interpret.interpret(computedRoot);
                 assert.equal(computedResult.type, 'number');
@@ -50,12 +50,12 @@ function(value,
             }],
             ["Non Member Object Expression",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
-                        new declaration.VariableDeclarator(a,
-                            new expression.ObjectExpression([]))]),
-                    new statement.ExpressionStatement(
-                        new expression.MemberExpression(a, b, false))]);
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
+                        new declaration.VariableDeclarator(null, a,
+                            new expression.ObjectExpression(null, []))]),
+                    new statement.ExpressionStatement(null,
+                        new expression.MemberExpression(null, a, b, false))]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
@@ -63,10 +63,10 @@ function(value,
             }],
             ["Multiple Duplicate Property Member Object Expression",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
-                        new declaration.VariableDeclarator(a,
-                            new expression.ObjectExpression([
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
+                        new declaration.VariableDeclarator(null, a,
+                            new expression.ObjectExpression(null, [
                                  {
                                      'kind': 'init',
                                      'key': new value.Literal(null, 'b', 'string'),
@@ -78,8 +78,8 @@ function(value,
                                      'value': new value.Literal(null, 2, 'number')
                                  }
                              ]))]),
-                    new statement.ExpressionStatement(
-                        new expression.MemberExpression(a, b, false))]);
+                    new statement.ExpressionStatement(null,
+                        new expression.MemberExpression(null, a, b, false))]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -87,24 +87,25 @@ function(value,
             }],
             ["Getter Property Member Object Expression",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
-                        new declaration.VariableDeclarator(a,
-                            new expression.ObjectExpression([
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
+                        new declaration.VariableDeclarator(null, a,
+                            new expression.ObjectExpression(null, [
                                  {
                                      'kind': 'get',
                                      'key': new value.Literal(null, 'b', 'string'),
                                      'value': new expression.FunctionExpression(
                                          null,
+                                         null,
                                          [],
-                                         new statement.BlockStatement([
-                                            new statement.ReturnStatement(
+                                         new statement.BlockStatement(null, [
+                                            new statement.ReturnStatement(null,
                                                 new value.Literal(null, 1, 'number'))
                                          ]))
                                  }
                              ]))]),
-                    new statement.ExpressionStatement(
-                        new expression.MemberExpression(a, b, false))]);
+                    new statement.ExpressionStatement(null,
+                        new expression.MemberExpression(null, a, b, false))]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -112,10 +113,10 @@ function(value,
             }],
             ["Getter This Property Member Object Expression",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
-                        new declaration.VariableDeclarator(a,
-                            new expression.ObjectExpression([
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
+                        new declaration.VariableDeclarator(null, a,
+                            new expression.ObjectExpression(null, [
                                  {
                                      'kind': 'init',
                                      'key': new value.Literal(null, 'c', 'string'),
@@ -126,18 +127,19 @@ function(value,
                                      'key': new value.Literal(null, 'b', 'string'),
                                      'value': new expression.FunctionExpression(
                                          null,
+                                         null,
                                          [],
-                                         new statement.BlockStatement([
-                                            new statement.ReturnStatement(
-                                                new expression.MemberExpression(
-                                                    new expression.ThisExpression(),
+                                         new statement.BlockStatement(null, [
+                                            new statement.ReturnStatement(null,
+                                                new expression.MemberExpression(null,
+                                                    new expression.ThisExpression(null),
                                                     c,
                                                     false))
                                          ]))
                                  }
                              ]))]),
-                    new statement.ExpressionStatement(
-                        new expression.MemberExpression(a, b, false))]);
+                    new statement.ExpressionStatement(null,
+                        new expression.MemberExpression(null, a, b, false))]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -146,23 +148,23 @@ function(value,
             
             ["Objects passed by reference",
             function(){
-                var root = new program.Program([
-                    new declaration.VariableDeclaration([
-                        new declaration.VariableDeclarator(a,
-                            new expression.ObjectExpression([
+                var root = new program.Program(null, [
+                    new declaration.VariableDeclaration(null, [
+                        new declaration.VariableDeclarator(null, a,
+                            new expression.ObjectExpression(null, [
                                  {
                                      'kind': 'init',
                                      'key': new value.Literal(null, 'c', 'string'),
                                      'value': new value.Literal(null, 1, 'number')
                                  }
                              ])),
-                             new declaration.VariableDeclarator(b, a)]),
-                     new statement.ExpressionStatement(
-                         new expression.AssignmentExpression('=',
-                             new expression.MemberExpression(a, c, false),
+                             new declaration.VariableDeclarator(null, b, a)]),
+                     new statement.ExpressionStatement(null,
+                         new expression.AssignmentExpression(null, '=',
+                             new expression.MemberExpression(null, a, c, false),
                              new value.Literal(null, 2, 'number'))),
-                    new statement.ExpressionStatement(
-                        new expression.MemberExpression(b, c, false))]);
+                    new statement.ExpressionStatement(null,
+                        new expression.MemberExpression(null, b, c, false))]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
