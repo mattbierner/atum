@@ -110,6 +110,22 @@ function(value,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
+            ["Global this assignment",
+            function(){
+                var root = new program.Program(null, [
+                    new statement.ExpressionStatement(null,
+                        new expression.AssignmentExpression(null, '=',
+                            new expression.MemberExpression(null,
+                                new expression.ThisExpression(null),
+                                a,
+                                false),
+                            new value.Literal(null, 1, "number"))),
+                    new statement.ExpressionStatement(null, a)]);
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 1);
+            }],
         ]
     };
 });
