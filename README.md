@@ -5,7 +5,7 @@ Atum is a Javascript interpreter written in functional style Javascript.
 
 Atum's functional implementation differentiates it from existing Javascript self
 interpreters such as Narcissus. Additionally, Atum aims to provide a high degree
-of modularity and flexibility.
+of modularity and flexibility to allow experimentation.
 
 Project Goals:
 
@@ -25,3 +25,22 @@ Defines primitive value data structures and operations.
 ### context 'atum/context' ###
 Defines data structures and operations for working with ECMAScript execution
 contexts.
+
+## TODO
+Atum is far from complete and currently only has very basic functionality.
+Major todo tasks include:
+
+* Builtins
+* Arguments object
+* Array objects
+* Arguments object
+* Labels
+* Exceptions
+* Try catch
+* With
+* in operator
+* instanceof operator
+* Inheritance
+* Memory management
+* and much more ...
+

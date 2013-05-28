@@ -1,16 +1,16 @@
 {
-  "name": "parse-ecma",
-  "version": "0.1.1",
-  "description": "Javascript Generator Library",
+  "name": "atum",
+  "version": "0.0.0",
+  "description": "Functional Javascript Interpreter",
   "main": "",
   "repository": {
     "type": "git",
-    "url": "git@github.com:mattbierner/parse-ecma.git"
+    "url": "git@github.com:mattbierner/atum.git"
   },
   "keywords": [
-    'parse', 
-    'parse.js',
-    'ecmascript'
+    'javascript', 
+    'functional',
+    'interpreter'
   ],
   "author": "Matt Bierner",
   "license": "MIT"
