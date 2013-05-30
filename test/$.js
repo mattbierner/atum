@@ -111,6 +111,19 @@ var Lt = function(l, r) {
     return new expression.BinaryExpression(null, '<', l, r);
 };
 
+var Lte = function(l, r) {
+    return new expression.BinaryExpression(null, '<=', l, r);
+};
+
+var Gt = function(l, r) {
+    return new expression.BinaryExpression(null, '>', l, r);
+};
+
+var Gte = function(l, r) {
+    return new expression.BinaryExpression(null, '>=', l, r);
+};
+
+
 var PreIncrement = function(x) {
     return new expression.UpdateExpression(null, '++', x, true);
 };
@@ -186,6 +199,9 @@ return {
     'Div': Div,
     'Mod': Mod,
     'Lt': Lt,
+    'Lte': Lte,
+    'Gt': Gt,
+    'Gte': Gte,
     'PreIncrement': PreIncrement,
     'PostIncrement': PostIncrement,
     'PreDecrement': PreDecrement,

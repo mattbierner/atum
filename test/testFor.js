@@ -88,7 +88,7 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 9);
             }],
-             ["Continue Yielded Value across iterations",
+            ["Continue Yielded Value across iterations",
             function(){
                 var root = $.Program(
                     $.For($.Assign(a, $.Number(0)), $.Lt(a, $.Number(10)), $.PreIncrement(a),
@@ -101,7 +101,7 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 8);
             }],
-           ["Nested For Continue",
+            ["Nested For Continue",
             function(){
                 var root = $.Program(
                     $.For($.Assign(a, $.Number(0)), $.Lt(a, $.Number(3)), $.PreIncrement(a),
@@ -111,6 +111,36 @@ function($,
                                     $.If($.Mod(a, $.Number(2)),
                                         $.Continue(),
                                         $.Expression($.Mul(a, b))))))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 6);
+            }],
+            ["Break",
+            function(){
+                var root = $.Program(
+                    $.Assign(b, $.Number(0)),
+                    $.For($.Assign(a, $.Number(0)), null, $.PreIncrement(a),
+                        $.If($.Gt(a, $.Number(5)),
+                            $.Block(
+                                $.Break(),
+                                $.Assign(a, $.Number(100))),
+                            $.Expression($.PreIncrement(b)))),
+                    $.Expression(b));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 6);
+            }],
+            ["Break Yielded value",
+            function(){
+                var root = $.Program(
+                    $.For($.Assign(a, $.Number(0)), null, $.PreIncrement(a),
+                        $.If($.Gt(a, $.Number(5)),
+                            $.Block(
+                                $.Expression(a),
+                                $.Break()),
+                            null)));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
