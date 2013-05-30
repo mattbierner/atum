@@ -51,6 +51,17 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 5);
             }],
+            ["Nested For",
+            function(){
+                var root = $.Program(
+                    $.For($.Assign(a, $.Number(0)), $.Lt($.PostIncrement(a), $.Number(3)), null,
+                        $.For($.Assign(b, $.Number(0)), $.Lt($.PostIncrement(b), $.Number(4)), null,
+                            $.Expression($.Mul(a, b)))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 12);
+            }],
             ["Continue",
             function(){
                 var root = $.Program(
@@ -76,6 +87,34 @@ function($,
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 9);
+            }],
+             ["Continue Yielded Value across iterations",
+            function(){
+                var root = $.Program(
+                    $.For($.Assign(a, $.Number(0)), $.Lt(a, $.Number(10)), $.PreIncrement(a),
+                        $.Block(
+                            $.If($.Mod(a, $.Number(2)),
+                                $.Continue(),
+                                $.Expression(a)))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 8);
+            }],
+           ["Nested For Continue",
+            function(){
+                var root = $.Program(
+                    $.For($.Assign(a, $.Number(0)), $.Lt(a, $.Number(3)), $.PreIncrement(a),
+                        $.Block(
+                            $.For($.Assign(b, $.Number(0)), $.Lt(b, $.Number(4)), $.PreIncrement(b),
+                                $.Block(
+                                    $.If($.Mod(a, $.Number(2)),
+                                        $.Continue(),
+                                        $.Expression($.Mul(a, b))))))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 6);
             }],
         ]
     };

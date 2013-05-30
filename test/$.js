@@ -91,6 +91,18 @@ var Add = function(l, r) {
     return new expression.BinaryExpression(null, '+', l, r);
 };
 
+var Sub = function(l, r) {
+    return new expression.BinaryExpression(null, '-', l, r);
+};
+
+var Mul = function(l, r) {
+    return new expression.BinaryExpression(null, '*', l, r);
+};
+
+var Div = function(l, r) {
+    return new expression.BinaryExpression(null, '/', l, r);
+};
+
 var Mod = function(l, r) {
     return new expression.BinaryExpression(null, '%', l, r);
 };
@@ -169,6 +181,9 @@ return {
     
     'This': This,
     'Add': Add,
+    'Sub': Sub,
+    'Mul': Mul,
+    'Div': Div,
     'Mod': Mod,
     'Lt': Lt,
     'PreIncrement': PreIncrement,
