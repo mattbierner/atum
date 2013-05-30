@@ -138,7 +138,6 @@ function($,
                     assert.equal(result.value, +x.value);
                 });
             }],
-            
         ],
     };
 });

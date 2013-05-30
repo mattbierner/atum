@@ -10,6 +10,7 @@ function(clause,
         statement,
         program,
         value){
+"use strict";
 
 var Program = function(/*...*/) {
     return new program.Program(null, arguments);
@@ -45,8 +46,16 @@ var If = function(test, consequent, alternate) {
     return new statement.IfStatement(null, test, consequent, alternate);
 };
 
-var For = function(init, cond, update, body) {
-    return new statement.ForStatement(null, init, cond, update, body);
+var While = function(test, body) {
+    return new statement.WhileStatement(null, test, body);
+};
+
+var For = function(init, test, update, body) {
+    return new statement.ForStatement(null, init, test, update, body);
+};
+
+var Try = function(body, handler, finalizer) {
+    return new statement.TryStatement(null, body, handler, finalizer);
 };
 
 var Switch = function(dis /*, ...*/) {
@@ -65,6 +74,14 @@ var Return = function(value) {
     return new statement.ReturnStatement(null, value);
 };
 
+var Throw = function(value) {
+    return new statement.ThrowStatement(null, value);
+};
+
+
+var Catch = function(param, body) {
+    return new clause.CatchClause(null, param, body);
+};
 
 var Case = function(test /*, ...*/) {
     return new clause.SwitchCase(null, test, [].slice.call(arguments, 1));
@@ -85,6 +102,14 @@ var FunctionDeclaration = function(id, args, body) {
 
 var This = function() {
     return new expression.ThisExpression(null);
+};
+
+var Plus = function(x) {
+    return new expression.UnaryExpression(null, '+', x);
+};
+
+var Negate = function(x) {
+    return new expression.UnaryExpression(null, '-', x);
 };
 
 var Add = function(l, r) {
@@ -180,12 +205,16 @@ return {
     'Block': Block,
     'Expression': Expression,
     'If': If,
+    'While': While,
     'For': For,
+    'Try': Try,
     'Switch': Switch,
     'Break': Break,
     'Continue': Continue,
     'Return': Return,
-    
+     'Throw': Throw,
+
+    'Catch': Catch,
     'Case': Case,
     
     'Var': Var,
@@ -193,6 +222,8 @@ return {
     'FunctionDeclaration': FunctionDeclaration,
     
     'This': This,
+    'Plus': Plus,
+    'Negate': Negate,
     'Add': Add,
     'Sub': Sub,
     'Mul': Mul,

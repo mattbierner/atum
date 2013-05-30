@@ -10,20 +10,21 @@ function($,
     return {
         'module': "For",
         'tests': [
-            ["Zero Iteration For",
+            ["Zero Iteration While",
             function(){
                 // returns undefined
                 var root = $.Program(
-                    $.For(null, $.Boolean(false), null,
+                    $.While($.Boolean(false),
                         $.Expression($.Number(1))));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
                 
-                // Init run and test one run once
+                // Test run once
                 var root = $.Program(
-                    $.For($.Assign(a, $.Number(0)), $.PostIncrement(a), null,
+                    $.Expression($.Assign(a, $.Number(0))),
+                    $.While($.PostIncrement(a),
                         $.Expression($.Number(10))),
                     $.Expression(a));
                 
@@ -34,40 +35,35 @@ function($,
             ["Return Last Iteration Body Value",
             function(){
                 var root = $.Program(
-                    $.For($.Assign(a, $.Number(0)), $.Lt(a, $.Number(5)), $.PreIncrement(a),
-                        $.Expression(a)));
-                
-                var result = interpret.interpret(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 4);
-            }],
-            ["Init run once, test run iteration + 1 times",
-            function(){
-                var root = $.Program(
-                    $.For($.Assign(a, $.Number(0)), $.Lt($.PostIncrement(a), $.Number(5)), null,
+                    $.Expression($.Assign(a, $.Number(0))),
+                    $.While($.Lt($.PostIncrement(a), $.Number(5)), 
                         $.Expression(a)));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 5);
             }],
-            ["Nested For",
+            ["Nested While",
             function(){
                 var root = $.Program(
-                    $.For($.Assign(a, $.Number(0)), $.Lt($.PostIncrement(a), $.Number(3)), null,
-                        $.For($.Assign(b, $.Number(0)), $.Lt($.PostIncrement(b), $.Number(4)), null,
-                            $.Expression($.Mul(a, b)))));
+                    $.Expression($.Assign(a, $.Number(2))),
+                    $.While($.Lt(a, $.Number(100)),
+                        $.Block(
+                            $.Expression($.Assign(b, a)),
+                            $.While($.Lt(a, $.Mul(b, b)),
+                                $.Expression($.Assign(a, $.Mul(a, a)))))));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
-                assert.equal(result.value, 12);
+                assert.equal(result.value, 256);
             }],
             ["Continue",
             function(){
                 var root = $.Program(
-                    $.Assign(b, $.Number(0)),
-                    $.For($.Assign(a, $.Number(0)), $.Lt(a, $.Number(10)), $.PreIncrement(a),
-                        $.If($.Mod(a, $.Number(2)),
+                    $.Expression($.Assign(b, $.Number(0))),
+                    $.Expression($.Assign(a, $.Number(0))),
+                    $.While($.Lt(a, $.Number(10)),
+                        $.If($.Mod($.PostIncrement(a), $.Number(2)),
                             $.Continue(),
                             $.Expression($.PreIncrement(b)))),
                     $.Expression(b));
@@ -79,9 +75,10 @@ function($,
             ["Continue Yielded Value",
             function(){
                 var root = $.Program(
-                    $.For($.Assign(a, $.Number(0)), $.Lt(a, $.Number(10)), $.PreIncrement(a),
+                    $.Expression($.Assign(a, $.Number(0))),
+                    $.While($.Lt(a, $.Number(10)),
                         $.Block(
-                            $.Expression(a),
+                            $.Expression($.PostIncrement(a)),
                             $.Continue())));
 
                 var result = interpret.interpret(root);
@@ -91,31 +88,35 @@ function($,
             ["Continue Yielded Value across iterations",
             function(){
                 var root = $.Program(
-                    $.For($.Assign(a, $.Number(0)), $.Lt(a, $.Number(10)), $.PreIncrement(a),
+                    $.Expression($.Assign(a, $.Number(0))),
+                    $.While($.Lt(a, $.Number(10)),
                         $.Block(
-                            $.If($.Mod(a, $.Number(2)),
+                            $.If($.Mod($.PostIncrement(a), $.Number(2)),
                                 $.Continue(),
-                                $.Expression(a)))));
+                                $.Expression($.Mul(a, a))))));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
-                assert.equal(result.value, 8);
+                assert.equal(result.value, 81);
             }],
             ["Nested For Continue",
             function(){
                 var root = $.Program(
-                    $.For($.Assign(a, $.Number(0)), $.Lt(a, $.Number(3)), $.PreIncrement(a),
+                    $.Expression($.Assign(a, $.Number(0))),
+                    $.While($.Lt(a, $.Number(3)),
                         $.Block(
                             $.For($.Assign(b, $.Number(0)), $.Lt(b, $.Number(4)), $.PreIncrement(b),
                                 $.Block(
                                     $.If($.Mod(a, $.Number(2)),
                                         $.Continue(),
-                                        $.Expression($.Mul(a, b))))))));
+                                        $.Expression($.Mul(a, b))))),
+                             $.PreIncrement(a))));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
-                assert.equal(result.value, 6);
+                assert.equal(result.value, 3);
             }],
+            /*
             ["Break",
             function(){
                 var root = $.Program(
@@ -183,23 +184,7 @@ function($,
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 6);
-            }],
-            
-            ["Return Inside For",
-            function(){
-                var root = $.Program(
-                    $.FunctionDeclaration(a, [],
-                        $.Block(
-                            $.For($.Assign(a, $.Number(0)), null, $.PreIncrement(a),
-                                $.If($.Gt(a, $.Number(5)),
-                                    $.Return(a))))),
-                    $.Call(a, []));
-                
-                var result = interpret.interpret(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 6);
-            }],
-            
+            }],*/
         ]
     };
 });

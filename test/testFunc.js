@@ -13,9 +13,7 @@ function($,
             ["Empty Func Declaration",
             function(){
                 var root = $.Program(
-                    $.FunctionDeclaration(
-                        a,
-                        [],
+                    $.FunctionDeclaration(a, [],
                         $.Block()),
                     $.Call(a, []));
                 
@@ -26,9 +24,7 @@ function($,
             ["Constant Func Declaration",
             function(){
                 var root = $.Program(
-                    $.FunctionDeclaration(
-                        a,
-                        [],
+                    $.FunctionDeclaration(a, [],
                         $.Block(
                             $.Return($.Number(3)))),
                     $.Call(a, []));
@@ -40,9 +36,7 @@ function($,
             ["Id Func Declaration",
             function(){
                 var root = $.Program(
-                    $.FunctionDeclaration(
-                        a,
-                        [b],
+                    $.FunctionDeclaration(a, [b],
                         $.Block(
                             $.Return(b))),
                     $.Call(a, [
@@ -55,9 +49,7 @@ function($,
             ["Multiple Argument Func Declaration",
             function(){
                 var root = $.Program(
-                    $.FunctionDeclaration(
-                        a,
-                        [b, c],
+                    $.FunctionDeclaration(a, [b, c],
                         $.Block(
                             $.Return($.Add(b, c)))),
                     $.Call(a, [
@@ -71,9 +63,7 @@ function($,
             ["Undefined Argument",
             function(){
                 var root = $.Program(
-                    $.FunctionDeclaration(
-                        a,
-                        [b],
+                    $.FunctionDeclaration(a, [b],
                         $.Block(
                             $.Return(b))),
                     $.Call(a, []));
@@ -86,9 +76,7 @@ function($,
             function(){
                 // Make sure bound arguments are not accessible in calling scope.
                 var root = $.Program(
-                    $.FunctionDeclaration(
-                        a,
-                        [b],
+                    $.FunctionDeclaration(a, [b],
                         $.Block()),
                     $.Call(a, [$.Number(1)]),
                     $.Expression(b));
@@ -102,9 +90,7 @@ function($,
                 var root = $.Program(
                     $.Expression(
                         $.Assign(b, $.Number(100))),
-                    $.FunctionDeclaration(
-                        a,
-                        [b],
+                    $.FunctionDeclaration(a, [b],
                         $.Block(
                           $.Return(b))),
                     $.Call(a, [$.Number(1)]));
@@ -120,9 +106,7 @@ function($,
                 var root = $.Program(
                     $.Var(
                          $.Declarator(b)),
-                    $.FunctionDeclaration(
-                        a,
-                        [],
+                    $.FunctionDeclaration(a, [],
                         $.Block(
                           $.Return(b))),
                     $.Expression(
@@ -143,9 +127,7 @@ function($,
             function(){
                 // Checks that argument passed in can be used in returned function.
                 var root = $.Program(
-                    $.FunctionDeclaration(
-                        a,
-                        [b],
+                    $.FunctionDeclaration(a, [b],
                         $.Block(
                           $.Return(
                               $.FunctionExpression(null, [],
@@ -163,9 +145,7 @@ function($,
             function(){
                 // Checks that variable defines in function scope is accessible in closure.
                 var root = $.Program(
-                    $.FunctionDeclaration(
-                        a,
-                        [],
+                    $.FunctionDeclaration(a, [],
                         $.Block(
                             $.Var(
                                 $.Declarator(b, $.Number(1))),
@@ -189,9 +169,7 @@ function($,
                 var root = $.Program(
                     $.Expression(
                         $.Assign(b, $.Number(0))),
-                    $.FunctionDeclaration(
-                        a,
-                        [],
+                    $.FunctionDeclaration(a, [],
                         $.Block(
                            $.Assign(b, $.Number(10)))),
                         $.Call(a, []),
@@ -231,12 +209,8 @@ function($,
                         a,
                         [b],
                         $.Block(
-                           $.Assign(
-                               $.Member(b, c),
-                               $.Number(10)),
-                           $.Assign(
-                               b,
-                               $.Number(1)))),
+                           $.Assign($.Member(b, c), $.Number(10)),
+                           $.Assign(b, $.Number(1)))),
                     $.Expression(
                         $.Assign(
                             b,
