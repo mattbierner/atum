@@ -1,28 +1,30 @@
-define(['ecma/ast/value',
+define(['$',
+        'ecma/ast/value',
         'ecma/ast/program',
         'ecma/ast/declaration',
         'ecma/ast/expression',
         'ecma/ast/statement',
         'atum/interpret'],
-function(value,
+function($,
+        value,
         program,
         declaration,
         expression,
         statement,
         interpret){
     
-    var a = new value.Identifier(null, 'a');
-    var b = new value.Identifier(null, 'b');
+    var a = $.Id('a');
+    var b = $.Id('b');
     
     return {
         'module': "Binding Tests",
         'tests': [
             ["Simple Undefined Var",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                         new declaration.VariableDeclarator(null, a)]),
-                    new statement.ExpressionStatement(null, a)]);
+                var root = $.Program(
+                    $.Var(
+                         $.Declarator(a)),
+                    $.Expression(a));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
@@ -30,13 +32,10 @@ function(value,
             }],
             ["Simple Init Var",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                         new declaration.VariableDeclarator(
-                             null,
-                             a,
-                             new value.Literal(null, 10, "number"))]),
-                    new statement.ExpressionStatement(null, a)]);
+                var root = $.Program(
+                    $.Var(
+                         $.Declarator(a, $.Number(10))),
+                    $.Expression(a));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -44,19 +43,11 @@ function(value,
             }],
             ["Multiple Variable Declaration",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                         new declaration.VariableDeclarator(
-                             null,
-                             a,
-                             new value.Literal(null, 1, "number")),
-                         new declaration.VariableDeclarator(
-                             null,
-                             b,
-                             new value.Literal(null, 2, "number"))]),
-                    new statement.ExpressionStatement(null, new expression.BinaryExpression(null, '+',
-                        a,
-                        b))]);
+                var root = $.Program(
+                    $.Var(
+                         $.Declarator(a, $.Number(1)),
+                         $.Declarator(b, $.Number(2))),
+                    $.Expression($.Add(a, b)));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -64,20 +55,20 @@ function(value,
             }],
             ["Multiple Variable Declaration",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
+                var root = $.Program(
+                    $.Var(
                          new declaration.VariableDeclarator(
                              null,
                              a,
-                             new value.Literal(null, 1, "number"))]),
-                     new declaration.VariableDeclaration(null, [
+                             $.Number(1))),
+                     $.Var(
                          new declaration.VariableDeclarator(
                              null,
                              b,
-                             new value.Literal(null, 2, "number"))]),
+                             $.Number(2))),
                     new statement.ExpressionStatement(
                         null,
-                        new expression.BinaryExpression(null, '+', a, b))]);
+                        new expression.BinaryExpression(null, '+', a, b)));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -86,12 +77,12 @@ function(value,
             
             ["Var Declaration init to undefined",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                        new declaration.VariableDeclarator(null, a, b)]),
-                     new declaration.VariableDeclaration(null, [
-                         new declaration.VariableDeclarator(null, b)]),
-                    new statement.ExpressionStatement(null, a)]);
+                var root = $.Program(
+                    $.Var(
+                        $.Declarator(a, b)),
+                     $.Var(
+                         $.Declarator(b)),
+                    $.Expression(a));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
@@ -101,10 +92,10 @@ function(value,
         // Global
             ["Global assignment",
             function(){
-                var root = new program.Program(null, [
-                    new statement.ExpressionStatement(null,
-                        new expression.AssignmentExpression(null, '=', a, new value.Literal(null, 1, "number"))),
-                    new statement.ExpressionStatement(null, a)]);
+                var root = $.Program(
+                    $.Expression(
+                        $.Assign( a, $.Number(1))),
+                    $.Expression(a));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -112,15 +103,15 @@ function(value,
             }],
             ["Global this assignment",
             function(){
-                var root = new program.Program(null, [
-                    new statement.ExpressionStatement(null,
-                        new expression.AssignmentExpression(null, '=',
+                var root = $.Program(
+                    $.Expression(
+                        $.Assign(
                             new expression.MemberExpression(null,
-                                new expression.ThisExpression(null),
+                                $.This(),
                                 a,
                                 false),
-                            new value.Literal(null, 1, "number"))),
-                    new statement.ExpressionStatement(null, a)]);
+                            $.Number(1))),
+                    $.Expression(a));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');

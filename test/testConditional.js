@@ -1,10 +1,12 @@
-define(['ecma/ast/value',
+define(['$',
+        'ecma/ast/value',
         'ecma/ast/program',
         'ecma/ast/declaration',
         'ecma/ast/expression',
         'ecma/ast/statement',
         'atum/interpret'],
-function(value,
+function($,
+        value,
         program,
         declaration,
         expression,
@@ -23,13 +25,13 @@ function(value,
                 var root = new program.Program(null, [
                     new declaration.VariableDeclaration(null, [
                         new declaration.VariableDeclarator(null, a)]),
-                    new statement.IfStatement(null,
-                        new value.Literal(null, true, 'boolean'),
-                        new statement.ExpressionStatement(null, 
-                            new expression.AssignmentExpression(null, '=',
+                    $.If(
+                        $.Boolean(true),
+                        $.Expression(
+                            $.Assign(
                                 a,
-                                new value.Literal(null, 1, 'number')))),
-                    new statement.ExpressionStatement(null, a)]);
+                                $.Number(1)))),
+                    $.Expression(a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -40,13 +42,13 @@ function(value,
                 var root = new program.Program(null, [
                     new declaration.VariableDeclaration(null, [
                         new declaration.VariableDeclarator(null, a)]),
-                    new statement.IfStatement(null,
-                        new value.Literal(null, false, 'boolean'),
-                        new statement.ExpressionStatement(null, 
-                            new expression.AssignmentExpression(null, '=',
+                    $.If(
+                        $.Boolean(false),
+                        $.Expression(
+                            $.Assign(
                                 a,
-                                new value.Literal(null, 1, 'number')))),
-                    new statement.ExpressionStatement(null, a)]);
+                                $.Number(1)))),
+                    $.Expression(a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
@@ -56,17 +58,17 @@ function(value,
                 var root = new program.Program(null, [
                     new declaration.VariableDeclaration(null, [
                         new declaration.VariableDeclarator(null, a)]),
-                    new statement.IfStatement(null,
-                        new value.Literal(null, true, 'boolean'),
-                        new statement.ExpressionStatement(null, 
-                            new expression.AssignmentExpression(null, '=',
+                    $.If(
+                        $.Boolean(true),
+                        $.Expression(
+                            $.Assign(
                                 a,
-                                new value.Literal(null, 1, 'number'))),
-                        new statement.ExpressionStatement(null, 
-                            new expression.AssignmentExpression(null, '=',
+                                $.Number(1))),
+                        $.Expression(
+                            $.Assign(
                                 a,
-                                new value.Literal(null, 10, 'number')))),
-                    new statement.ExpressionStatement(null, a)]);
+                                $.Number(10)))),
+                    $.Expression(a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -77,17 +79,17 @@ function(value,
                 var root = new program.Program(null, [
                     new declaration.VariableDeclaration(null, [
                         new declaration.VariableDeclarator(null, a)]),
-                    new statement.IfStatement(null,
-                        new value.Literal(null, false, 'boolean'),
-                        new statement.ExpressionStatement(null, 
-                            new expression.AssignmentExpression(null, '=',
+                    $.If(
+                        $.Boolean(false),
+                        $.Expression(
+                            $.Assign(
                                 a,
-                                new value.Literal(null, 1, 'number'))),
-                        new statement.ExpressionStatement(null, 
-                            new expression.AssignmentExpression(null, '=',
+                                $.Number(1))),
+                        $.Expression(
+                            $.Assign(
                                 a,
-                                new value.Literal(null, 10, 'number')))),
-                    new statement.ExpressionStatement(null, a)]);
+                                $.Number(10)))),
+                    $.Expression(a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -99,20 +101,20 @@ function(value,
                     new declaration.VariableDeclaration(null, [
                         new declaration.VariableDeclarator(null, 
                             a,
-                            new value.Literal(null, 0, 'number'))]),
-                    new statement.IfStatement(null,
+                            $.Number(0))]),
+                    $.If(
                         new expression.UpdateExpression(null, '++',
                             a,
                             true),
-                        new statement.ExpressionStatement(null, 
+                        $.Expression(
                             new expression.AssignmentExpression(null, '+=',
                                 a,
-                                new value.Literal(null, 1, 'number'))),
-                        new statement.ExpressionStatement(null, 
+                                $.Number(1))),
+                        $.Expression(
                             new expression.AssignmentExpression(null, '+=',
                                 a,
-                                new value.Literal(null, 10, 'number')))),
-                    new statement.ExpressionStatement(null, a)]);
+                                $.Number(10)))),
+                    $.Expression(a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -124,20 +126,20 @@ function(value,
                     new declaration.VariableDeclaration(null, [
                         new declaration.VariableDeclarator(null, 
                             a,
-                            new value.Literal(null, 0, 'number'))]),
-                    new statement.IfStatement(null,
+                            $.Number(0))]),
+                    $.If(
                         new expression.UpdateExpression(null, '++',
                             a,
                             false),
-                        new statement.ExpressionStatement(null, 
+                        $.Expression(
                             new expression.AssignmentExpression(null, '+=',
                                 a,
-                                new value.Literal(null, 1, 'number'))),
-                        new statement.ExpressionStatement(null, 
+                                $.Number(1))),
+                        $.Expression(
                             new expression.AssignmentExpression(null, '+=',
                                 a,
-                                new value.Literal(null, 10, 'number')))),
-                    new statement.ExpressionStatement(null, a)]);
+                                $.Number(10)))),
+                    $.Expression(a)]);
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');

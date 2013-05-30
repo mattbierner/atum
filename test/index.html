@@ -23,8 +23,8 @@
             }
         });
         require(
-            ['testLiteral', 'testUnary', 'testBinary', 'testBinding', 'testIncDec', 'testFunc',
-            'testObject', 'testConditional'],
+            ['testLiteral', 'testUnary', 'testNumber', 'testBinding', 'testIncDec', 'testFunc',
+            'testObject', 'testConditional', 'testSwitch'],
             function() {
                 Array.prototype.forEach.call(arguments, function(m) {
                     m.module && module(m.module);
