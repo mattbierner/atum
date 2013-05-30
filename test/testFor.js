@@ -65,6 +65,18 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 5);
             }],
+            ["Continue Yielded Value",
+            function(){
+                var root = $.Program(
+                    $.For($.Assign(a, $.Number(0)), $.Lt(a, $.Number(10)), $.PreIncrement(a),
+                        $.Block(
+                            $.Expression(a),
+                            $.Continue())));
+
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 9);
+            }],
         ]
     };
 });
