@@ -132,7 +132,7 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 6);
             }],
-            ["Break",
+            ["update not run after break",
             function(){
                 var root = $.Program(
                     $.For($.Assign(a, $.Number(0)), null, $.PreIncrement(a),
@@ -151,8 +151,34 @@ function($,
                         $.If($.Gt(a, $.Number(5)),
                             $.Block(
                                 $.Expression(a),
-                                $.Break()),
-                            null)));
+                                $.Break()))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 6);
+            }],
+            ["Break Across Iterations Yielded value",
+            function(){
+                var root = $.Program(
+                    $.For($.Assign(a, $.Number(0)), null, $.PreIncrement(a),
+                        $.If($.Gte(a, $.Number(4)),
+                            $.Break(),
+                            $.Expression(a))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 3);
+            }],
+            ["Nested Break",
+            function(){
+                var root = $.Program(
+                    $.For($.Assign(a, $.Number(0)), $.Lt(a, $.Number(3)), $.PreIncrement(a),
+                        $.Block(
+                            $.For($.Assign(b, $.Number(0)), null, $.PreIncrement(b),
+                                $.Block(
+                                    $.If($.Gte(b, $.Number(4)),
+                                        $.Break(),
+                                        $.Expression($.Mul(a, b))))))));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
