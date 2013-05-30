@@ -25,6 +25,17 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
+            ["Simple If True Statement yielded",
+            function(){
+                var root = $.Program(
+                    $.If(
+                        $.Boolean(true),
+                        $.Expression($.Number(1))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 1);
+            }],
             ["Simple If false Statement",
             function(){
                 var root = $.Program(
@@ -38,6 +49,18 @@ function($,
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
+            }],
+            ["Simple If false Statement yielded",
+            function(){
+                var root = $.Program(
+                    $.Expression($.Number(5)),
+                    $.If(
+                        $.Boolean(false),
+                        $.Expression($.Number(1))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 5);
             }],
             ["Simple If True Else Statement",
             function(){

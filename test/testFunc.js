@@ -27,7 +27,7 @@ function($,
                     $.FunctionDeclaration(a, [],
                         $.Block(
                             $.Return($.Number(3)))),
-                    $.Call(a, []));
+                    $.Expression($.Call(a, [])));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
