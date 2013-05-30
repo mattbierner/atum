@@ -8,8 +8,18 @@ function($,
     var c = $.Id('c');
 
     return {
-        'module': "For Tests",
+        'module': "For",
         'tests': [
+            ["Never Run For",
+            function(){
+                var root = $.Program(
+                    $.For(null, $.Boolean(false), null,
+                        $.Expression($.Number(1))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'undefined');
+                assert.equal(result.value, undefined);
+            }],
         ]
     };
 });

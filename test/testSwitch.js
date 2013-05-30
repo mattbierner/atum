@@ -29,7 +29,7 @@ function($,
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
             }],
-            ["Covered Cases",
+            ["Covered Case",
             function(){
                 var root = $.Program(
                     $.Expression(
@@ -48,6 +48,30 @@ function($,
                                 $.Assign(a, $.Number(2))),
                             $.Break())),
                     $.Expression(a));
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 1);
+            }],
+            ["Multiple Covered Cases",
+            function(){
+                var root = $.Program(
+                    $.Switch($.Number(0),
+                        $.Case($.Boolean(false),
+                            $.Expression(
+                                $.Number(0)),
+                            $.Break()),
+                        $.Case($.Number(0),
+                            $.Expression(
+                                $.Number(1)),
+                            $.Break()),
+                        $.Case($.String(""),
+                            $.Expression(
+                                $.Number(2)),
+                            $.Break()),
+                        $.Case(null,
+                            $.Expression(
+                                $.Number(2)),
+                            $.Break())));
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);

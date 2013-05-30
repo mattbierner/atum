@@ -45,6 +45,10 @@ var If = function(test, consequent, alternate) {
     return new statement.IfStatement(null, test, consequent, alternate);
 };
 
+var For = function(init, cond, update, body) {
+    return new statement.ForStatement(null, init, cond, update, body);
+};
+
 var Switch = function(dis /*, ...*/) {
     return new statement.SwitchStatement(null, dis, [].slice.call(arguments, 1));
 };
@@ -143,11 +147,12 @@ return {
     'Block': Block,
     'Expression': Expression,
     'If': If,
+    'For': For,
+    'Switch': Switch,
     'Break': Break,
     'Continue': Continue,
     'Return': Return,
     
-    'Switch': Switch,
     'Case': Case,
     
     'Var': Var,
