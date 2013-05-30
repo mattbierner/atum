@@ -1,31 +1,23 @@
-define(['ecma/ast/value',
-        'ecma/ast/program',
-        'ecma/ast/declaration',
-        'ecma/ast/expression',
-        'ecma/ast/statement',
+define(['$',
         'atum/interpret'],
-function(value,
-        program,
-        declaration,
-        expression,
-        statement,
+function($,
         interpret){
     
-    var a = new value.Identifier(null, 'a');
-    var b = new value.Identifier(null, 'b');
-    var c = new value.Identifier(null, 'c');
+    var a = $.Id('a');
+    var b = $.Id('b');
+    var c = $.Id('c');
 
     return {
         'module': "Function Tests",
         'tests': [
             ["Empty Func Declaration",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.FunctionDeclaration(null,
+                var root = $.Program(
+                    $.FunctionDeclaration(
                         a,
                         [],
-                        new statement.BlockStatement(null, [])),
-                    new expression.CallExpression(null, a, [])]);
+                        $.Block()),
+                    $.Call(a, []));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
@@ -33,13 +25,13 @@ function(value,
             }],
             ["Constant Func Declaration",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.FunctionDeclaration(null,
+                var root = $.Program(
+                    $.FunctionDeclaration(
                         a,
                         [],
-                        new statement.BlockStatement(null, [
-                            new statement.ReturnStatement(null, new value.Literal(null, 3, "number"))])),
-                    new expression.CallExpression(null, a, [])]);
+                        $.Block(
+                            $.Return($.Number(3)))),
+                    $.Call(a, []));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -47,14 +39,14 @@ function(value,
             }],
             ["Id Func Declaration",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.FunctionDeclaration(null,
+                var root = $.Program(
+                    $.FunctionDeclaration(
                         a,
                         [b],
-                        new statement.BlockStatement(null, [
-                            new statement.ReturnStatement(null, b)])),
-                    new expression.CallExpression(null, a, [
-                      new value.Literal(null, 3, "number")])]);
+                        $.Block(
+                            $.Return(b))),
+                    $.Call(a, [
+                      $.Number(3)]));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -62,16 +54,15 @@ function(value,
             }],
             ["Multiple Argument Func Declaration",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.FunctionDeclaration(null,
+                var root = $.Program(
+                    $.FunctionDeclaration(
                         a,
                         [b, c],
-                        new statement.BlockStatement(null, [
-                            new statement.ReturnStatement(null,
-                                new expression.BinaryExpression(null, '+', b, c))])),
-                    new expression.CallExpression(null, a, [
-                      new value.Literal(null, 1, "number"),
-                      new value.Literal(null, 3, "number")])]);
+                        $.Block(
+                            $.Return($.Add(b, c)))),
+                    $.Call(a, [
+                      $.Number(1),
+                      $.Number(3)]));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -79,13 +70,13 @@ function(value,
             }],
             ["Undefined Argument",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.FunctionDeclaration(null,
+                var root = $.Program(
+                    $.FunctionDeclaration(
                         a,
                         [b],
-                        new statement.BlockStatement(null, [
-                            new statement.ReturnStatement(null, b)])),
-                    new expression.CallExpression(null, a, [])]);
+                        $.Block(
+                            $.Return(b))),
+                    $.Call(a, []));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
@@ -94,13 +85,13 @@ function(value,
             ["Argument Scope Leak Check",
             function(){
                 // Make sure bound arguments are not accessible in calling scope.
-                var root = new program.Program(null, [
-                    new declaration.FunctionDeclaration(null,
+                var root = $.Program(
+                    $.FunctionDeclaration(
                         a,
                         [b],
-                        new statement.BlockStatement(null, [])),
-                    new expression.CallExpression(null, a, [new value.Literal(null, 1, "number")]),
-                    new statement.ExpressionStatement(null, b)]);
+                        $.Block()),
+                    $.Call(a, [$.Number(1)]),
+                    $.Expression(b));
                 
                 assert.throws(interpret.interpret.bind(undefined, root));
             }],
@@ -108,15 +99,15 @@ function(value,
             ["Argument Alias Scope Check",
             function(){
                 // Make sure closest bound value for argument is used.
-                var root = new program.Program(null, [
-                    new statement.ExpressionStatement(null, 
-                        new expression.AssignmentExpression(null, '=', b, new value.Literal(null, 100, "number"))),
-                    new declaration.FunctionDeclaration(null,
+                var root = $.Program(
+                    $.Expression(
+                        $.Assign(b, $.Number(100))),
+                    $.FunctionDeclaration(
                         a,
                         [b],
-                        new statement.BlockStatement(null, [
-                          new statement.ReturnStatement(null, b)])),
-                    new expression.CallExpression(null, a, [new value.Literal(null, 1, "number")])]);
+                        $.Block(
+                          $.Return(b))),
+                    $.Call(a, [$.Number(1)]));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -126,22 +117,22 @@ function(value,
             function(){
                 // Check that variables in function scope are resolved to current
                 // values, not values when function declared.
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                         new declaration.VariableDeclarator(null, b)]),
-                    new declaration.FunctionDeclaration(null,
+                var root = $.Program(
+                    $.Var(
+                         $.Declarator(b)),
+                    $.FunctionDeclaration(
                         a,
                         [],
-                        new statement.BlockStatement(null, [
-                          new statement.ReturnStatement(null, b)])),
-                    new statement.ExpressionStatement(null, 
-                        new expression.AssignmentExpression(null, '=', b, new value.Literal(null, 1, "number"))),
-                    new expression.BinaryExpression(null, '+',
+                        $.Block(
+                          $.Return(b))),
+                    $.Expression(
+                        $.Assign(b, $.Number(1))),
+                    $.Add(
                         // b resolves to 1
-                        new expression.CallExpression(null, a, []), 
+                        $.Call(a, []), 
                         // b resolves to 3
-                        new expression.CallExpression(null, a, [
-                               new expression.AssignmentExpression(null, '=', b, new value.Literal(null, 3, "number"))]))]);
+                        $.Call(a, [
+                               $.Assign(b, $.Number(3))])));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -151,21 +142,18 @@ function(value,
             ["Closure Argument Check",
             function(){
                 // Checks that argument passed in can be used in returned function.
-                var root = new program.Program(null, [
-                    new declaration.FunctionDeclaration(null,
+                var root = $.Program(
+                    $.FunctionDeclaration(
                         a,
                         [b],
-                        new statement.BlockStatement(null, [
-                          new statement.ReturnStatement(null, 
-                              new expression.FunctionExpression(
-                                  null,
-                                  null,
-                                  [],
-                                  new statement.BlockStatement(null, [
-                                      new statement.ReturnStatement(null, b)])))])),
-                    new expression.CallExpression(null, 
-                        new expression.CallExpression(null, a, [new value.Literal(null, 1, "number")]),
-                        [])]);
+                        $.Block(
+                          $.Return(
+                              $.FunctionExpression(null, [],
+                                  $.Block(
+                                      $.Return(b)))))),
+                    $.Call(
+                        $.Call(a, [$.Number(1)]),
+                        []));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -174,24 +162,20 @@ function(value,
             ["Closure Variable Check",
             function(){
                 // Checks that variable defines in function scope is accessible in closure.
-                var root = new program.Program(null, [
-                    new declaration.FunctionDeclaration(null,
+                var root = $.Program(
+                    $.FunctionDeclaration(
                         a,
                         [],
-                        new statement.BlockStatement(null, [
-                            new declaration.VariableDeclaration(null, [
-                                new declaration.VariableDeclarator(null, b,
-                                    new value.Literal(null, 1, "number"))]),
-                          new statement.ReturnStatement(null,
-                              new expression.FunctionExpression(
-                                  null,
-                                  null,
-                                  [],
-                                  new statement.BlockStatement(null, [
-                                      new statement.ReturnStatement(null, b)])))])),
-                    new expression.CallExpression(null, 
-                        new expression.CallExpression(null, a, []),
-                        [])]);
+                        $.Block(
+                            $.Var(
+                                $.Declarator(b, $.Number(1))),
+                          $.Return(
+                              $.FunctionExpression(null, [],
+                                  $.Block(
+                                      $.Return(b)))))),
+                    $.Call(
+                        $.Call(a, []),
+                        []));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -202,16 +186,16 @@ function(value,
             function(){
                 // Checks that variable assignment for external scope modifies
                 // that variable.
-                var root = new program.Program(null, [
-                    new statement.ExpressionStatement(null, 
-                        new expression.AssignmentExpression(null, '=', b, new value.Literal(null, 0, "number"))),
-                    new declaration.FunctionDeclaration(null,
+                var root = $.Program(
+                    $.Expression(
+                        $.Assign(b, $.Number(0))),
+                    $.FunctionDeclaration(
                         a,
                         [],
-                        new statement.BlockStatement(null, [
-                           new expression.AssignmentExpression(null, '=', b, new value.Literal(null, 10, "number"))])),
-                        new expression.CallExpression(null, a, []),
-                        new statement.ExpressionStatement(null, b)]);
+                        $.Block(
+                           $.Assign(b, $.Number(10)))),
+                        $.Call(a, []),
+                        $.Expression(b));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -222,16 +206,16 @@ function(value,
             ["Values passed by value",
             function(){
                 // Checks that arguments primitive values are passed by value
-                var root = new program.Program(null, [
-                    new declaration.FunctionDeclaration(null,
+                var root = $.Program(
+                    $.FunctionDeclaration(
                         a,
                         [b],
-                        new statement.BlockStatement(null, [
-                           new expression.AssignmentExpression(null, '=', b, new value.Literal(null, 10, "number"))])),
-                    new statement.ExpressionStatement(null, 
-                        new expression.AssignmentExpression(null, '=', b, new value.Literal(null, 2, "number"))),
-                    new expression.CallExpression(null, a, [b]),
-                    new statement.ExpressionStatement(null, b)]);
+                        $.Block(
+                           $.Assign(b, $.Number(10)))),
+                    $.Expression(
+                        $.Assign(b, $.Number(2))),
+                    $.Call(a, [b]),
+                    $.Expression(b));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -242,30 +226,28 @@ function(value,
             function(){
                 // Checks that argument object values are passed by reference
                 // but that environment binding still acts correctly.
-                var root = new program.Program(null, [
-                    new declaration.FunctionDeclaration(null,
+                var root = $.Program(
+                    $.FunctionDeclaration(
                         a,
                         [b],
-                        new statement.BlockStatement(null, [
-                           new expression.AssignmentExpression(null, '=',
-                               new expression.MemberExpression(null, b, c),
-                               new value.Literal(null, 10, "number")),
-                           new expression.AssignmentExpression(null, '=',
+                        $.Block(
+                           $.Assign(
+                               $.Member(b, c),
+                               $.Number(10)),
+                           $.Assign(
                                b,
-                               new value.Literal(null, 1, "number"))])),
-                    new statement.ExpressionStatement(null, 
-                        new expression.AssignmentExpression(null, '=',
+                               $.Number(1)))),
+                    $.Expression(
+                        $.Assign(
                             b,
-                            new expression.ObjectExpression(null, [
-                                 {
-                                     'kind': 'init',
-                                     'key': new value.Literal(null, 'c', 'string'),
-                                     'value': new value.Literal(null, 1, 'number')
-                                 }
-                             ]))),
-                    new expression.CallExpression(null, a, [b]),
-                    new statement.ExpressionStatement(null, 
-                        new expression.MemberExpression(null, b, c))]);
+                            $.Object({
+                                 'kind': 'init',
+                                 'key': $.String('c'),
+                                 'value': $.Number(1)
+                             }))),
+                    $.Call(a, [b]),
+                    $.Expression(
+                        $.Member(b, c)));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');

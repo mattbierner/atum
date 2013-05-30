@@ -1,37 +1,25 @@
 define(['$',
-        'ecma/ast/value',
-        'ecma/ast/program',
-        'ecma/ast/declaration',
-        'ecma/ast/expression',
-        'ecma/ast/statement',
         'atum/interpret'],
 function($,
-        value,
-        program,
-        declaration,
-        expression,
-        statement,
         interpret){
     
-    var a = new value.Identifier(null, 'a');
-    var b = new value.Identifier(null, 'b');
-    var c = new value.Identifier(null, 'c');
+    var a = $.Id('a');
+    var b = $.Id('b');
+    var c = $.Id('c');
 
     return {
         'module': "Conditional Tests",
         'tests': [
             ["Simple If True Statement",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                        new declaration.VariableDeclarator(null, a)]),
+                var root = $.Program(
+                    $.Var(
+                        $.Declarator(a)),
                     $.If(
                         $.Boolean(true),
                         $.Expression(
-                            $.Assign(
-                                a,
-                                $.Number(1)))),
-                    $.Expression(a)]);
+                            $.Assign(a, $.Number(1)))),
+                    $.Expression(a));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -39,36 +27,30 @@ function($,
             }],
             ["Simple If false Statement",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                        new declaration.VariableDeclarator(null, a)]),
+                var root = $.Program(
+                    $.Var(
+                        $.Declarator(a)),
                     $.If(
                         $.Boolean(false),
                         $.Expression(
-                            $.Assign(
-                                a,
-                                $.Number(1)))),
-                    $.Expression(a)]);
+                            $.Assign(a, $.Number(1)))),
+                    $.Expression(a));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
             }],
             ["Simple If True Else Statement",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                        new declaration.VariableDeclarator(null, a)]),
+                var root = $.Program(
+                    $.Var(
+                        $.Declarator(a)),
                     $.If(
                         $.Boolean(true),
                         $.Expression(
-                            $.Assign(
-                                a,
-                                $.Number(1))),
+                            $.Assign(a, $.Number(1))),
                         $.Expression(
-                            $.Assign(
-                                a,
-                                $.Number(10)))),
-                    $.Expression(a)]);
+                            $.Assign(a, $.Number(10)))),
+                    $.Expression(a));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -76,20 +58,16 @@ function($,
             }],
             ["Simple If False Else Statement",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                        new declaration.VariableDeclarator(null, a)]),
+                var root = $.Program(
+                    $.Var(
+                        $.Declarator(a)),
                     $.If(
                         $.Boolean(false),
                         $.Expression(
-                            $.Assign(
-                                a,
-                                $.Number(1))),
+                            $.Assign(a, $.Number(1))),
                         $.Expression(
-                            $.Assign(
-                                a,
-                                $.Number(10)))),
-                    $.Expression(a)]);
+                            $.Assign(a, $.Number(10)))),
+                    $.Expression(a));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -97,24 +75,16 @@ function($,
             }],
             ["If Statement True Test Side Effects",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                        new declaration.VariableDeclarator(null, 
-                            a,
-                            $.Number(0))]),
+                var root = $.Program(
+                    $.Var(
+                        $.Declarator(a, $.Number(0))),
                     $.If(
-                        new expression.UpdateExpression(null, '++',
-                            a,
-                            true),
+                        $.PreIncrement(a),
                         $.Expression(
-                            new expression.AssignmentExpression(null, '+=',
-                                a,
-                                $.Number(1))),
+                            $.AddAssign(a, $.Number(1))),
                         $.Expression(
-                            new expression.AssignmentExpression(null, '+=',
-                                a,
-                                $.Number(10)))),
-                    $.Expression(a)]);
+                            $.AddAssign(a, $.Number(10)))),
+                    $.Expression(a));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -122,24 +92,16 @@ function($,
             }],
             ["If Statement False Test Side Effects",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                        new declaration.VariableDeclarator(null, 
-                            a,
-                            $.Number(0))]),
+                var root = $.Program(
+                    $.Var(
+                        $.Declarator(a, $.Number(0))),
                     $.If(
-                        new expression.UpdateExpression(null, '++',
-                            a,
-                            false),
+                        $.PostIncrement(a),
                         $.Expression(
-                            new expression.AssignmentExpression(null, '+=',
-                                a,
-                                $.Number(1))),
+                            $.AddAssign(a, $.Number(1))),
                         $.Expression(
-                            new expression.AssignmentExpression(null, '+=',
-                                a,
-                                $.Number(10)))),
-                    $.Expression(a)]);
+                            $.AddAssign(a, $.Number(10)))),
+                    $.Expression(a));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');

@@ -1,16 +1,6 @@
 define(['$',
-        'ecma/ast/value',
-        'ecma/ast/program',
-        'ecma/ast/declaration',
-        'ecma/ast/expression',
-        'ecma/ast/statement',
         'atum/interpret'],
 function($,
-        value,
-        program,
-        declaration,
-        expression,
-        statement,
         interpret){
     
     var a = $.Id('a');
@@ -57,18 +47,10 @@ function($,
             function(){
                 var root = $.Program(
                     $.Var(
-                         new declaration.VariableDeclarator(
-                             null,
-                             a,
-                             $.Number(1))),
+                         $.Declarator(a, $.Number(1))),
                      $.Var(
-                         new declaration.VariableDeclarator(
-                             null,
-                             b,
-                             $.Number(2))),
-                    new statement.ExpressionStatement(
-                        null,
-                        new expression.BinaryExpression(null, '+', a, b)));
+                         $.Declarator(b, $.Number(2))),
+                    $.Expression($.Add(a, b)));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -106,10 +88,7 @@ function($,
                 var root = $.Program(
                     $.Expression(
                         $.Assign(
-                            new expression.MemberExpression(null,
-                                $.This(),
-                                a,
-                                false),
+                            $.Member($.This(), a),
                             $.Number(1))),
                     $.Expression(a));
                 
