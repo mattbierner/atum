@@ -132,6 +132,18 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 6);
             }],
+            ["Break",
+            function(){
+                var root = $.Program(
+                    $.For($.Assign(a, $.Number(0)), null, $.PreIncrement(a),
+                        $.If($.Gt(a, $.Number(5)),
+                            $.Break())),
+                    $.Expression(a));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 6);
+            }],
             ["Break Yielded value",
             function(){
                 var root = $.Program(
