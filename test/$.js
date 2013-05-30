@@ -91,6 +91,14 @@ var Add = function(l, r) {
     return new expression.BinaryExpression(null, '+', l, r);
 };
 
+var Mod = function(l, r) {
+    return new expression.BinaryExpression(null, '%', l, r);
+};
+
+var Lt = function(l, r) {
+    return new expression.BinaryExpression(null, '<', l, r);
+};
+
 var PreIncrement = function(x) {
     return new expression.UpdateExpression(null, '++', x, true);
 };
@@ -161,6 +169,8 @@ return {
     
     'This': This,
     'Add': Add,
+    'Mod': Mod,
+    'Lt': Lt,
     'PreIncrement': PreIncrement,
     'PostIncrement': PostIncrement,
     'PreDecrement': PreDecrement,
