@@ -1,39 +1,30 @@
-define(['ecma/ast/value',
-        'ecma/ast/program',
-        'ecma/ast/declaration',
-        'ecma/ast/expression',
-        'ecma/ast/statement',
+define(['$',
         'atum/interpret'],
-function(value,
-        program,
-        declaration,
-        expression,
-        statement,
+function($,
         interpret){
     
-    var a = new value.Identifier(null, 'a');
-    
+    var a = $.Id('a');
     
     var set = [
-       new value.Literal(null, 0, "number"),
-       new value.Literal(null, 10, "number"),
-       new value.Literal(null, -10, "number"),
-       new value.Literal(null, 1.5, "number"),
-       new value.Literal(null, "1", "string")];
+       $.Number(0),
+       $.Number(10),
+       $.Number(-10),
+       $.Number(1.5),
+       $.String("1")];
     
     return {
-        'module': "Test Increment and Decrement Operators",
+        'module': "Increment and Decrement Operators",
         'tests': [
         // Prefix Increment 
             ["Prefix Increment Changes Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program(null, [
-                        new declaration.VariableDeclaration(null, [
-                             new declaration.VariableDeclarator(null, a, x)]),
-                        new statement.ExpressionStatement(null, 
-                            new expression.UpdateExpression(null, '++', a, true)),
-                        new statement.ExpressionStatement(null, a)]);
+                    var root = $.Program(
+                        $.Var(
+                             $.Declarator(a, x)),
+                        $.Expression( 
+                            $.PreIncrement(a)),
+                        $.Expression( a));
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -43,11 +34,11 @@ function(value,
             ["Prefix Increment Return Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program(null, [
-                        new declaration.VariableDeclaration(null, [
-                             new declaration.VariableDeclarator(null, a, x)]),
-                        new statement.ExpressionStatement(null, 
-                            new expression.UpdateExpression(null, '++', a, true))]);
+                    var root = $.Program(
+                        $.Var(
+                             $.Declarator(a, x)),
+                        $.Expression( 
+                            $.PreIncrement(a)));
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -59,12 +50,12 @@ function(value,
             ["Prefix Decrement Changes Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program(null, [
-                        new declaration.VariableDeclaration(null, [
-                             new declaration.VariableDeclarator(null, a, x)]),
-                        new statement.ExpressionStatement(null, 
-                            new expression.UpdateExpression(null, '--', a, true)),
-                        new statement.ExpressionStatement(null, a)]);
+                    var root = $.Program(
+                        $.Var(
+                             $.Declarator(a, x)),
+                        $.Expression( 
+                            $.PreDecrement(a)),
+                        $.Expression( a));
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -74,11 +65,11 @@ function(value,
             ["Prefix Decrement Return Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program(null, [
-                        new declaration.VariableDeclaration(null, [
-                             new declaration.VariableDeclarator(null, a, x)]),
-                        new statement.ExpressionStatement(null, 
-                            new expression.UpdateExpression(null, '--', a, true))]);
+                    var root = $.Program(
+                        $.Var(
+                             $.Declarator(a, x)),
+                        $.Expression( 
+                            $.PreDecrement(a)));
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -90,12 +81,12 @@ function(value,
             ["Postfix Increment Changes Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program(null, [
-                        new declaration.VariableDeclaration(null, [
-                             new declaration.VariableDeclarator(null, a, x)]),
-                        new statement.ExpressionStatement(null, 
-                            new expression.UpdateExpression(null, '++', a, false)),
-                        new statement.ExpressionStatement(null, a)]);
+                    var root = $.Program(
+                        $.Var(
+                             $.Declarator(a, x)),
+                        $.Expression( 
+                            $.PostIncrement(a)),
+                        $.Expression( a));
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -105,11 +96,11 @@ function(value,
             ["Postfix Increment Return Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program(null, [
-                        new declaration.VariableDeclaration(null, [
-                             new declaration.VariableDeclarator(null, a, x)]),
-                        new statement.ExpressionStatement(null, 
-                            new expression.UpdateExpression(null, '++', a, false))]);
+                    var root = $.Program(
+                        $.Var(
+                             $.Declarator(a, x)),
+                        $.Expression( 
+                            $.PostIncrement(a)));
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -121,12 +112,12 @@ function(value,
             ["Postfix Decrement Changes Value",
             function(){
                set.forEach(function(x){
-                    var root = new program.Program(null, [
-                        new declaration.VariableDeclaration(null, [
-                             new declaration.VariableDeclarator(null, a, x)]),
-                        new statement.ExpressionStatement(null, 
-                            new expression.UpdateExpression(null, '--', a, false)),
-                        new statement.ExpressionStatement(null, a)]);
+                    var root = $.Program(
+                        $.Var(
+                             $.Declarator(a, x)),
+                        $.Expression( 
+                            $.PostDecrement(a)),
+                        $.Expression( a));
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
@@ -136,11 +127,11 @@ function(value,
             ["Postfix Decrement Return Value",
             function(){
                 set.forEach(function(x){
-                    var root = new program.Program(null, [
-                        new declaration.VariableDeclaration(null, [
-                             new declaration.VariableDeclarator(null, a, x)]),
-                        new statement.ExpressionStatement(null,
-                            new expression.UpdateExpression(null, '--', a, false))]);
+                    var root = $.Program(
+                        $.Var(
+                             $.Declarator(a, x)),
+                        $.Expression(
+                            $.PostDecrement(a)));
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');

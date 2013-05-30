@@ -1,48 +1,38 @@
-define(['ecma/ast/value',
-        'ecma/ast/program',
-        'ecma/ast/declaration',
-        'ecma/ast/expression',
-        'ecma/ast/statement',
+define(['$',
         'atum/interpret'],
-function(value,
-        program,
-        declaration,
-        expression,
-        statement,
+function($,
         interpret){
     
-    var a = new value.Identifier(null, 'a');
-    var b = new value.Identifier(null, 'b');
-    var c = new value.Identifier(null, 'c');
+    var a = $.Id('a');
+    var b = $.Id('b');
+    var c = $.Id('c');
 
     return {
         'module': "Object Tests",
         'tests': [
             ["Simple Object Expression",
             function(){
-                var decl = new declaration.VariableDeclaration(null, [
-                    new declaration.VariableDeclarator(null, a,
-                        new expression.ObjectExpression(null, [
-                             {
-                                 'kind': 'init',
-                                 'key': new value.Literal(null, 'b', 'string'),
-                                 'value': new value.Literal(null, 1, 'number')
-                             }
-                         ]))]);
+                var decl = $.Var(
+                    $.Declarator(a,
+                        $.Object({
+                             'kind': 'init',
+                             'key': $.String('b'),
+                             'value': $.Number(1)
+                         })));
                 
-                var nonComputedRoot = new program.Program(null, [
+                var nonComputedRoot = $.Program(
                     decl,
-                    new statement.ExpressionStatement(null,
-                        new expression.MemberExpression(null, a, b, false))]);
+                    $.Expression(
+                        $.Member(a, b)));
                 
                 var nonComputedresult = interpret.interpret(nonComputedRoot);
                 assert.equal(nonComputedresult.type, 'number');
                 assert.equal(nonComputedresult.value, 1);
                 
-                var computedRoot = new program.Program(null, [
+                var computedRoot = $.Program(
                     decl,
-                    new statement.ExpressionStatement(null,
-                        new expression.MemberExpression(null, a, new value.Literal(null, 'b', 'string'), true))]);
+                    $.Expression(
+                        $.ComputedMember(a, $.String('b'))));
                 
                 var computedResult = interpret.interpret(computedRoot);
                 assert.equal(computedResult.type, 'number');
@@ -50,12 +40,11 @@ function(value,
             }],
             ["Non Member Object Expression",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                        new declaration.VariableDeclarator(null, a,
-                            new expression.ObjectExpression(null, []))]),
-                    new statement.ExpressionStatement(null,
-                        new expression.MemberExpression(null, a, b, false))]);
+                var root = $.Program(
+                    $.Var(
+                        $.Declarator(a, $.Object())),
+                    $.Expression(
+                        $.Member(a, b)));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
@@ -63,23 +52,20 @@ function(value,
             }],
             ["Multiple Duplicate Property Member Object Expression",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                        new declaration.VariableDeclarator(null, a,
-                            new expression.ObjectExpression(null, [
-                                 {
-                                     'kind': 'init',
-                                     'key': new value.Literal(null, 'b', 'string'),
-                                     'value': new value.Literal(null, 1, 'number')
-                                 },
-                                 {
-                                     'kind': 'init',
-                                     'key': new value.Literal(null, 'b', 'string'),
-                                     'value': new value.Literal(null, 2, 'number')
-                                 }
-                             ]))]),
-                    new statement.ExpressionStatement(null,
-                        new expression.MemberExpression(null, a, b, false))]);
+                var root = $.Program(
+                    $.Var(
+                        $.Declarator(a,
+                            $.Object({
+                                 'kind': 'init',
+                                 'key': $.String('b'),
+                                 'value': $.Number(1)
+                             }, {
+                                 'kind': 'init',
+                                 'key': $.String('b'),
+                                 'value': $.Number(2)
+                             }))),
+                    $.Expression(
+                        $.Member(a, b)));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -87,25 +73,18 @@ function(value,
             }],
             ["Getter Property Member Object Expression",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                        new declaration.VariableDeclarator(null, a,
-                            new expression.ObjectExpression(null, [
-                                 {
-                                     'kind': 'get',
-                                     'key': new value.Literal(null, 'b', 'string'),
-                                     'value': new expression.FunctionExpression(
-                                         null,
-                                         null,
-                                         [],
-                                         new statement.BlockStatement(null, [
-                                            new statement.ReturnStatement(null,
-                                                new value.Literal(null, 1, 'number'))
-                                         ]))
-                                 }
-                             ]))]),
-                    new statement.ExpressionStatement(null,
-                        new expression.MemberExpression(null, a, b, false))]);
+                var root = $.Program(
+                    $.Var(
+                        $.Declarator(a,
+                            $.Object({
+                                 'kind': 'get',
+                                 'key': $.String('b'),
+                                 'value': $.FunctionExpression(null, [],
+                                     $.Block(
+                                        $.Return($.Number(1))))
+                             }))),
+                    $.Expression(
+                        $.Member(a, b)));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -113,33 +92,24 @@ function(value,
             }],
             ["Getter This Property Member Object Expression",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                        new declaration.VariableDeclarator(null, a,
-                            new expression.ObjectExpression(null, [
-                                 {
-                                     'kind': 'init',
-                                     'key': new value.Literal(null, 'c', 'string'),
-                                     'value': new value.Literal(null, 1, 'number')
-                                 },
-                                 {
-                                     'kind': 'get',
-                                     'key': new value.Literal(null, 'b', 'string'),
-                                     'value': new expression.FunctionExpression(
-                                         null,
-                                         null,
-                                         [],
-                                         new statement.BlockStatement(null, [
-                                            new statement.ReturnStatement(null,
-                                                new expression.MemberExpression(null,
-                                                    new expression.ThisExpression(null),
-                                                    c,
-                                                    false))
-                                         ]))
-                                 }
-                             ]))]),
-                    new statement.ExpressionStatement(null,
-                        new expression.MemberExpression(null, a, b, false))]);
+                var root = $.Program(
+                    $.Var(
+                        $.Declarator(a,
+                            $.Object({
+                                 'kind': 'init',
+                                 'key': $.String('c'),
+                                 'value': $.Number(1)
+                             },
+                             {
+                                 'kind': 'get',
+                                 'key': $.String('b'),
+                                 'value': $.FunctionExpression(null, [],
+                                     $.Block(
+                                        $.Return(
+                                            $.Member($.This(), c))))
+                             }))),
+                    $.Expression(
+                        $.Member(a, b)));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
@@ -148,23 +118,21 @@ function(value,
             
             ["Objects passed by reference",
             function(){
-                var root = new program.Program(null, [
-                    new declaration.VariableDeclaration(null, [
-                        new declaration.VariableDeclarator(null, a,
-                            new expression.ObjectExpression(null, [
-                                 {
-                                     'kind': 'init',
-                                     'key': new value.Literal(null, 'c', 'string'),
-                                     'value': new value.Literal(null, 1, 'number')
-                                 }
-                             ])),
-                             new declaration.VariableDeclarator(null, b, a)]),
-                     new statement.ExpressionStatement(null,
-                         new expression.AssignmentExpression(null, '=',
-                             new expression.MemberExpression(null, a, c, false),
-                             new value.Literal(null, 2, 'number'))),
-                    new statement.ExpressionStatement(null,
-                        new expression.MemberExpression(null, b, c, false))]);
+                var root = $.Program(
+                    $.Var(
+                        $.Declarator(a,
+                            $.Object({
+                                 'kind': 'init',
+                                 'key': $.String('c'),
+                                 'value': $.Number(1)
+                             })),
+                             $.Declarator(b, a)),
+                     $.Expression(
+                         $.Assign(
+                             $.Member(a, c),
+                             $.Number(2))),
+                    $.Expression(
+                        $.Member(b, c)));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');

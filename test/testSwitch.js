@@ -46,8 +46,26 @@ function($,
                         $.Case($.Number(10),
                             $.Expression(
                                 $.Assign(a, $.Number(2))),
-                                $.Break())),
+                            $.Break())),
                     $.Expression(a));
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 1);
+            }],
+            ["Break Return Last Value",
+            function(){
+                var root = $.Program(
+                    $.Switch($.Number(5),
+                        $.Case($.Number(1),
+                            $.Expression($.Number(0)),
+                            $.Break()),
+                        $.Case($.Number(5),
+                             $.Expression($.Number(1)),
+                            $.Break()),
+                        $.Case($.Number(10),
+                             $.Expression($.Number(2)),
+                             $.Break())));
+                
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
@@ -113,6 +131,7 @@ function($,
                             $.Expression(
                                 $.AddAssign(a, $.Number(2))))),
                     $.Expression(a));
+                
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 8);

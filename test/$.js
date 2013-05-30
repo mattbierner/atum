@@ -95,6 +95,14 @@ var PostIncrement = function(x) {
     return new expression.UpdateExpression(null, '++', x, false);
 };
 
+var PreDecrement = function(x) {
+    return new expression.UpdateExpression(null, '--', x, true);
+};
+
+var PostDecrement = function(x) {
+    return new expression.UpdateExpression(null, '--', x, false);
+};
+
 var Assign = function(l, r) {
     return new expression.AssignmentExpression(null, '=', l, r);
 };
@@ -106,6 +114,11 @@ var AddAssign = function(l, r) {
 var Member = function(l, r) {
     return new expression.MemberExpression(null, l, r, false);
 };
+
+var ComputedMember = function(l, r) {
+    return new expression.MemberExpression(null, l, r, true);
+};
+
 
 var Call = function(l, args) {
     return new expression.CallExpression(null, l, args);
@@ -145,8 +158,11 @@ return {
     'Add': Add,
     'PreIncrement': PreIncrement,
     'PostIncrement': PostIncrement,
+    'PreDecrement': PreDecrement,
+    'PostDecrement': PostDecrement,
     'Assign': Assign,
     'AddAssign': AddAssign,
+    'ComputedMember': ComputedMember,
     'Member': Member,
     'Call': Call,
     'FunctionExpression': FunctionExpression,
