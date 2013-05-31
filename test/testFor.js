@@ -31,6 +31,17 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
+            ["Zero Iteration Yielded Value",
+            function(){
+                var root = $.Program(
+                    $.Expression($.Number(10)),
+                    $.For(null, $.Boolean(false), null,
+                        $.Expression($.Number(1))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 10);
+            }],
             ["Return Last Iteration Body Value",
             function(){
                 var root = $.Program(
