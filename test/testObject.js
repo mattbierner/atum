@@ -99,8 +99,7 @@ function($,
                                  'kind': 'init',
                                  'key': $.String('c'),
                                  'value': $.Number(1)
-                             },
-                             {
+                             }, {
                                  'kind': 'get',
                                  'key': $.String('b'),
                                  'value': $.FunctionExpression(null, [],
