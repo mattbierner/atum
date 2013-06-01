@@ -72,6 +72,50 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 20);
             }],
+            ["throw try catch, catch var used outside of catch block is error",
+            function(){
+                var root = $.Program(
+                    $.Try(
+                        $.Block(
+                            $.Throw($.Number(10))),
+                        $.Catch(a,
+                            $.Block())),
+                    $.Expression(a));
+                
+                assert.throws(interpret.interpret.bind(undefined, root));
+            }],
+            ["throw try catch, catch var hides and does not mutate current binding",
+            function(){
+                var root = $.Program(
+                    $.Expression($.Assign(a, $.Number(2))),
+                    $.Try(
+                        $.Block(
+                            $.Throw($.Number(3))),
+                        $.Catch(a,
+                            $.Block(
+                                $.AddAssign(a, a)))),
+                    $.Expression(a));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 2);
+            }],
+            ["throw try catch, catch scope assign back to global",
+            function(){
+                var root = $.Program(
+                    $.Expression($.Assign(a, $.Number(2))),
+                    $.Try(
+                        $.Block(
+                            $.Throw($.Number(3))),
+                        $.Catch(a,
+                            $.Block(
+                                $.AddAssign($.Member($.This(), a), a)))),
+                    $.Expression(a));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 5);
+            }],
             ["throw try empty catch yield from catch body",
             function(){
                 var root = $.Program(
