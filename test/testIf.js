@@ -57,7 +57,6 @@ function($,
                     $.If(
                         $.Boolean(false),
                         $.Expression($.Number(1))));
-                
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 5);

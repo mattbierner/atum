@@ -82,6 +82,7 @@
                     try {
                         var lex = lexer.lexRegExp(input);
                         var ast = parser.parseStream(lex);
+                        console.log(ast);
                         var out = interpret.interpret(ast);
                         
                         $('#text_out').text(out);

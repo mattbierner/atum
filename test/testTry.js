@@ -10,36 +10,83 @@ function($,
     return {
         'module': "Try",
         'tests': [
-            ["No throw",
+            ["nothrow try catch",
             function(){
                 var root = $.Program(
                     $.Try(
                         $.Block(
-                            $.Expression($.Number(10))),
-                        null,
-                        $.Block()));
+                            $.Expression($.Assign(b, $.Number(10)))),
+                        $.Catch(a,
+                            $.Block(
+                                $.Expression($.Assign(b, $.Number(20)))))),
+                    $.Expression(b));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
-            ["Simple Throw",
+            ["nothrow try catch yield",
+            function(){
+                var root = $.Program(
+                    $.Try(
+                        $.Block(
+                            $.Expression($.Number(10))),
+                        $.Catch(a,
+                            $.Block(
+                                $.Expression($.Number(20))))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 10);
+            }],
+            ["throw try catch",
             function(){
                 var root = $.Program(
                     $.Assign(b, $.Number(0)),
                     $.Try(
                         $.Block(
                             $.Expression($.PostIncrement(b)),
-                            $.Throw($.Number(10))),
+                            $.Throw($.Number(10)),
+                            $.Expression($.PostIncrement(b))),
                         $.Catch(a,
                             $.Block(
-                                $.Expression($.Add(a, b))))));
+                                $.Expression($.AddAssign(b, a))))),
+                    $.Expression(b));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 11);
             }],
-            ["Throw finally no catch",
+            ["throw try catch yield",
+            function(){
+                var root = $.Program(
+                    $.Try(
+                        $.Block(
+                            $.Expression($.Number(10)),
+                            $.Throw($.Number(30))),
+                        $.Catch(a,
+                            $.Block(
+                                $.Expression($.Number(20))))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 20);
+            }],
+            ["throw try emtpy catch yield",
+            function(){
+                var root = $.Program(
+                    $.Try(
+                        $.Block(
+                            $.Expression($.Number(10)),
+                            $.Throw($.Number(10))),
+                        $.Catch(a,
+                            $.Block())));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 10);
+            }],
+            ["throw finally no catch",
             function(){
                 var root = $.Program(
                     $.Assign(b, $.Number(1)),
