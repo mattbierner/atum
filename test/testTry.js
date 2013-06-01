@@ -72,12 +72,26 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 20);
             }],
-            ["throw try emtpy catch yield",
+            ["throw try empty catch yield from catch body",
             function(){
                 var root = $.Program(
                     $.Try(
                         $.Block(
                             $.Expression($.Number(10)),
+                            $.Throw($.Number(10))),
+                        $.Catch(a,
+                            $.Block())));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 10);
+            }],
+             ["throw try empty catch yield from pre",
+            function(){
+                var root = $.Program(
+                    $.Expression($.Number(10)),
+                    $.Try(
+                        $.Block(
                             $.Throw($.Number(10))),
                         $.Catch(a,
                             $.Block())));
@@ -124,7 +138,7 @@ function($,
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
-                assert.equal(result.value, 2);
+                assert.equal(result.value, 4);
             }],
            
         ]

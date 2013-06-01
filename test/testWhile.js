@@ -8,7 +8,7 @@ function($,
     var c = $.Id('c');
 
     return {
-        'module': "For",
+        'module': "While",
         'tests': [
             ["Zero Iteration While",
             function(){
@@ -99,7 +99,7 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 81);
             }],
-            ["Nested For Continue",
+            ["Nested While Continue",
             function(){
                 var root = $.Program(
                     $.Expression($.Assign(a, $.Number(0))),
@@ -110,7 +110,7 @@ function($,
                                     $.If($.Mod(a, $.Number(2)),
                                         $.Continue(),
                                         $.Expression($.Mul(a, b))))),
-                             $.PreIncrement(a))));
+                             $.Expression($.PreIncrement(a)))));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
