@@ -205,23 +205,17 @@ function($,
                 // Checks that argument object values are passed by reference
                 // but that environment binding still acts correctly.
                 var root = $.Program(
-                    $.FunctionDeclaration(
-                        a,
-                        [b],
+                    $.FunctionDeclaration(a, [b],
                         $.Block(
-                           $.Assign($.Member(b, c), $.Number(10)),
-                           $.Assign(b, $.Number(1)))),
-                    $.Expression(
-                        $.Assign(
-                            b,
-                            $.Object({
-                                 'kind': 'init',
-                                 'key': $.String('c'),
-                                 'value': $.Number(1)
-                             }))),
-                    $.Call(a, [b]),
-                    $.Expression(
-                        $.Member(b, c)));
+                           $.Expression($.Assign($.Member(b, c), $.Number(10))),
+                           $.Expression($.Assign(b, $.Number(1))))),
+                    $.Expression($.Assign(b, $.Object({
+                         'kind': 'init',
+                         'key': $.String('c'),
+                         'value': $.Number(1)
+                     }))),
+                    $.Expression($.Call(a, [b])),
+                    $.Expression($.Member(b, c)));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
