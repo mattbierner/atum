@@ -122,7 +122,7 @@ function($,
                     $.Try(
                         $.Block(
                             $.Expression($.Number(10)),
-                            $.Throw($.Number(10))),
+                            $.Throw($.Number(100))),
                         $.Catch(a,
                             $.Block())));
                 
@@ -130,7 +130,7 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
-             ["throw try empty catch yield from pre",
+            ["throw try empty catch yield from pre",
             function(){
                 var root = $.Program(
                     $.Expression($.Number(10)),
