@@ -17,7 +17,10 @@ Project Goals:
 ## Modules ##
 
 ### semantics 'atum/semantics' ###
-Defines computations for the semantics of an ECMAScript program. 
+Defines the semantics of ECMAScript using computations.
+
+### operations 'atum/operations' ###
+Computations used for evaluation.
 
 ### value 'atum/value' ###
 Defines primitive value data structures and operations.
