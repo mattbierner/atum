@@ -165,7 +165,7 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 4);
             }],
-            ["No throw finally no catch",
+            ["Nothrow finally no catch",
             function(){
                 var root = $.Program(
                     $.Assign(b, $.Number(1)),
@@ -184,7 +184,94 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 4);
             }],
-           
+            ["Throw, catch also throws",
+            function(){
+                var root = $.Program(
+                    $.Try(
+                        $.Block(
+                            $.Try(
+                                $.Block(
+                                    $.Throw($.Number(10))),
+                                $.Catch(a,
+                                    $.Block(
+                                        $.Throw(a))))),
+                        $.Catch(a,
+                            $.Block(
+                                $.Expression(a)))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 10);
+            }],
+            ["Throw, catch also throws",
+            function(){
+                var root = $.Program(
+                    $.Expression($.Assign(b, $.Number(1))),
+                    $.Try(
+                        $.Block(
+                            $.Try(
+                                $.Block(
+                                    $.Expression($.Assign(b, $.Number(2))),
+                                    $.Throw($.Number(b)),
+                                    $.Expression($.Assign(b, $.Number(3)))),
+                                $.Catch(a,
+                                    $.Block(
+                                        $.Expression($.AddAssign(b, $.Number(8))),
+                                        $.Throw(a),
+                                        $.Expression($.AddAssign(b, $.Number(16))))))),
+                        $.Catch(a,
+                            $.Block(
+                                $.Expression(b)))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 10);
+            }],
+            ["Throw, catch also throws with finally",
+            function(){
+                var root = $.Program(
+                    $.Expression($.Assign(b, $.Number(1))),
+                    $.Try(
+                        $.Block(
+                            $.Try(
+                                $.Block(
+                                    $.Expression($.Assign(b, $.Number(2))),
+                                    $.Throw(b),
+                                    $.Expression($.Assign(b, $.Number(3)))),
+                                $.Catch(a,
+                                    $.Block(
+                                        $.Expression($.AddAssign(b, $.Number(8))),
+                                        $.Throw(a),
+                                        $.Expression($.AddAssign(b, $.Number(16))))),
+                                $.Block(
+                                    $.Expression($.AddAssign(b, $.Number(100)))))),
+                        $.Catch(a,
+                            $.Block(
+                                $.Expression($.AddAssign(b, a))))),
+                        $.Expression(b));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 112);
+            }],
+            ["Throw, catch return and finally return",
+            function(){
+                var root = $.Program(
+                    $.FunctionDeclaration(a, [], $.Block(
+                        $.Try(
+                            $.Block(
+                                $.Return(b)),
+                            $.Catch(b,
+                                $.Block(
+                                    $.Return($.Number(1)))),
+                            $.Block(
+                                $.Return($.Number(2)))))),
+                    $.Expression($.Call(a, [])));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 2);
+            }],
         ]
     };
 });
