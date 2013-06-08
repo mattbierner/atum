@@ -37,7 +37,7 @@
             <h2>Input</h2>
             <div>
                 <textarea rows='20'></textarea>
-                <button>Tokenize</button>
+                <button>Eval</button>
             </div>
         </div>
         <div class='output'>
@@ -82,7 +82,6 @@
                     try {
                         var lex = lexer.lexRegExp(input);
                         var ast = parser.parseStream(lex);
-                        console.log(ast);
                         var out = interpret.interpret(ast);
                         
                         $('#text_out').text(out);
