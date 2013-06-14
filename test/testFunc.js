@@ -236,7 +236,19 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
-            
+            ["Set Property on function object",
+            function(){
+                var root = $.Program(
+                    $.FunctionDeclaration(a, [],
+                        $.Block(
+                           $.Return($.Number(1)))),
+                    $.Expression($.Assign($.Member(a, c), $.Number(10))),
+                    $.Expression($.Add($.Call(a, []), $.Member(a, c))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 11);
+            }],
         ]
     };
 });
