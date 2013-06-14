@@ -222,6 +222,21 @@ function($,
                 assert.equal(result.value, 10);
             }],
             
+            ["Call With global this",
+            function(){
+                var root = $.Program(
+                    $.FunctionDeclaration(a, [b],
+                        $.Block(
+                           $.Expression($.Assign($.Member($.This(), c), b)),
+                           $.Return($.Number(1)))),
+                    $.Expression($.Call(a, [$.Number(10)])),
+                    $.Expression($.Member($.This(), c)));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 10);
+            }],
+            
         ]
     };
 });

@@ -83,7 +83,7 @@
                         var lex = lexer.lexRegExp(input);
                         var ast = parser.parseStream(lex);
                         var out = interpret.interpret(ast);
-                        
+                        console.log(out);
                         $('#text_out').text(out);
                     } catch (e) {
                         $('.ParseError').text(e);
