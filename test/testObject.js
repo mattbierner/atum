@@ -3,9 +3,10 @@ define(['$',
 function($,
         interpret){
     
-    var a = $.Id('a');
-    var b = $.Id('b');
-    var c = $.Id('c');
+    var a = $.Id('a'),
+        b = $.Id('b'),
+        c = $.Id('c'),
+        d = $.Id('d');
 
     return {
         'module': "Object Tests",
@@ -136,6 +137,26 @@ function($,
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 2);
+            }],
+            
+            ["setter yields set value",
+            function(){
+                var root = $.Program(
+                    $.Expression($.Assign(a, $.Object({
+                        'kind': 'set',
+                        'key': $.String('b'),
+                        'value': $.FunctionExpression(null, [c],
+                             $.Block(
+                                $.Expression($.Assign($.Member($.This(), d), $.Number(23))),
+                                $.Return($.Number(13))))
+                    }))),
+                    $.Expression($.Add(
+                        $.Assign($.Member(a, b), $.Number(100)),
+                        $.Member(a, d))));
+                
+                var result = interpret.interpret(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 123);
             }],
         ]
     };
