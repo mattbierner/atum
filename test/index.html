@@ -24,7 +24,7 @@
         });
         require(
             ['testUnary', 'testNumber', 'testString', 'testBinding', 'testIncDec', 'testFunc',
-            'testObject', 'testIf', 'testSwitch', 'testFor', 'testWhile', 'testTry'],
+            'testObject', 'testInheritance', 'testIf', 'testSwitch', 'testFor', 'testWhile', 'testTry'],
             function() {
                 Array.prototype.forEach.call(arguments, function(m) {
                     m.module && module(m.module);

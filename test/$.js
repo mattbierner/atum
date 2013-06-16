@@ -186,6 +186,10 @@ var Call = function(l, args) {
     return new expression.CallExpression(null, l, args);
 };
 
+var New = function(l, args) {
+    return new expression.NewExpression(null, l, args);
+};
+
 var FunctionExpression = function(id, params, body) {
     return new expression.FunctionExpression(null, id, params, body);
 };
@@ -242,6 +246,7 @@ return {
     'ComputedMember': ComputedMember,
     'Member': Member,
     'Call': Call,
+    'New': New,
     'FunctionExpression': FunctionExpression,
     'Object': Object
 };

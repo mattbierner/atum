@@ -3,40 +3,25 @@ define(['$',
 function($,
         interpret){
     
-    var a = $.Id('a');
-    var b = $.Id('b');
-    var c = $.Id('c');
+    var a = $.Id('a'),
+        b = $.Id('b'),
+        c = $.Id('c');
 
     return {
         'module': "Object Tests",
         'tests': [
-            ["Simple Object Expression",
+            ["Simple new constructor",
             function(){
-                var decl = $.Var(
-                    $.Declarator(a,
-                        $.Object({
-                             'kind': 'init',
-                             'key': $.String('b'),
-                             'value': $.Number(1)
-                         })));
+                var root = $.Program(
+                    $.FunctionDeclaration(a, [],
+                        $.Block(
+                           $.Expression($.Assign($.Member($.This(), b), $.Number(10))),
+                           $.Return($.Number(1)))),
+                    $.Expression($.Member($.New(a, []), b)));
                 
-                var nonComputedRoot = $.Program(
-                    decl,
-                    $.Expression(
-                        $.Member(a, b)));
-                
-                var nonComputedresult = interpret.interpret(nonComputedRoot);
+                var nonComputedresult = interpret.interpret(root);
                 assert.equal(nonComputedresult.type, 'number');
-                assert.equal(nonComputedresult.value, 1);
-                
-                var computedRoot = $.Program(
-                    decl,
-                    $.Expression(
-                        $.ComputedMember(a, $.String('b'))));
-                
-                var computedResult = interpret.interpret(computedRoot);
-                assert.equal(computedResult.type, 'number');
-                assert.equal(computedResult.value, 1);
+                assert.equal(nonComputedresult.value, 10);
             }],
             
         ]
