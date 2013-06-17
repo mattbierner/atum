@@ -11,28 +11,46 @@ function(clause,
         program,
         value){
 "use strict";
+/* 
+ ******************************************************************************/
+var binary = function(op) {
+    return function(l, r) {
+        return new expression.BinaryExpression(null, op, l, r);
+    };
+};
 
+var unary = function(op) {
+    return function(x) {
+        return new expression.UnaryExpression(null, op, x);
+    };
+};
+
+var update = function(op, prefix) {
+    return function(x) {
+        return new expression.UpdateExpression(null, op, x, prefix);
+    };
+};
+
+var literal = function(type) {
+    return function(val) {
+        return new value.Literal(null, val, type);
+    };
+};
+
+/*
+ ******************************************************************************/
 var Program = function(/*...*/) {
     return new program.Program(null, arguments);
 };
 
-
-var Number = function(val) {
-    return new value.Literal(null, val, 'number');
-};
-
-var Boolean = function(val) {
-    return new value.Literal(null, val, 'boolean');
-};
-
-var String = function(val) {
-    return new value.Literal(null, val, 'string');
-};
+var Number = literal('number');
+var Boolean = literal('boolean');
+var String = literal('string');
+var Null = literal('null');
 
 var Id = function(id) {
     return new value.Identifier(null, id);
 };
-
 
 var Block = function(/*...*/) {
     return new statement.BlockStatement(null, arguments);
@@ -104,66 +122,26 @@ var This = function() {
     return new expression.ThisExpression(null);
 };
 
-var Plus = function(x) {
-    return new expression.UnaryExpression(null, '+', x);
-};
+var Plus = unary('+');
+var Negate = unary('-');
 
-var Negate = function(x) {
-    return new expression.UnaryExpression(null, '-', x);
-};
+var Add = binary('+');
+var Sub = binary('-');
+var Mul = binary('*');
+var Div = binary('/');
+var Mod = binary('%');
 
-var Add = function(l, r) {
-    return new expression.BinaryExpression(null, '+', l, r);
-};
+var Lt = binary('<');
+var Lte = binary('<=');
+var Gt = binary('>');
+var Gte = binary('>=');
+var Equals = binary('==');
+var StrictEquals = binary('===');
 
-var Sub = function(l, r) {
-    return new expression.BinaryExpression(null, '-', l, r);
-};
-
-var Mul = function(l, r) {
-    return new expression.BinaryExpression(null, '*', l, r);
-};
-
-var Div = function(l, r) {
-    return new expression.BinaryExpression(null, '/', l, r);
-};
-
-var Mod = function(l, r) {
-    return new expression.BinaryExpression(null, '%', l, r);
-};
-
-var Lt = function(l, r) {
-    return new expression.BinaryExpression(null, '<', l, r);
-};
-
-var Lte = function(l, r) {
-    return new expression.BinaryExpression(null, '<=', l, r);
-};
-
-var Gt = function(l, r) {
-    return new expression.BinaryExpression(null, '>', l, r);
-};
-
-var Gte = function(l, r) {
-    return new expression.BinaryExpression(null, '>=', l, r);
-};
-
-
-var PreIncrement = function(x) {
-    return new expression.UpdateExpression(null, '++', x, true);
-};
-
-var PostIncrement = function(x) {
-    return new expression.UpdateExpression(null, '++', x, false);
-};
-
-var PreDecrement = function(x) {
-    return new expression.UpdateExpression(null, '--', x, true);
-};
-
-var PostDecrement = function(x) {
-    return new expression.UpdateExpression(null, '--', x, false);
-};
+var PreIncrement = update('++', true);
+var PostIncrement = update('++', false);
+var PreDecrement = update('--', true);
+var PostDecrement = update('--', false);
 
 var Assign = function(l, r) {
     return new expression.AssignmentExpression(null, '=', l, r);
@@ -180,7 +158,6 @@ var Member = function(l, r) {
 var ComputedMember = function(l, r) {
     return new expression.MemberExpression(null, l, r, true);
 };
-
 
 var Call = function(l, args) {
     return new expression.CallExpression(null, l, args);
@@ -204,6 +181,7 @@ return {
     'Number': Number,
     'String': String,
     'Boolean': Boolean,
+    'Null': Null,
     'Id': Id,
     
     'Block': Block,
@@ -237,6 +215,8 @@ return {
     'Lte': Lte,
     'Gt': Gt,
     'Gte': Gte,
+    'Equals': Equals,
+    'StrictEquals': StrictEquals,
     'PreIncrement': PreIncrement,
     'PostIncrement': PostIncrement,
     'PreDecrement': PreDecrement,

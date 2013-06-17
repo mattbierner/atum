@@ -23,8 +23,20 @@
             }
         });
         require(
-            ['testUnary', 'testNumber', 'testString', 'testBinding', 'testIncDec', 'testFunc',
-            'testObject', 'testInheritance', 'testIf', 'testSwitch', 'testFor', 'testWhile', 'testTry'],
+            ['testBinding',
+            'testCompare',
+            'testFor',
+            'testFunc',
+            'testIf',
+            'testIncDec', 
+            'testInheritance',
+            'testNumber',
+            'testObject',
+            'testSwitch',
+            'testString',
+            'testTry',
+            'testUnary',
+            'testWhile'],
             function() {
                 Array.prototype.forEach.call(arguments, function(m) {
                     m.module && module(m.module);
