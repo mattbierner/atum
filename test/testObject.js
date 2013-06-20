@@ -1,6 +1,8 @@
 define(['$',
+        'expect',
         'atum/interpret'],
 function($,
+        expect,
         interpret){
     
     var a = $.Id('a'),
@@ -13,31 +15,22 @@ function($,
         'tests': [
             ["Simple Object Expression",
             function(){
-                var decl = $.Var(
-                    $.Declarator(a,
-                        $.Object({
-                             'kind': 'init',
-                             'key': $.String('b'),
-                             'value': $.Number(1)
-                         })));
+                var f = function(extract) {
+                    return  $.Program(
+                        $.Expression($.Assign(a, 
+                            $.Object({
+                                 'kind': 'init',
+                                 'key': $.String('ab'),
+                                 'value': $.Number(1)
+                             }))),
+                        $.Expression(extract));
+                };
                 
-                var nonComputedRoot = $.Program(
-                    decl,
-                    $.Expression(
-                        $.Member(a, b)));
+                expect.type('number', 1)(
+                    interpret.interpret(f($.Member(a, $.Id('ab')))));
                 
-                var nonComputedresult = interpret.interpret(nonComputedRoot);
-                assert.equal(nonComputedresult.type, 'number');
-                assert.equal(nonComputedresult.value, 1);
-                
-                var computedRoot = $.Program(
-                    decl,
-                    $.Expression(
-                        $.ComputedMember(a, $.String('b'))));
-                
-                var computedResult = interpret.interpret(computedRoot);
-                assert.equal(computedResult.type, 'number');
-                assert.equal(computedResult.value, 1);
+                expect.type('number', 1)(
+                    interpret.interpret(f($.ComputedMember(a, $.Add($.String('a'), $.String('b'))))));
             }],
             ["Non Member Object Expression",
             function(){
@@ -47,9 +40,31 @@ function($,
                     $.Expression(
                         $.Member(a, b)));
                 
+                expect.type('undefined', undefined)(
+                    interpret.interpret(root));
+            }],
+            ["Multiple Properties Member Object Literal",
+            function(){
+                var root = $.Program(
+                    $.Var(
+                        $.Declarator(a,
+                            $.Object({
+                                 'kind': 'init',
+                                 'key': $.String('b'),
+                                 'value': $.Number(1)
+                             }, {
+                                 'kind': 'init',
+                                 'key': $.String('c'),
+                                 'value': $.Number(2)
+                             }))),
+                    $.Expression(
+                        $.Add(
+                            $.Member(a, b),
+                            $.Member(a, c))));
+                
                 var result = interpret.interpret(root);
-                assert.equal(result.type, 'undefined');
-                assert.equal(result.value, undefined);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 3);
             }],
             ["Multiple Duplicate Property Member Object Expression",
             function(){
