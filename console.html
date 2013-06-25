@@ -65,13 +65,16 @@
         });
 
         $(function () {
-            require(['parse/parse',
-               'nu/stream',
-               'atum/interpret',
-               'ecma/lex/lexer', 'ecma/parse/parser'],
+            require([
+                'parse/parse',
+                'nu/stream',
+                'atum/interpret',
+                'atum/compute',
+                'ecma/lex/lexer', 'ecma/parse/parser'],
             function(parse,
                     stream,
                     interpret,
+                    compute,
                     lexer, parser) {
                     
                 $('button').click(function () {
@@ -83,7 +86,6 @@
                         var lex = lexer.lexRegExp(input);
                         var ast = parser.parseStream(lex);
                         var out = interpret.interpret(ast);
-                        console.log(out);
                         $('#text_out').text(out);
                     } catch (e) {
                         $('.ParseError').text(e);
