@@ -34,19 +34,29 @@
 <body lang="en">
     <div class="content">
         <div class='console'>
-            <h2>Input</h2>
+            <div class='input'>
+                <h2>Input</h2>
+                <div>
+                    <textarea rows='20'></textarea>
+                </div>
+            </div>
+            <div class='output'>
+                <h2>Output</h2>
+                <span class="ParseError"></span>
+                <p>
+                    <span id='parse_out'></span>
+                </p>
+                <pre id='text_out'></pre>
+            </div>
             <div>
-                <textarea rows='20'></textarea>
                 <button>Eval</button>
+                <button>Debug</button>
             </div>
         </div>
-        <div class='output'>
-            <h2>Output</h2>
-            <span class="ParseError"></span>
-            <p>
-                <span id='parse_out'></span>
-            </p>
-            <pre id='text_out'></pre>
+        <div class='debug'>
+            <div>
+                <button>step</button>
+            </div>
         </div>
     </div>
     
@@ -70,11 +80,13 @@
                 'nu/stream',
                 'atum/interpret',
                 'atum/compute',
+                'atum/debug/operations',
                 'ecma/lex/lexer', 'ecma/parse/parser'],
             function(parse,
                     stream,
                     interpret,
                     compute,
+                    debug,
                     lexer, parser) {
                     
                 $('button').click(function () {
