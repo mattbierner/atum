@@ -3,20 +3,77 @@
 <head>
     <meta charset="utf-8">
     <title>Atum Console</title>
+    
+    <link type="text/css" rel="stylesheet" href="resources/layout-default-latest.css" />
+    <link type="text/css" rel="stylesheet" href="resources/codemirror-3.14/codemirror.css" />
+    
     <style>
-        .content > * {
-            width: 100%;
-            position: relative;
+        @import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
+    
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
         }
         
-        .content > * > * {
-            padding: 0 2em;
+        body {
+            font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-weight:300;
+        }
+
+        #container {
+            min-height: 300px;
+            min-width:  600px;
+            height: 100%;
+            width: 100%;
+        }
+        
+        .pane {
+            padding: 0;
+            margin: 0;
+            width: auto;
+        }
+        
+        .pane-header {
+            border-bottom: 1px solid gray;
+        }
+        
+        .pane-title {
+            margin: 0;
+            font-weight: normal;
+            font-size: 1.2em;
+            color: black;
+            padding: 0 0.25em;
+        }
+        
+        .ui-layout-resizer {
+            border: 0;
+        }
+        
+        #input {
+            border-bottom: 1px solid lightgray;
+        }
+        .console .workspace {
+            width: auto;
+            border-bottom: 1px solid gray;
+        }
+        
+        .console .workspace .controls > * {
             display: block;
+            float: right;
+            padding: 0 1em;
+            font-size: 0.90em;
+            border-left: 1px solid gray;
         }
         
-        .console textarea {
-            width: 100%;
-            box-sizing: border-box;
+        button {
+            margin: 0;
+            border: 0;
+            background: white;
+        }
+        
+        button:hover {
+            color: gray;
         }
         
         .ParseError {
@@ -24,20 +81,32 @@
         }
         
         #text_out {
-            border: 1px solid black;
             padding: 0;
             margin: 0;
+        }
+        
+        /* From http://nicolasgallagher.com/micro-clearfix-hack/ */
+        .cf:before,
+        .cf:after {
+            content: " ";
+            display: table;
+        }
+        
+        .cf:after {
+            clear: both;
         }
     </style>
 </head>
 
 <body lang="en">
-    <div class="content">
-        <div class='console'>
-            <div class='input'>
-                <h2>Input</h2>
-                <div>
-                    <textarea rows='20'></textarea>
+    <div id='container' class="content">
+    
+        <div class='console pane ui-layout-center'>
+            <div class='workspace'>
+                <div id='input'></div>
+                <div class='controls cf'>
+                    <button id='eval-button'>Eval</button>
+                    <button id='debug-button'>Debug</button>
                 </div>
             </div>
             <div class='output'>
@@ -48,20 +117,29 @@
                 </p>
                 <pre id='text_out'></pre>
             </div>
+        </div>
+        
+        <div class='debug pane ui-layout-east'>
+            <div class='pane-header'>
+                <h2 class='pane-title'>State</h2>
+            </div>
             <div>
-                <button>Eval</button>
-                <button>Debug</button>
+                <ul class='frames'></ul>
             </div>
         </div>
-        <div class='debug'>
-            <div>
-                <button>step</button>
+        <div class='callstack pane ui-layout-west'>
+            <div class='pane-header'>
+                <h2 class='pane-title'>Callstack</h2>
             </div>
         </div>
     </div>
     
     <script type="application/javascript" src="resources/require.js"></script>
-    <script type="application/javascript" src="resources/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="resources/jquery-ui-1.10.3/js/jquery-1.9.1.js"></script>
+    <script type="application/javascript" src="resources/jquery-ui-1.10.3/js/jquery-ui-1.10.3.custom.js"></script>
+    <script type="application/javascript" src="resources/jquery.layout-latest.js"></script>
+    <script type="application/javascript" src="resources/codemirror-3.14/codemirror.js"></script>
+    <script type="application/javascript" src="resources/codemirror-3.14/javascript.js"></script>
     
     <script type="application/javascript">
         requirejs.config({
@@ -73,24 +151,63 @@
                 'ecma': 'dependencies/parse-ecma/lib',
             }
         });
-
+        
+        var get = function(p, c) {
+            return p[c];
+        };
+        
+        var format = function(str, obj) {
+            return str.replace(/@([a-z][a-z0-9\.]*)|@/gi, function(path) {
+                if (path === '@')
+                    return obj;
+                return [].reduce.call(path, get, obj);
+            });
+        };
+        
+        var printFrame = function(d, lex) {
+            var d = $('<ul></ul>');
+            Object.keys(lex.record).forEach(function(x) {
+                d.append('<li>' + x + '</li>');
+            });
+            return d;
+        };
+        
+        var printState = function(d, ctx) {
+            var template = $('<li></li>');
+            $('.frames').empty();
+            var lex = d.getValue(ctx.userData.lexicalEnvironment);
+            while (lex) {
+                $('.frames').append($('<li></li>').append(printFrame(d, lex)));
+                lex = d.getValue(lex.outer);
+            }
+        };
+        
         $(function () {
+            var mirror = CodeMirror(document.getElementById('input'), {
+                'mode':  'javascript',
+                'lineNumbers': true
+            });
+            
+            $('#container').layout();
+            
             require([
                 'parse/parse',
                 'nu/stream',
                 'atum/interpret',
                 'atum/compute',
+                'atum/debug/debugger',
                 'atum/debug/operations',
                 'ecma/lex/lexer', 'ecma/parse/parser'],
             function(parse,
                     stream,
                     interpret,
                     compute,
+                    atum_debugger,
                     debug,
                     lexer, parser) {
                     
-                $('button').click(function () {
-                    var input = $('textarea').val();
+                $('button#eval-button').click(function () {
+                    var input = mirror.doc.getValue();
                     $('.ParseError').text('');
                     $('#text_out').text('');
                     
@@ -99,6 +216,37 @@
                         var ast = parser.parseStream(lex);
                         var out = interpret.interpret(ast);
                         $('#text_out').text(out);
+                    } catch (e) {
+                        $('.ParseError').text(e);
+                    }
+                });
+                
+                $('button#debug-button').click(function () {
+                    var input = mirror.doc.getValue();
+                    $('.ParseError').text('');
+                    $('#text_out').text('');
+                    
+                    try {
+                        var lex = lexer.lexRegExp(input);
+                        var ast = parser.parseStream(lex);
+                        var p = interpret.evaluateProgram(ast);
+                        var done = false;
+                        var ctx = new compute.ComputeContext({}, null);
+                        var z = new atum_debugger.Debugger(p(ctx,
+                            function(x, ctx){ done = true; return function() { $('#text_out').text(x); }; },
+                            function(x, ctx){ done = true; return function() { $('.ParseError').text(x);} }));
+                         if (!done) {
+                            printState(z, z.k.ctx);
+                        }
+                        while (!done) {
+                            z = z.step();
+                            if (!done) {
+                                printState(z, z.k.ctx);
+                               
+                            }
+                        }
+                        
+                        z.k();
                     } catch (e) {
                         $('.ParseError').text(e);
                     }
