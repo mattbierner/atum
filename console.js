@@ -27,17 +27,17 @@ var format = function(str, obj) {
 var printFrame = function(d, lex) {
     var d = $('<ul></ul>');
     Object.keys(lex.record).forEach(function(x) {
-        d.append('<li>' + x + '</li>');
+        d.append('<li>' + x + ': ' + lex.record[x] + '</li>');
     });
     return d;
 };
 
 var printState = function(d, ctx) {
-    var template = $('<li></li>');
-    $('.frames').empty();
+    var template = $("<li class='environment'></li>");
+    $('.environments').empty();
     var lex = d.getValue(ctx.userData.lexicalEnvironment);
     while (lex) {
-        $('.frames').append($('<li></li>').append(printFrame(d, lex)));
+        $('.environments').append($("<li class='environment'></li>").append(printFrame(d, lex)));
         lex = d.getValue(lex.outer);
     }
 };

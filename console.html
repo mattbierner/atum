@@ -85,6 +85,17 @@
             margin: 0;
         }
         
+        .environments {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .environment {
+            list-style: none;
+            border-bottom: 1px solid gray;
+        }
+        
+        
         /* From http://nicolasgallagher.com/micro-clearfix-hack/ */
         .cf:before,
         .cf:after {
@@ -124,14 +135,16 @@
                 <h2 class='pane-title'>State</h2>
             </div>
             <div>
-                <ul class='frames'></ul>
+                <ul class='environments'></ul>
             </div>
         </div>
+        
         <div class='callstack pane ui-layout-west'>
             <div class='pane-header'>
                 <h2 class='pane-title'>Callstack</h2>
             </div>
         </div>
+        
     </div>
     
     
