@@ -137,6 +137,17 @@
 </head>
 
 <body lang="en">
+    <script type="text/html" id="environments-template">
+        <li>
+            <ul class='binding-list' data-bind="foreach: bindings">
+                <li>
+                    <span data-bind="text: name"></span>
+                    <span data-bind="text: value"></span>
+                </li>
+            </ul>
+        </li>
+    </script>
+
     <header id='page-header' class='cf'>
         <h1 id='page-title'>Atum</h1>
     </header>
@@ -171,7 +182,7 @@
                 <h2 class='pane-title'>State</h2>
             </div>
             <div>
-                <ul class='environments'></ul>
+                <ul class='environments' data-bind="template: { name: 'environments-template', foreach: environments }"></ul>
             </div>
         </div>
         
@@ -187,12 +198,26 @@
     
     <script type="application/javascript" src="resources/require.js"></script>
     
+    <script type="application/javascript">
+        requirejs.config({
+            paths: {
+                'atum': 'lib',
+                'amulet': 'dependencies/amulet/lib',
+                'parse': 'dependencies/parse/lib',
+                'nu': 'dependencies/nu/lib',
+                'ecma': 'dependencies/parse-ecma/lib',
+                'knockout-2.2.1': 'resources/knockout-2.2.1'
+            }
+        });
+    </script>
+    
     <script type="application/javascript" src="resources/jquery-ui-1.10.3/js/jquery-1.9.1.js"></script>
     <script type="application/javascript" src="resources/jquery-ui-1.10.3/js/jquery-ui-1.10.3.custom.js"></script>
     <script type="application/javascript" src="resources/jquery.layout-latest.js"></script>
     
     <script type="application/javascript" src="resources/codemirror-3.14/codemirror.js"></script>
     <script type="application/javascript" src="resources/codemirror-3.14/javascript.js"></script>
+    
     
     <script type="application/javascript" src="console.js"></script>
 </body>

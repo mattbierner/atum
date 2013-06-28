@@ -1,24 +1,14 @@
 /**
- * 
  */
-requirejs.config({
-    paths: {
-        'atum': 'lib',
-        'amulet': 'dependencies/amulet/lib',
-        'parse': 'dependencies/parse/lib',
-        'nu': 'dependencies/nu/lib',
-        'ecma': 'dependencies/parse-ecma/lib',
-    }
-});
-
-require([
+require(['knockout-2.2.1',
         'parse/parse',
         'nu/stream',
         'atum/interpret',
         'atum/compute',
         'atum/debug/debugger',
         'ecma/lex/lexer', 'ecma/parse/parser'],
-function(parse,
+function(ko,
+        parse,
         stream,
         interpret,
         compute,
@@ -43,25 +33,30 @@ var format = function(str, obj) {
 
 /* 
  ******************************************************************************/
+var printBindings = function(d, record) {
+    return Object.keys(record).reduce(function(p, c) {
+        p.push({'name': c, 'value': record[c] });
+        return p;
+    }, []);
+};
+
+
 var printFrame = function(d, lex) {
-    var d = $('<ul></ul>');
-    Object.keys(lex.record).forEach(function(x) {
-        d.append('<li>' + x + ': ' + lex.record[x] + '</li>');
-    });
-    return d;
+    return {
+        'bindings': printBindings(d, lex.record)
+    };
 };
 
 var printState = function(d, ctx) {
     if (!ctx.userData)
         return;
     
-    var template = $("<li class='environment'></li>");
-    $('.environments').empty();
-    var lex = d.getValue(ctx.userData.lexicalEnvironment);
-    while (lex) {
-        $('.environments').append($("<li class='environment'></li>").append(printFrame(d, lex)));
-        lex = d.getValue(lex.outer);
-    }
+    var environment = d.getValue(ctx.userData.lexicalEnvironment);
+    model.environments.removeAll();
+    do {
+        model.environments.push(printFrame(d, environment));
+        environment = d.getValue(environment.outer);
+    } while (environment);
 };
 
 /* 
@@ -101,6 +96,12 @@ var doc = CodeMirror(document.getElementById('input'), {
 }).doc;
 
 var debug;
+
+var ViewModel = function() {
+    this.environments = ko.observableArray([]);
+};
+var model = new ViewModel();
+ko.applyBindings(model);
 
 $(function(){
     $('#container').layout();
