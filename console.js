@@ -1,7 +1,6 @@
 /**
  * 
  */
-
 requirejs.config({
     paths: {
         'atum': 'lib',
@@ -12,18 +11,38 @@ requirejs.config({
     }
 });
 
+require([
+        'parse/parse',
+        'nu/stream',
+        'atum/interpret',
+        'atum/compute',
+        'atum/debug/debugger',
+        'ecma/lex/lexer', 'ecma/parse/parser'],
+function(parse,
+        stream,
+        interpret,
+        compute,
+        atum_debugger,
+        lexer, parser) {
+
+var reduce = Function.prototype.call.bind(Array.prototype.reduce);
+
 var get = function(p, c) {
     return p[c];
 };
 
 var format = function(str, obj) {
-    return str.replace(/@([a-z][a-z0-9\.]*)|@/gi, function(path) {
+    return str.replace(/@@|@([a-z][a-z0-9\.]*)|@/gi, function(path) {
         if (path === '@')
             return obj;
-        return [].reduce.call(path, get, obj);
+        else if (path === '@@')
+            return '@';
+        return reduce(path, get, obj);
     });
 };
 
+/* 
+ ******************************************************************************/
 var printFrame = function(d, lex) {
     var d = $('<ul></ul>');
     Object.keys(lex.record).forEach(function(x) {
@@ -33,6 +52,9 @@ var printFrame = function(d, lex) {
 };
 
 var printState = function(d, ctx) {
+    if (!ctx.userData)
+        return;
+    
     var template = $("<li class='environment'></li>");
     $('.environments').empty();
     var lex = d.getValue(ctx.userData.lexicalEnvironment);
@@ -42,74 +64,78 @@ var printState = function(d, ctx) {
     }
 };
 
-$(function () {
-    var mirror = CodeMirror(document.getElementById('input'), {
-        'mode':  'javascript',
-        'lineNumbers': true
-    });
-    
+/* 
+ ******************************************************************************/
+var out = {
+    'write': function(x) {
+        $('#text_out').text(x);
+    },
+    'clear': function(x) {
+        $('#text_out').text('');
+    }
+};
+
+var errorOut = {
+    'write': function(x) {
+        $('#ParseError').text(x);
+    },
+    'clear': function(x) {
+        $('#ParseError').text('');
+    }
+};
+
+var run = function (input, ok, err) {
+    try {
+        return ok(interpret.interpret(parser.parseStream(lexer.lexRegExp(input))));
+    } catch (e) {
+        return err(e);
+    }
+};
+
+
+/* 
+ ******************************************************************************/
+var doc = CodeMirror(document.getElementById('input'), {
+    'mode':  'javascript',
+    'lineNumbers': true
+}).doc;
+
+var debug;
+
+$(function(){
     $('#container').layout();
     
-    require([
-        'parse/parse',
-        'nu/stream',
-        'atum/interpret',
-        'atum/compute',
-        'atum/debug/debugger',
-        'atum/debug/operations',
-        'ecma/lex/lexer', 'ecma/parse/parser'],
-    function(parse,
-            stream,
-            interpret,
-            compute,
-            atum_debugger,
-            debug,
-            lexer, parser) {
-            
-        $('button#eval-button').click(function () {
-            var input = mirror.doc.getValue();
-            $('.ParseError').text('');
-            $('#text_out').text('');
-            
-            try {
-                var lex = lexer.lexRegExp(input);
-                var ast = parser.parseStream(lex);
-                var out = interpret.interpret(ast);
-                $('#text_out').text(out);
-            } catch (e) {
-                $('.ParseError').text(e);
-            }
-        });
-        
-        $('button#debug-button').click(function () {
-            var input = mirror.doc.getValue();
-            $('.ParseError').text('');
-            $('#text_out').text('');
-            
-            try {
-                var lex = lexer.lexRegExp(input);
-                var ast = parser.parseStream(lex);
-                var p = interpret.evaluateProgram(ast);
-                var done = false;
-                var ctx = new compute.ComputeContext({}, null);
-                var z = new atum_debugger.Debugger(p(ctx,
-                    function(x, ctx){ done = true; return function() { $('#text_out').text(x); }; },
-                    function(x, ctx){ done = true; return function() { $('.ParseError').text(x);} }));
-                 if (!done) {
-                    printState(z, z.k.ctx);
-                }
-                while (!done) {
-                    z = z.step();
-                    if (!done) {
-                        printState(z, z.k.ctx);
-                       
-                    }
-                }
-                
-                z.k();
-            } catch (e) {
-                $('.ParseError').text(e);
-            }
-        });
+    $('button#eval-button').click(function(e){
+        out.clear();
+        errorOut.clear()
+        run(doc.getValue(), out.write, errorOut.write);
     });
+    
+    $('button#debug-button').click(function () {
+        var input = doc.getValue();
+        out.clear();
+        errorOut.clear()
+        
+        try {
+            var lex = lexer.lexRegExp(input);
+            var ast = parser.parseStream(lex);
+            var p = interpret.evaluateProgram(ast);
+            var ctx = new compute.ComputeContext({}, null);
+            
+            debug = atum_debugger.Debugger.create(p, ctx, 
+                function(x, ctx){ return function() { $('#text_out').text(x); }; },
+                function(x, ctx){ return function() { $('.ParseError').text(x);} });
+            
+            do {
+                printState(debug, debug.ctx);
+                debug = debug.step();
+            } while (debug && debug instanceof atum_debugger.Debugger);
+            
+            debug();
+        } catch (e) {
+            $('.ParseError').text(e);
+        }
+    });
+});
+
 });

@@ -20,7 +20,18 @@
             font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-weight:300;
         }
-
+        
+        #page-header {
+            
+        }
+        
+        #page-title {
+            margin: 0 0.25em;
+            padding: 0;
+            font-size: 1.6em;
+            float: left;
+        }
+        
         #container {
             min-height: 300px;
             min-width:  600px;
@@ -58,12 +69,28 @@
             border-bottom: 1px solid gray;
         }
         
-        .console .workspace .controls > * {
+        .console .workspace .controls > *,
+        .console .workspace .debug-controls > * {
             display: block;
-            float: right;
             padding: 0 1em;
             font-size: 0.90em;
+        }
+        
+        .console .workspace .controls {
+            float: right;
+        }
+        
+        .console .workspace .controls > * {
+            float: right;
             border-left: 1px solid gray;
+        }
+        
+        .console .workspace .debug-controls {
+            float: left;
+        }
+        .console .workspace .debug-controls > * {
+            float: left;
+            border-right: 1px solid gray;
         }
         
         button {
@@ -110,14 +137,23 @@
 </head>
 
 <body lang="en">
-    <div id='container' class="content">
+    <header id='page-header' class='cf'>
+        <h1 id='page-title'>Atum</h1>
+    </header>
     
+    <div id='container' class="content">
         <div class='console pane ui-layout-center'>
-            <div class='workspace'>
+            <div class='workspace cf'>
                 <div id='input'></div>
                 <div class='controls cf'>
                     <button id='eval-button'>Eval</button>
                     <button id='debug-button'>Debug</button>
+                </div>
+                <div class='debug-controls cf'>
+                    <button id='stop-button'>Stop</button>
+                    <button id='run-button'>Run</button>
+                    <button id='step-button'>Step</button>
+                    <button id='step-over-button'>Step Over</button>
                 </div>
             </div>
             <div class='output'>
@@ -143,6 +179,7 @@
             <div class='pane-header'>
                 <h2 class='pane-title'>Callstack</h2>
             </div>
+            <p>TODO</p>
         </div>
         
     </div>
