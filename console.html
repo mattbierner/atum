@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Atum Console</title>
     
+    <link type="text/css" rel="stylesheet" href="resources/jquery-ui-1.10.3/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
     <link type="text/css" rel="stylesheet" href="resources/layout-default-latest.css" />
     <link type="text/css" rel="stylesheet" href="resources/codemirror-3.14/codemirror.css" />
     
@@ -18,7 +19,6 @@
         
         body {
             font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-weight:300;
         }
         
         #page-header {
@@ -56,7 +56,7 @@
             color: black;
             padding: 0 0.25em;
         }
-        
+
         .ui-layout-resizer {
             border: 0;
         }
@@ -93,14 +93,36 @@
             border-right: 1px solid gray;
         }
         
-        button {
-            margin: 0;
-            border: 0;
-            background: white;
+        .ui-widget {
+            font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
         
-        button:hover {
-            color: gray;
+        .ui-corner-all {
+            border-radius: 0;
+        }
+        
+        .ui-button {
+            color: black;
+            border: 0;
+            background: transparent;
+            margin: 0;
+            border: 0;
+        }
+        
+        .ui-button.ui-state-hover .ui-icon {
+            opacity: 0.50;
+        }
+        
+        .ui-button-text-only .ui-button-text {
+            padding: 0.1em 0.25em;
+        }
+        
+        .ui-state-default .ui-icon {
+            background-image: url(resources/jquery-ui-1.10.3/css/ui-lightness/images/ui-icons_222222_256x240.png);
+        }
+        
+        button {
+
         }
         
         .ParseError {
@@ -157,14 +179,15 @@
             <div class='workspace cf'>
                 <div id='input'></div>
                 <div class='controls cf'>
-                    <button id='eval-button'>Eval</button>
-                    <button id='debug-button'>Debug</button>
+                    <button id='eval-button' title='Eval'>eval</button>
+                    <button id='debug-button' title='Debug'>debug</button>
                 </div>
-                <div class='debug-controls cf'>
-                    <button id='stop-button'>Stop</button>
-                    <button id='run-button'>Run</button>
-                    <button id='step-button'>Step</button>
-                    <button id='step-over-button'>Step Over</button>
+                <div class='debug-controls cf disabled'>
+                    <button id='stop-button' title='stop'><span class="ui-icon ui-icon-stop"></span></button>
+                    <button id='run-button' title='run'><span class="ui-icon ui-icon-play"></span></button>
+                    <button id='step-button' title='step over'><span class="ui-icon ui-icon-arrowstop-1-e"></span></button>
+                    <button id='step-into-button' title='step into'><span class="ui-icon ui-icon-arrowstop-1-s"></span></button>
+                    <button id='step-out-button' title='step out'><span class="ui-icon ui-icon-arrowstop-1-n"></span></button>
                 </div>
             </div>
             <div class='output'>

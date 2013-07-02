@@ -21,16 +21,6 @@ var get = function(p, c) {
     return p[c];
 };
 
-var format = function(str, obj) {
-    return str.replace(/@@|@([a-z][a-z0-9\.]*)|@/gi, function(path) {
-        if (path === '@')
-            return obj;
-        else if (path === '@@')
-            return '@';
-        return reduce(path, get, obj);
-    });
-};
-
 /* 
  ******************************************************************************/
 var printBindings = function(d, record) {
@@ -47,17 +37,18 @@ var printFrame = function(d, lex) {
     };
 };
 
-var printState = function(d, ctx) {
-    if (!ctx.userData)
-        return;
-    
-    var environment = d.getValue(ctx.userData.lexicalEnvironment);
-    model.environments.removeAll();
-    do {
-        model.environments.push(printFrame(d, environment));
-        environment = d.getValue(environment.outer);
-    } while (environment);
+var printEnvironments = function(d, ctx) {
+    var environments = [];
+    if (ctx.userData) {
+        var environment = d.getValue(ctx.userData.lexicalEnvironment);
+        do {
+            environments.push(printFrame(d, environment));
+            environment = d.getValue(environment.outer);
+        } while (environment);
+    };
+    return environments;
 };
+
 
 /* 
  ******************************************************************************/
@@ -97,46 +88,101 @@ var doc = CodeMirror(document.getElementById('input'), {
 
 var debug;
 
-var ViewModel = function() {
-    this.environments = ko.observableArray([]);
+var ConsoleViewModel = function() {
+    var self = this;
+    
+    this.debug = ko.observable();
+    
+    this.environments = ko.computed(function(){
+        return (self.debug() ?
+            printEnvironments(self.debug(), self.debug().ctx) :
+            []);
+    });
 };
-var model = new ViewModel();
+
+ConsoleViewModel.prototype.step = function() {
+    return this.debug(this.debug().step());
+};
+
+ConsoleViewModel.prototype.stop = function() {
+    return this.debug(null);
+};
+
+
+var model = new ConsoleViewModel();
 ko.applyBindings(model);
 
 $(function(){
+    var stopButton = $('button#stop-button'),
+        runButton = $('button#run-button'),
+        stepButton = $('button#step-button'),
+        stepOutButton = $('button#step-out-button'),
+        stepIntoButton = $('button#step-into-button');
+    
     $('#container').layout();
     
-    $('button#eval-button').click(function(e){
-        out.clear();
-        errorOut.clear()
-        run(doc.getValue(), out.write, errorOut.write);
-    });
+    $('button#eval-button')
+        .button()
+        .click(function(e){
+            out.clear();
+            errorOut.clear()
+            run(doc.getValue(), out.write, errorOut.write);
+        });
     
-    $('button#debug-button').click(function () {
-        var input = doc.getValue();
-        out.clear();
-        errorOut.clear()
-        
-        try {
-            var lex = lexer.lexRegExp(input);
-            var ast = parser.parseStream(lex);
-            var p = interpret.evaluateProgram(ast);
-            var ctx = new compute.ComputeContext({}, null);
+    $('button#debug-button')
+        .button()
+        .click(function () {
+            var input = doc.getValue();
+            out.clear();
+            errorOut.clear()
             
-            debug = atum_debugger.Debugger.create(p, ctx, 
-                function(x, ctx){ return function() { $('#text_out').text(x); }; },
-                function(x, ctx){ return function() { $('.ParseError').text(x);} });
-            
-            do {
-                printState(debug, debug.ctx);
-                debug = debug.step();
-            } while (debug && debug instanceof atum_debugger.Debugger);
-            
-            debug();
-        } catch (e) {
-            $('.ParseError').text(e);
-        }
-    });
+            try {
+                var lex = lexer.lexRegExp(input);
+                var ast = parser.parseStream(lex);
+                var p = interpret.evaluateProgram(ast);
+                
+                var ctx = compute.ComputeContext.empty;
+                model.debug(atum_debugger.Debugger.create(p, ctx, 
+                    function(x, ctx){ return function() { $('#text_out').text(x); }; },
+                    function(x, ctx){ return function() { $('.ParseError').text(x);} }));
+                
+                stopButton.attr("disabled", false);
+                runButton.attr("disabled", false);
+                stepButton.attr("disabled", false);
+
+            } catch (e) {
+                $('.ParseError').text(e);
+            }
+        });
+    
+    stopButton
+        .button()
+        .attr("disabled", true)
+        .click(function(e){
+            model.stop();
+        })
+
+    runButton
+        .button()
+        .attr("disabled", true)
+        .click(function(e){
+            model.step();
+        });
+    
+    stepButton
+        .button()
+        .attr("disabled", true)
+        .click(function(e){
+            model.step();
+        });
+    
+    stepIntoButton
+        .button()
+        .attr("disabled", true);
+    
+    stepOutButton
+        .button()
+        .attr("disabled", true);
 });
 
 });
