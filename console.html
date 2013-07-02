@@ -40,6 +40,7 @@
         }
         
         .pane {
+            position: relative;
             padding: 0;
             margin: 0;
             width: auto;
@@ -69,26 +70,26 @@
             border-bottom: 1px solid gray;
         }
         
-        .console .workspace .controls > *,
-        .console .workspace .debug-controls > * {
+        .console .workspace .run-buttons > *,
+        .console .workspace .debug-buttons > * {
             display: block;
             padding: 0 1em;
             font-size: 0.90em;
         }
         
-        .console .workspace .controls {
+        .console .workspace .run-buttons {
             float: right;
         }
         
-        .console .workspace .controls > * {
+        .console .workspace .run-buttons > * {
             float: right;
             border-left: 1px solid gray;
         }
         
-        .console .workspace .debug-controls {
+        .console .workspace .debug-buttons {
             float: left;
         }
-        .console .workspace .debug-controls > * {
+        .console .workspace .debug-buttons > * {
             float: left;
             border-right: 1px solid gray;
         }
@@ -125,7 +126,7 @@
 
         }
         
-        .ParseError {
+        #ParseError {
             color: red;
         }
         
@@ -174,6 +175,29 @@
             margin-left: 0.15em;
         }
         
+        .output-interactive {
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            border-top: 1px solid red;
+        }
+        
+        .output-interactive-textarea {
+            overflow-y: hidden;
+            background: red;
+        }
+        
+        .output-interactive-textarea .CodeMirror-hscrollbar {
+            display: none;
+        }
+        
+        
+        
+        
+    /* CodeMirror*/
+        .CodeMirror {
+            background: transparent;
+        }
         
     /* From http://nicolasgallagher.com/micro-clearfix-hack/ */
         .cf:before,
@@ -209,24 +233,30 @@
             <div class='workspace cf'>
                 <div id='input'></div>
                 <div class='controls cf'>
-                    <button id='eval-button' title='Eval'>eval</button>
-                    <button id='debug-button' title='Debug'>debug</button>
-                </div>
-                <div class='debug-controls cf disabled'>
-                    <button id='stop-button' title='stop'><span class="ui-icon ui-icon-stop"></span></button>
-                    <button id='run-button' title='run'><span class="ui-icon ui-icon-play"></span></button>
-                    <button id='step-button' title='step over'><span class="ui-icon ui-icon-arrowstop-1-e"></span></button>
-                    <button id='step-into-button' title='step into'><span class="ui-icon ui-icon-arrowstop-1-s"></span></button>
-                    <button id='step-out-button' title='step out'><span class="ui-icon ui-icon-arrowstop-1-n"></span></button>
+                    <div class='run-buttons cf'>
+                        <button id='eval-button' title='Eval'>eval</button>
+                        <button id='debug-button' title='Debug'>debug</button>
+                    </div>
+                    <div class='debug-buttons cf'>
+                        <button id='stop-button' title='stop'><span class="ui-icon ui-icon-stop"></span></button>
+                        <button id='run-button' title='run'><span class="ui-icon ui-icon-play"></span></button>
+                        <button id='step-button' title='step over'><span class="ui-icon ui-icon-arrowstop-1-e"></span></button>
+                        <button id='step-into-button' title='step into'><span class="ui-icon ui-icon-arrowstop-1-s"></span></button>
+                        <button id='step-out-button' title='step out'><span class="ui-icon ui-icon-arrowstop-1-n"></span></button>
+                    </div>
                 </div>
             </div>
             <div class='output'>
-                <h2>Output</h2>
-                <span class="ParseError"></span>
-                <p>
-                    <span id='parse_out'></span>
-                </p>
-                <pre id='text_out'></pre>
+                <div class='output-console'>
+                    <span id="ParseError"></span>
+                    <p>
+                        <span id='parse_out'></span>
+                    </p>
+                    <pre id='text_out'></pre>
+                </div>
+                <div class='output-interactive cf'>
+                    <div id='output-interactive-textarea'></div>
+                </div>
             </div>
         </div>
         

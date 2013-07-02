@@ -72,7 +72,22 @@ var errorOut = {
 
 var run = function (input, ok, err) {
     try {
-        return ok(interpret.interpret(parser.parseStream(lexer.lexRegExp(input))));
+        var lex = lexer.lexRegExp(input);
+        var ast = parser.parseStream(lex);
+        return ok(interpret.interpret(ast));
+    } catch (e) {
+        return err(e);
+    }
+};
+
+var runContext = function (input, ctx, ok, err) {
+    try {
+        var lex = lexer.lexRegExp(input);
+        var ast = parser.parseStream(lex);
+        var p = interpret.evaluate(ast);
+        return model.debug().run(p,
+            function(x, ctx){ return function(){ ok(x); }},
+            function(x, ctx){ return function(){ err(x); }});
     } catch (e) {
         return err(e);
     }
@@ -86,8 +101,26 @@ var doc = CodeMirror(document.getElementById('input'), {
     'lineNumbers': true
 }).doc;
 
-var debug;
+var interactive = CodeMirror(document.getElementById('output-interactive-textarea'), {
+    'mode': 'javascript',
+    'lineNumbers': false,
+});
+interactive.setSize(null, 20);
+interactive.on('beforeChange', function(instance, change) {
+    change.update(change.from, change.to, [change.text.join("").replace(/\n/g, "")]);
+    return true;
+});
 
+interactive.on('keyHandled', function(instance, name, event) {
+    if (name === 'Enter') {
+        runContext(interactiveDoc.getValue(), model.debug().ctx, out.write, errorOut.write);
+    }
+});
+
+var interactiveDoc = interactive.doc;
+
+/* 
+ ******************************************************************************/
 var ConsoleViewModel = function() {
     var self = this;
     
@@ -108,7 +141,8 @@ ConsoleViewModel.prototype.stop = function() {
     return this.debug(null);
 };
 
-
+/* 
+ ******************************************************************************/
 var model = new ConsoleViewModel();
 ko.applyBindings(model);
 
@@ -120,7 +154,7 @@ $(function(){
         stepIntoButton = $('button#step-into-button');
     
     $('#container').layout();
-    
+
     $('button#eval-button')
         .button()
         .click(function(e){
