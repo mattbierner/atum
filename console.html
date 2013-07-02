@@ -134,6 +134,11 @@
             margin: 0;
         }
         
+        .code {
+            font-family: Courier New, monospace;
+        }
+        
+    /* Environments */
         .environments {
             margin: 0;
             padding: 0;
@@ -143,9 +148,34 @@
             list-style: none;
             border-bottom: 1px solid gray;
         }
+
+        .binding-list {
+            margin: 0;
+            padding: 0;
+            border-bottom: 1px solid black;
+        }
+        
+        .binding-list > .binding {
+            margin-bottom: 0.25em;
+        }
+        
+        .binding {
+            list-style: none;
+            font-size: 0.90em;
+            font-weight: normal;
+            line-height: 100%;
+        }
+        
+        .binding .binding-name {
+            font-weight: bold;
+        }
+        
+        .binding .binding-value {
+            margin-left: 0.15em;
+        }
         
         
-        /* From http://nicolasgallagher.com/micro-clearfix-hack/ */
+    /* From http://nicolasgallagher.com/micro-clearfix-hack/ */
         .cf:before,
         .cf:after {
             content: " ";
@@ -159,12 +189,12 @@
 </head>
 
 <body lang="en">
+
     <script type="text/html" id="environments-template">
         <li>
             <ul class='binding-list' data-bind="foreach: bindings">
-                <li>
-                    <span data-bind="text: name"></span>
-                    <span data-bind="text: value"></span>
+                <li class='binding code'>
+                    <span class='binding-name' data-bind="text: name"></span>:<span class='binding-value' data-bind="text: value"></span>
                 </li>
             </ul>
         </li>
