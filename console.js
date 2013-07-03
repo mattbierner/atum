@@ -54,10 +54,11 @@ var printEnvironments = function(d, ctx) {
  ******************************************************************************/
 var out = {
     'write': function(x) {
-        $('#text_out').text(x);
+        model.push(x, false);
+        //$('#text_out').text(x);
     },
     'clear': function(x) {
-        $('#text_out').text('');
+        //$('#text_out').text('');
     }
 };
 
@@ -126,6 +127,8 @@ var ConsoleViewModel = function() {
     
     this.debug = ko.observable();
     
+    this.output = ko.observableArray();
+    
     this.environments = ko.computed(function(){
         return (self.debug() ?
             printEnvironments(self.debug(), self.debug().ctx) :
@@ -135,6 +138,14 @@ var ConsoleViewModel = function() {
 
 ConsoleViewModel.prototype.step = function() {
     return this.debug(this.debug().step());
+};
+
+ConsoleViewModel.prototype.push = function(value, error) {
+    this.output.push({
+        'value': value,
+        'error': !!error
+    });
+    return this;
 };
 
 ConsoleViewModel.prototype.stop = function() {

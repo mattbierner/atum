@@ -26,6 +26,7 @@
         }
         
         #page-title {
+            position: absolute;
             margin: 0 0.25em;
             padding: 0;
             font-size: 1.6em;
@@ -33,12 +34,14 @@
         }
         
         #container {
-            min-height: 300px;
-            min-width:  600px;
+            box-sizing: border-box;
+            min-height: 400px;
+            min-width: 800px;
             height: 100%;
             width: 100%;
+            padding-top: 33px;
         }
-        
+
         .pane {
             position: relative;
             padding: 0;
@@ -63,11 +66,32 @@
         }
         
         #input {
-            border-bottom: 1px solid lightgray;
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            padding-bottom: 19px;
         }
+        
+         #input .CodeMirror {
+            height: 100%;
+         }
+         
+         #input .CodeMirror-scroll {
+            margin-bottom: 0;
+            padding-bottom: 0;
+         }
+        
         .console .workspace {
             width: auto;
             border-bottom: 1px solid gray;
+            position: relative;
+        }
+        
+        .console .workspace .controls {
+            border-top: 1px solid lightgray;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
         }
         
         .console .workspace .run-buttons > *,
@@ -126,8 +150,11 @@
 
         }
         
-        #ParseError {
+        .output-error {
             color: red;
+        }
+        .output-value {
+        
         }
         
         #text_out {
@@ -173,6 +200,23 @@
         
         .binding .binding-value {
             margin-left: 0.15em;
+        }
+        
+        .workspace {
+            height: 60%;
+        }
+        
+        .output {
+            position: relative;
+            height: 40%;
+        }
+        
+        #output-console {
+            box-sizing: border-box;
+            height: 100%;
+            padding-bottom: 18px;
+            overflow-y: scroll;
+            list-style: none;
         }
         
         .output-interactive {
@@ -224,6 +268,12 @@
         </li>
     </script>
 
+    <script type="text/html" id="output-template">
+        <li class='output-value'>
+            <span class='binding-name' data-bind="text: value, class: { error: error }"></span>
+        </li>
+    </script>
+    
     <header id='page-header' class='cf'>
         <h1 id='page-title'>Atum</h1>
     </header>
@@ -245,15 +295,8 @@
                         <button id='step-out-button' title='step out'><span class="ui-icon ui-icon-arrowstop-1-n"></span></button>
                     </div>
                 </div>
-            </div>
-            <div class='output'>
-                <div class='output-console'>
-                    <span id="ParseError"></span>
-                    <p>
-                        <span id='parse_out'></span>
-                    </p>
-                    <pre id='text_out'></pre>
-                </div>
+            </div><div class='output'>
+                <ul id='output-console' data-bind="template: { name: 'output-template', foreach: output }"></ul>
                 <div class='output-interactive cf'>
                     <div id='output-interactive-textarea'></div>
                 </div>
