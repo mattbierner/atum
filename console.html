@@ -269,8 +269,8 @@
     </script>
 
     <script type="text/html" id="output-template">
-        <li class='output-value'>
-            <span class='binding-name' data-bind="text: value, class: { error: error }"></span>
+        <li class='output-value' data-bind="css: { 'output-error': error }">
+            <span class='binding-name' data-bind="text: value"></span>
         </li>
     </script>
     

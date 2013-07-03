@@ -55,7 +55,6 @@ var printEnvironments = function(d, ctx) {
 var out = {
     'write': function(x) {
         model.push(x, false);
-        //$('#text_out').text(x);
     },
     'clear': function(x) {
         //$('#text_out').text('');
@@ -64,7 +63,7 @@ var out = {
 
 var errorOut = {
     'write': function(x) {
-        $('#ParseError').text(x);
+        model.push(x, true);
     },
     'clear': function(x) {
         $('#ParseError').text('');
