@@ -136,9 +136,18 @@ var ConsoleViewModel = function() {
     });
 };
 
-ConsoleViewModel.prototype.step = function() {
+ConsoleViewModel.prototype.stepOver = function() {
+    return this.debug(this.debug().stepOver());
+};
+
+ConsoleViewModel.prototype.stepInto = function() {
     return this.debug(this.debug().step());
 };
+
+ConsoleViewModel.prototype.stepOut = function() {
+    return this.debug(this.debug().stepOut());
+};
+
 
 ConsoleViewModel.prototype.push = function(value, error) {
     this.output.push({
@@ -194,6 +203,8 @@ $(function(){
                 stopButton.attr("disabled", false);
                 runButton.attr("disabled", false);
                 stepButton.attr("disabled", false);
+                stepIntoButton.attr("disabled", false);
+                stepOutButton.attr("disabled", false);
 
             } catch (e) {
                 $('.ParseError').text(e);
@@ -218,16 +229,22 @@ $(function(){
         .button()
         .attr("disabled", true)
         .click(function(e){
-            model.step();
+            model.stepOver();
         });
     
     stepIntoButton
         .button()
-        .attr("disabled", true);
+        .attr("disabled", true)
+        .click(function(e){
+            model.stepInto();
+        });
     
     stepOutButton
         .button()
-        .attr("disabled", true);
+        .attr("disabled", true)
+        .click(function(e){
+            model.stepOut();
+        });
 });
 
 });
