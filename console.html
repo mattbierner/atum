@@ -267,7 +267,13 @@
             </ul>
         </li>
     </script>
-
+    
+    <script type="text/html" id="stack-frame-template">
+        <li class='stack-frame'>
+            a
+        </li>
+    </script>
+    
     <script type="text/html" id="output-template">
         <li class='output-value' data-bind="css: { 'output-error': error }">
             <span class='binding-name' data-bind="text: value"></span>
@@ -316,7 +322,9 @@
             <div class='pane-header'>
                 <h2 class='pane-title'>Callstack</h2>
             </div>
-            <p>TODO</p>
+            <div>
+                <ul class='callstack' data-bind="template: { name: 'stack-frame-template', foreach: stack }"></ul>
+            </div>
         </div>
         
     </div>

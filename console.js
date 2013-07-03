@@ -55,18 +55,12 @@ var printEnvironments = function(d, ctx) {
 var out = {
     'write': function(x) {
         model.push(x, false);
-    },
-    'clear': function(x) {
-        //$('#text_out').text('');
     }
 };
 
 var errorOut = {
     'write': function(x) {
         model.push(x, true);
-    },
-    'clear': function(x) {
-        $('#ParseError').text('');
     }
 };
 
@@ -133,6 +127,12 @@ var ConsoleViewModel = function() {
             printEnvironments(self.debug(), self.debug().ctx) :
             []);
     });
+    
+    this.stack = ko.computed(function(){
+        return (self.debug() && self.debug().ctx.userData ? 
+            self.debug().ctx.userData.stack :
+            [])
+    });
 };
 
 ConsoleViewModel.prototype.stepOver = function() {
@@ -177,8 +177,6 @@ $(function(){
     $('button#eval-button')
         .button()
         .click(function(e){
-            out.clear();
-            errorOut.clear()
             run(doc.getValue(), out.write, errorOut.write);
         });
     
@@ -186,8 +184,6 @@ $(function(){
         .button()
         .click(function () {
             var input = doc.getValue();
-            out.clear();
-            errorOut.clear()
             
             try {
                 var lex = lexer.lexRegExp(input);
@@ -196,8 +192,8 @@ $(function(){
                 
                 var ctx = compute.ComputeContext.empty;
                 model.debug(atum_debugger.Debugger.create(p, ctx, 
-                    function(x, ctx){ return function() { $('#text_out').text(x); }; },
-                    function(x, ctx){ return function() { $('.ParseError').text(x);} }));
+                    function(x, ctx){ return function() { out.write(x); }; },
+                    function(x, ctx){ return function() { errorOut.write(x); } }));
                 
                 stopButton.attr("disabled", false);
                 runButton.attr("disabled", false);
