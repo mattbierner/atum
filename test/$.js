@@ -19,6 +19,12 @@ var binary = function(op) {
     };
 };
 
+var logical = function(op) {
+    return function(l, r) {
+        return new expression.LogicalExpression(null, op, l, r);
+    };
+};
+
 var unary = function(op) {
     return function(x) {
         return new expression.UnaryExpression(null, op, x);
@@ -118,12 +124,22 @@ var FunctionDeclaration = function(id, args, body) {
     return new declaration.FunctionDeclaration(null, id, args, body);
 };
 
+var Sequence = function(/*...*/) {
+    return new expression.SequenceExpression(null, arguments);
+};
+
+var Conditional = function(test, left, right) {
+    return new expression.ConditionalExpression(null, test, left, right);
+};
+
 var This = function() {
     return new expression.ThisExpression(null);
 };
 
 var Plus = unary('+');
 var Negate = unary('-');
+
+var Void = unary('void');
 
 var Add = binary('+');
 var Sub = binary('-');
@@ -137,6 +153,9 @@ var Gt = binary('>');
 var Gte = binary('>=');
 var Equals = binary('==');
 var StrictEquals = binary('===');
+
+var LogicalAnd = logical('&&');
+var LogicalOr = logical('||');
 
 var PreIncrement = update('++', true);
 var PostIncrement = update('++', false);
@@ -194,7 +213,7 @@ return {
     'Break': Break,
     'Continue': Continue,
     'Return': Return,
-     'Throw': Throw,
+    'Throw': Throw,
 
     'Catch': Catch,
     'Case': Case,
@@ -203,9 +222,16 @@ return {
     'Declarator': Declarator,
     'FunctionDeclaration': FunctionDeclaration,
     
+    'Sequence': Sequence,
+    'Conditional': Conditional,
+    
     'This': This,
+    
     'Plus': Plus,
     'Negate': Negate,
+    
+    'Void': Void,
+    
     'Add': Add,
     'Sub': Sub,
     'Mul': Mul,
@@ -217,6 +243,8 @@ return {
     'Gte': Gte,
     'Equals': Equals,
     'StrictEquals': StrictEquals,
+    'LogicalAnd': LogicalAnd,
+    'LogicalOr': LogicalOr,
     'PreIncrement': PreIncrement,
     'PostIncrement': PostIncrement,
     'PreDecrement': PreDecrement,

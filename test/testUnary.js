@@ -1,9 +1,15 @@
-define(['ecma/ast/value',
+define(['$',
+        'ecma/ast/value',
         'ecma/ast/expression',
         'atum/interpret'],
-function(value,
+function($,
+        value,
         expression,
         interpret){
+    
+    var a = $.Id('a'),
+        b = $.Id('b'),
+        c = $.Id('c');
     
     return {
         'module': "Unary Tests",
@@ -11,28 +17,23 @@ function(value,
         // void
             ["Void",
             function(){
-                var root = new expression.UnaryExpression(null, 'void', new value.Literal(null, 10, "number"));
+                var root = $.Program(
+                    $.Void($.Number(10)));
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
             }],
             ["Void Side Effects",
             function(){
-                var root = new expression.SequenceExpression(null, [
-                  new expression.AssignmentExpression(null, '=',
-                      new value.Identifier(null, 'a'),
-                      new value.Literal(null, 0, 'number')),
-                  new expression.UnaryExpression(null, 'void',
-                      new expression.UpdateExpression(
-                          null,
-                          '++',
-                          new value.Identifier(null, 'a')),
-                          true),
-                  new value.Identifier(null, 'a')]);
+                var root = $.Program(
+                    $.Expression($.Sequence(
+                        $.Assign(a, $.Number(0)),
+                        $.Void($.PreIncrement(a)),
+                        a)));
                 
                 var result = interpret.interpret(root);
                 assert.equal(result.type, 'number');
-                assert.equal(result.value, '1');
+                assert.equal(result.value, 1);
             }],
         // Unary plus
             ["Unary Plus Number",

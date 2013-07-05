@@ -24,7 +24,7 @@ function($,
                              $.Declarator(a, x)),
                         $.Expression( 
                             $.PreIncrement(a)),
-                        $.Expression( a));
+                        $.Expression(a));
                     
                     var result = interpret.interpret(root);
                     assert.equal(result.type, 'number');
