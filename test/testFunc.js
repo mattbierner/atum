@@ -249,6 +249,20 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 11);
             }],
+            ["Set on current function object in function",
+            function(){
+                var root = $.Program(
+                    $.FunctionDeclaration(a, [b],
+                        $.Block(
+                           $.Expression($.Assign($.Member(a, c), b)),
+                           $.Return($.Number(b)))),
+                    $.Expression($.Call(a, [$.Number(11)])),
+                    $.Expression($.Member(a, c)));
+                
+                var result = interpret.evaluate(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 11);
+            }],
         ]
     };
 });
