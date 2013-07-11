@@ -19,7 +19,7 @@ function($,
             function(){
                 var root = $.Program(
                     $.Void($.Number(10)));
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
             }],
@@ -31,7 +31,7 @@ function($,
                         $.Void($.PreIncrement(a)),
                         a)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
@@ -41,7 +41,7 @@ function($,
                  ([10, -10, 1e6, -1e6, 1.5, -1.5])
                     .forEach(function(x) {
                         var root = new expression.UnaryExpression(null, '+', new value.Literal(null, x, "number"));
-                        var result = interpret.interpret(root);
+                        var result = interpret.evaluate(root);
                         assert.equal(result.type, 'number');
                         assert.equal(result.value, x);
                     });
@@ -52,7 +52,7 @@ function($,
                  ([10, -10, 1e6, -1e6, 1.5, -1.5])
                     .forEach(function(x) {
                         var root = new expression.UnaryExpression(null, '-', new value.Literal(null, x, "number"));
-                        var result = interpret.interpret(root);
+                        var result = interpret.evaluate(root);
                         assert.equal(result.type, 'number');
                         assert.equal(result.value, -x);
                     });
@@ -64,7 +64,7 @@ function($,
                  ([true, false])
                     .forEach(function(x) {
                         var root = new expression.UnaryExpression(null, '!', new value.Literal(null, x, "boolean"));
-                        var result = interpret.interpret(root);
+                        var result = interpret.evaluate(root);
                         assert.equal(result.type, 'boolean');
                         assert.equal(result.value, !x);
                     });
@@ -79,7 +79,7 @@ function($,
                    new value.Literal(null, "1", "string")])
                    .forEach(function(x) {
                         var root = new expression.UnaryExpression(null, '~', x);
-                        var result = interpret.interpret(root);
+                        var result = interpret.evaluate(root);
                         assert.equal(result.type, 'number');
                         assert.equal(result.value, ~x.value);
                     });
@@ -89,7 +89,7 @@ function($,
             ["Typeof string",
              function(){
                 var root = new expression.UnaryExpression(null, 'typeof', new value.Literal(null, "", "string"));
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'string');
                 assert.equal(result.value, "string");
             }],

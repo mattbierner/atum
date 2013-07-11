@@ -17,7 +17,7 @@ function($,
                         $.Block()),
                     $.Call(a, []));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
             }],
@@ -29,7 +29,7 @@ function($,
                             $.Return($.Number(3)))),
                     $.Expression($.Call(a, [])));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 3);
             }],
@@ -42,7 +42,7 @@ function($,
                     $.Call(a, [
                       $.Number(3)]));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 3);
             }],
@@ -56,7 +56,7 @@ function($,
                       $.Number(1),
                       $.Number(3)]));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 4);
             }],
@@ -68,7 +68,7 @@ function($,
                             $.Return(b))),
                     $.Call(a, []));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
             }],
@@ -81,7 +81,7 @@ function($,
                     $.Call(a, [$.Number(1)]),
                     $.Expression(b));
                 
-                assert.throws(interpret.interpret.bind(undefined, root));
+                assert.throws(interpret.evaluate.bind(undefined, root));
             }],
             
             ["Argument Alias Scope Check",
@@ -95,7 +95,7 @@ function($,
                           $.Return(b))),
                     $.Call(a, [$.Number(1)]));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
@@ -118,7 +118,7 @@ function($,
                         $.Call(a, [
                                $.Assign(b, $.Number(3))])));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 4);
             }],
@@ -137,7 +137,7 @@ function($,
                         $.Call(a, [$.Number(1)]),
                         []));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
@@ -157,7 +157,7 @@ function($,
                         $.Call(a, []),
                         []));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
@@ -175,7 +175,7 @@ function($,
                         $.Call(a, []),
                         $.Expression(b));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
@@ -195,7 +195,7 @@ function($,
                     $.Call(a, [b]),
                     $.Expression(b));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 2);
             }],
@@ -217,7 +217,7 @@ function($,
                     $.Expression($.Call(a, [b])),
                     $.Expression($.Member(b, c)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
@@ -232,7 +232,7 @@ function($,
                     $.Expression($.Call(a, [$.Number(10)])),
                     $.Expression($.Member($.This(), c)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
@@ -245,7 +245,7 @@ function($,
                     $.Expression($.Assign($.Member(a, c), $.Number(10))),
                     $.Expression($.Add($.Call(a, []), $.Member(a, c))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 11);
             }],

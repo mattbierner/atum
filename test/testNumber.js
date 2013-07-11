@@ -9,7 +9,7 @@ function($,
             ["Number Literal",
             function(){
                 ([10, -10, 1e6, -1e6, 1.5, -1.5]).forEach(function(x) {
-                    var result = interpret.interpret($.Number(x));
+                    var result = interpret.evaluate($.Number(x));
                     assert.equal(result.type, 'number');
                     assert.equal(result.value, x);
                 });
@@ -18,7 +18,7 @@ function($,
             function(){
                  ([10, -10, 1e6, -1e6, 1.5, -1.5]).forEach(function(x) {
                     var root = $.Add($.Number(x), $.Number(10));
-                    var result = interpret.interpret(root);
+                    var result = interpret.evaluate(root);
                     assert.equal(result.type, 'number');
                     assert.equal(result.value, x + 10);
                 });
@@ -27,7 +27,7 @@ function($,
             function(){
                 ([["3.3e10", 3.3e10], ["  10  ", 10]]).forEach(function(x) {
                     var root = $.Plus($.String(x[0]));
-                    var result = interpret.interpret(root);
+                    var result = interpret.evaluate(root);
                     assert.equal(result.type, 'number');
                     assert.equal(result.value, x[1]);
                 });

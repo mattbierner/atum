@@ -26,7 +26,7 @@ function($,
                             $.PreIncrement(a)),
                         $.Expression(a));
                     
-                    var result = interpret.interpret(root);
+                    var result = interpret.evaluate(root);
                     assert.equal(result.type, 'number');
                     assert.equal(result.value, +x.value + 1);
                 });
@@ -40,7 +40,7 @@ function($,
                         $.Expression( 
                             $.PreIncrement(a)));
                     
-                    var result = interpret.interpret(root);
+                    var result = interpret.evaluate(root);
                     assert.equal(result.type, 'number');
                     assert.equal(result.value, +x.value + 1);
                 });
@@ -57,7 +57,7 @@ function($,
                             $.PreDecrement(a)),
                         $.Expression( a));
                     
-                    var result = interpret.interpret(root);
+                    var result = interpret.evaluate(root);
                     assert.equal(result.type, 'number');
                     assert.equal(result.value, +x.value - 1);
                 });
@@ -71,7 +71,7 @@ function($,
                         $.Expression( 
                             $.PreDecrement(a)));
                     
-                    var result = interpret.interpret(root);
+                    var result = interpret.evaluate(root);
                     assert.equal(result.type, 'number');
                     assert.equal(result.value, +x.value - 1);
                 });
@@ -88,7 +88,7 @@ function($,
                             $.PostIncrement(a)),
                         $.Expression( a));
                     
-                    var result = interpret.interpret(root);
+                    var result = interpret.evaluate(root);
                     assert.equal(result.type, 'number');
                     assert.equal(result.value, +x.value + 1);
                 });
@@ -102,7 +102,7 @@ function($,
                         $.Expression( 
                             $.PostIncrement(a)));
                     
-                    var result = interpret.interpret(root);
+                    var result = interpret.evaluate(root);
                     assert.equal(result.type, 'number');
                     assert.equal(result.value, +x.value);
                 });
@@ -119,7 +119,7 @@ function($,
                             $.PostDecrement(a)),
                         $.Expression( a));
                     
-                    var result = interpret.interpret(root);
+                    var result = interpret.evaluate(root);
                     assert.equal(result.type, 'number');
                     assert.equal(result.value, +x.value - 1);
                 });
@@ -133,7 +133,7 @@ function($,
                         $.Expression(
                             $.PostDecrement(a)));
                     
-                    var result = interpret.interpret(root);
+                    var result = interpret.evaluate(root);
                     assert.equal(result.type, 'number');
                     assert.equal(result.value, +x.value);
                 });

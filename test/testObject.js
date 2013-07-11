@@ -27,10 +27,10 @@ function($,
                 };
                 
                 expect.type('number', 1)(
-                    interpret.interpret(f($.Member(a, $.Id('ab')))));
+                    interpret.evaluate(f($.Member(a, $.Id('ab')))));
                 
                 expect.type('number', 1)(
-                    interpret.interpret(f($.ComputedMember(a, $.Add($.String('a'), $.String('b'))))));
+                    interpret.evaluate(f($.ComputedMember(a, $.Add($.String('a'), $.String('b'))))));
             }],
             ["Non Member Object Expression",
             function(){
@@ -41,7 +41,7 @@ function($,
                         $.Member(a, b)));
                 
                 expect.type('undefined', undefined)(
-                    interpret.interpret(root));
+                    interpret.evaluate(root));
             }],
             ["Multiple Properties Member Object Literal",
             function(){
@@ -62,7 +62,7 @@ function($,
                             $.Member(a, b),
                             $.Member(a, c))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 3);
             }],
@@ -83,7 +83,7 @@ function($,
                     $.Expression(
                         $.Member(a, b)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 2);
             }],
@@ -102,7 +102,7 @@ function($,
                     $.Expression(
                         $.Member(a, b)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
@@ -126,7 +126,7 @@ function($,
                     $.Expression(
                         $.Member(a, b)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
@@ -149,7 +149,7 @@ function($,
                     $.Expression(
                         $.Member(b, c)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 2);
             }],
@@ -169,7 +169,7 @@ function($,
                         $.Assign($.Member(a, b), $.Number(100)),
                         $.Member(a, d))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 123);
             }],

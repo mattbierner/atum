@@ -17,7 +17,7 @@ function($,
                     $.For(null, $.Boolean(false), null,
                         $.Expression($.Number(1))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
                 
@@ -27,7 +27,7 @@ function($,
                         $.Expression($.Number(10))),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
@@ -38,7 +38,7 @@ function($,
                     $.For(null, $.Boolean(false), null,
                         $.Expression($.Number(1))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
@@ -48,7 +48,7 @@ function($,
                     $.For($.Assign(a, $.Number(0)), $.Lt(a, $.Number(5)), $.PreIncrement(a),
                         $.Expression(a)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 4);
             }],
@@ -58,7 +58,7 @@ function($,
                     $.For($.Assign(a, $.Number(0)), $.Lt($.PostIncrement(a), $.Number(5)), null,
                         $.Expression(a)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 5);
             }],
@@ -69,7 +69,7 @@ function($,
                         $.For($.Assign(b, $.Number(0)), $.Lt($.PostIncrement(b), $.Number(4)), null,
                             $.Expression($.Mul(a, b)))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 12);
             }],
@@ -83,7 +83,7 @@ function($,
                             $.Expression($.PreIncrement(b)))),
                     $.Expression(b));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 5);
             }],
@@ -95,7 +95,7 @@ function($,
                             $.Expression(a),
                             $.Continue())));
 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 9);
             }],
@@ -108,7 +108,7 @@ function($,
                                 $.Continue(),
                                 $.Expression(a)))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 8);
             }],
@@ -123,7 +123,7 @@ function($,
                                         $.Continue(),
                                         $.Expression($.Mul(a, b))))))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 6);
             }],
@@ -139,7 +139,7 @@ function($,
                             $.Expression($.PreIncrement(b)))),
                     $.Expression(b));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 6);
             }],
@@ -151,7 +151,7 @@ function($,
                             $.Break())),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 6);
             }],
@@ -164,7 +164,7 @@ function($,
                                 $.Expression(a),
                                 $.Break()))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 6);
             }],
@@ -176,7 +176,7 @@ function($,
                             $.Break(),
                             $.Expression(a))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 3);
             }],
@@ -191,7 +191,7 @@ function($,
                                         $.Break(),
                                         $.Expression($.Mul(a, b))))))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 6);
             }],
@@ -206,7 +206,7 @@ function($,
                                     $.Return(a))))),
                     $.Call(a, []));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 6);
             }],

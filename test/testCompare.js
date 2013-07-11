@@ -4,7 +4,7 @@ function($,
         interpret){
     
     var compareValue = function(a, b) {
-        return interpret.interpret(
+        return interpret.evaluate(
             $.Program(
                 $.Expression($.Equals(a, b))));
     };
@@ -193,7 +193,7 @@ function($,
                   [$.Object(), $.Object(), false],
                   [$.Object({'key': 'x', 'value': $.Number(4), 'kind': 'init'}), $.Object({'key': 'x', 'value': $.Number(4), 'kind': 'init'}), false],]);
                 
-                var result = interpret.interpret(
+                var result = interpret.evaluate(
                     $.Program(
                         $.Expression($.Assign($.Id('a'), $.Object())),
                         $.Expression($.Assign($.Id('b'), $.Id('a'))),

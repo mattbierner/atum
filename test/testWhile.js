@@ -17,7 +17,7 @@ function($,
                     $.While($.Boolean(false),
                         $.Expression($.Number(1))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
                 
@@ -28,7 +28,7 @@ function($,
                         $.Expression($.Number(10))),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
@@ -39,7 +39,7 @@ function($,
                     $.While($.Lt($.PostIncrement(a), $.Number(5)), 
                         $.Expression(a)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 5);
             }],
@@ -53,7 +53,7 @@ function($,
                             $.While($.Lt(a, $.Mul(b, b)),
                                 $.Expression($.Assign(a, $.Mul(a, a)))))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 256);
             }],
@@ -68,7 +68,7 @@ function($,
                             $.Expression($.PreIncrement(b)))),
                     $.Expression(b));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 5);
             }],
@@ -81,7 +81,7 @@ function($,
                             $.Expression($.PostIncrement(a)),
                             $.Continue())));
 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 9);
             }],
@@ -95,7 +95,7 @@ function($,
                                 $.Continue(),
                                 $.Expression($.Mul(a, a))))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 81);
             }],
@@ -112,7 +112,7 @@ function($,
                                         $.Expression($.Mul(a, b))))),
                              $.Expression($.PreIncrement(a)))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 3);
             }],
@@ -129,7 +129,7 @@ function($,
                             $.Expression($.PreIncrement(b)))),
                     $.Expression(b));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 6);
             }],
@@ -141,7 +141,7 @@ function($,
                             $.Break())),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 6);
             }],
@@ -154,7 +154,7 @@ function($,
                                 $.Expression(a),
                                 $.Break()))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 6);
             }],
@@ -166,7 +166,7 @@ function($,
                             $.Break(),
                             $.Expression(a))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 3);
             }],
@@ -181,7 +181,7 @@ function($,
                                         $.Break(),
                                         $.Expression($.Mul(a, b))))))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 6);
             }],*/

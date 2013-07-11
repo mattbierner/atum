@@ -1,7 +1,9 @@
 define(['atum/compute',
-        'atum/interpret'],
+        'atum/interpret',
+        'atum/semantics/program'],
 function(compute,
-        interpret){
+        interpret,
+        program){
 "use strict";
 
 
@@ -12,17 +14,27 @@ var Result = function(isError, value, ctx) {
 };
 
 Result.prototype.run = function(node) {
-    return interpret.evaluate(node)(this.ctx,
-        function(x, ctx){ return new Result(false, x, ctx); },
-        function(x, ctx){ return new Result(true, x, ctx); });
+    return interpret.interpret(node, this.ctx,
+        function(x, ctx){ return function(){ return new Result(false, x, ctx); }; },
+        function(x, ctx){ return function(){ return new Result(true, x, ctx); }; });
 };
 
+Result.prototype.equal = function(expr, expected, msg) {
+    assert.equal(this.run(expr).value, expected, msg);
+    return this;
+};
+
+Result.prototype.type = function(expr, t, v) {
+    type(t, v)(this.run(expr).value.value);
+    return this;
+};
 
 var run = function(root) {
-    return interpret.evaluate(root)(compute.ComputeContext.empty,
-        function(x, ctx){ return new Result(false, x, ctx); },
-        function(x, ctx){ return new Result(true, x, ctx); });
+    return interpret.interpret(root, compute.ComputeContext.empty,
+        function(x, ctx){ return function(){ return new Result(false, x, ctx); }; },
+        function(x, ctx){ return function(){ return new Result(true, x, ctx); }; });
 };
+
 
 var type = function(t, v) {
     return (arguments.length > 1 ?

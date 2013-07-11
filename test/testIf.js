@@ -21,7 +21,7 @@ function($,
                             $.Assign(a, $.Number(1)))),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
@@ -32,7 +32,7 @@ function($,
                         $.Boolean(true),
                         $.Expression($.Number(1))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
@@ -47,7 +47,7 @@ function($,
                             $.Assign(a, $.Number(1)))),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'undefined');
             }],
             ["Simple If false Statement yielded",
@@ -57,7 +57,7 @@ function($,
                     $.If(
                         $.Boolean(false),
                         $.Expression($.Number(1))));
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 5);
             }],
@@ -74,7 +74,7 @@ function($,
                             $.Assign(a, $.Number(10)))),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
@@ -91,7 +91,7 @@ function($,
                             $.Assign(a, $.Number(10)))),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
@@ -108,7 +108,7 @@ function($,
                             $.AddAssign(a, $.Number(10)))),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 2);
             }],
@@ -125,7 +125,7 @@ function($,
                             $.AddAssign(a, $.Number(10)))),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 11);
             }],

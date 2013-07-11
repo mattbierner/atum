@@ -16,7 +16,7 @@ function($,
                          $.Declarator(a)),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
             }],
@@ -27,7 +27,7 @@ function($,
                          $.Declarator(a, $.Number(10))),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
@@ -39,7 +39,7 @@ function($,
                          $.Declarator(b, $.Number(2))),
                     $.Expression($.Add(a, b)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 3);
             }],
@@ -52,7 +52,7 @@ function($,
                          $.Declarator(b, $.Number(2))),
                     $.Expression($.Add(a, b)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 3);
             }],
@@ -66,7 +66,7 @@ function($,
                          $.Declarator(b)),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
             }],
@@ -79,7 +79,7 @@ function($,
                         $.Assign( a, $.Number(1))),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
@@ -92,7 +92,7 @@ function($,
                             $.Number(1))),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],

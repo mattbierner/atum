@@ -25,7 +25,7 @@ function($,
                            $.Return($.Number(1)))),
                     $.Expression($.Member($.New(a, []), x)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
@@ -39,7 +39,7 @@ function($,
                     $.Expression($.Assign($.Member($.Member(a, $.Id('prototype')), x), $.Number(20))),
                     $.Expression($.Member($.New(a, []), x)));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 30);
             }],
@@ -52,14 +52,14 @@ function($,
                            $.Return($.Object({'key': $.String('z'), 'kind': 'init', 'value': $.Number(20)})))),
                     $.Expression($.Member($.New(a, []), $.Id('z'))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 20);
             }],
             ["Simple new inherit",
             function(){
                 var f = function(extract) {
-                    return interpret.interpret($.Program(
+                    return interpret.evaluate($.Program(
                         $.FunctionDeclaration(a, [],
                             $.Block(
                                $.Expression($.Assign($.Member($.This(), x), $.Number(10))))),
@@ -86,7 +86,7 @@ function($,
             ["Simple new inherit, override from this",
             function(){
                 var f = function(extract) {
-                    return interpret.interpret($.Program(
+                    return interpret.evaluate($.Program(
                         $.FunctionDeclaration(a, [],
                             $.Block(
                                $.Expression($.Assign($.Member($.This(), x), $.Number(10))))),
@@ -105,7 +105,7 @@ function($,
             ["Changing dervided prototype does not effect base",
             function(){
                 var f = function(extract) {
-                    return interpret.interpret($.Program(
+                    return interpret.evaluate($.Program(
                         $.FunctionDeclaration(a, [],
                             $.Block()),
                         $.Expression($.Assign($.Member($.Member(a, $.Id('prototype')), x), $.Number(10))),
@@ -123,7 +123,7 @@ function($,
             ["Changing base prototype after does effect base",
             function(){
                 var f = function(extract) {
-                    return interpret.interpret($.Program(
+                    return interpret.evaluate($.Program(
                         $.FunctionDeclaration(a, [],
                             $.Block()),
                         $.FunctionDeclaration(b, [],
@@ -147,7 +147,7 @@ function($,
                     $.Expression($.Member(b, x)));
                 
                 expect.type('number', 20)(
-                    interpret.interpret(root));
+                    interpret.evaluate(root));
             }],
             ["Changing prototype after creation on mutated object does not effect",
             function(){
@@ -161,7 +161,7 @@ function($,
                     $.Expression($.Member(b, x)));
                 
                 expect.type('number', 300)(
-                    interpret.interpret(root));
+                    interpret.evaluate(root));
             }],
         ]
     };

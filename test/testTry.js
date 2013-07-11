@@ -21,7 +21,7 @@ function($,
                                 $.Expression($.Assign(b, $.Number(20)))))),
                     $.Expression(b));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
@@ -35,7 +35,7 @@ function($,
                             $.Block(
                                 $.Expression($.Number(20))))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
@@ -53,7 +53,7 @@ function($,
                                 $.Expression($.AddAssign(b, a))))),
                     $.Expression(b));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 11);
             }],
@@ -68,7 +68,7 @@ function($,
                             $.Block(
                                 $.Expression($.Number(20))))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 20);
             }],
@@ -82,7 +82,7 @@ function($,
                             $.Block())),
                     $.Expression(a));
                 
-                assert.throws(interpret.interpret.bind(undefined, root));
+                assert.throws(interpret.evaluate.bind(undefined, root));
             }],
             ["throw try catch, catch var hides and does not mutate current binding",
             function(){
@@ -96,7 +96,7 @@ function($,
                                 $.AddAssign(a, a)))),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 2);
             }],
@@ -112,7 +112,7 @@ function($,
                                 $.AddAssign($.Member($.This(), a), a)))),
                     $.Expression(a));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 5);
             }],
@@ -126,7 +126,7 @@ function($,
                         $.Catch(a,
                             $.Block())));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
@@ -140,7 +140,7 @@ function($,
                         $.Catch(a,
                             $.Block())));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
@@ -161,7 +161,7 @@ function($,
                         $.Catch(a, $.Block())),
                     $.Expression(b));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 4);
             }],
@@ -180,7 +180,7 @@ function($,
                         $.Catch(a, $.Block())),
                     $.Expression(b));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 4);
             }],
@@ -199,7 +199,7 @@ function($,
                             $.Block(
                                 $.Expression(a)))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
@@ -223,7 +223,7 @@ function($,
                             $.Block(
                                 $.Expression(b)))));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 10);
             }],
@@ -250,7 +250,7 @@ function($,
                                 $.Expression($.AddAssign(b, a))))),
                         $.Expression(b));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 112);
             }],
@@ -268,7 +268,7 @@ function($,
                                 $.Return($.Number(2)))))),
                     $.Expression($.Call(a, [])));
                 
-                var result = interpret.interpret(root);
+                var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 2);
             }],
