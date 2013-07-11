@@ -1,6 +1,8 @@
 define(['$',
+        'expect',
         'atum/interpret'],
 function($,
+        expect,
         interpret){
     
     var a = $.Id('a');
@@ -11,14 +13,13 @@ function($,
         'tests': [
             ["Simple Undefined Var",
             function(){
-                var root = $.Program(
-                    $.Var(
-                         $.Declarator(a)),
-                    $.Expression(a));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'undefined');
-                assert.equal(result.value, undefined);
+                expect.run(
+                    $.Program(
+                        $.Var(
+                             $.Declarator(a)),
+                        $.Expression(a)))
+                    .testResult()
+                        .type('undefined', undefined);
             }],
             ["Simple Init Var",
             function(){
