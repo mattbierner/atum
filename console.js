@@ -93,7 +93,7 @@ var runContext = function (input, ctx, ok, err) {
 /* 
  ******************************************************************************/
 var doc = CodeMirror(document.getElementById('input'), {
-    'mode':  'javascript',
+    'mode': 'javascript',
     'lineNumbers': true
 }).doc;
 
