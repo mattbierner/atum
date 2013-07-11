@@ -5,6 +5,7 @@ require(['knockout-2.2.1',
         'nu/stream',
         'atum/interpret',
         'atum/compute',
+        'atum/semantics/semantics',
         'atum/debug/debugger',
         'ecma/lex/lexer', 'ecma/parse/parser'],
 function(ko,
@@ -12,6 +13,7 @@ function(ko,
         stream,
         interpret,
         compute,
+        semantics,
         atum_debugger,
         lexer, parser) {
 
@@ -68,7 +70,7 @@ var run = function (input, ok, err) {
     try {
         var lex = lexer.lexRegExp(input);
         var ast = parser.parseStream(lex);
-        return ok(interpret.interpret(ast));
+        return ok(interpret.evaluate(ast));
     } catch (e) {
         return err(e);
     }
@@ -78,10 +80,10 @@ var runContext = function (input, ctx, ok, err) {
     try {
         var lex = lexer.lexRegExp(input);
         var ast = parser.parseStream(lex);
-        var p = interpret.evaluate(ast);
+        var p = semantics.sourceElements(ast.body);
         return model.debug().run(p,
-            function(x, ctx){ return function(){ ok(x); }},
-            function(x, ctx){ return function(){ err(x); }});
+            function(x, ctx){ return function(){ return ok(x); }},
+            function(x, ctx){ return function(){ return err(x); }});
     } catch (e) {
         return err(e);
     }
@@ -188,7 +190,7 @@ $(function(){
             try {
                 var lex = lexer.lexRegExp(input);
                 var ast = parser.parseStream(lex);
-                var p = interpret.evaluateProgram(ast);
+                var p = semantics.mapSemantics(ast);
                 
                 var ctx = compute.ComputeContext.empty;
                 model.debug(atum_debugger.Debugger.create(p, ctx, 
