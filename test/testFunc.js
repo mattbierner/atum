@@ -263,6 +263,21 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 11);
             }],
+            
+            /*
+            ["Max Stack",
+            function(){
+                var root = $.Program(
+                    $.FunctionDeclaration(a, [b],
+                        $.Block(
+                           $.If($.Gt(b, $.Number(0)),
+                               $.Return($.Call(a, [$.Sub(b, $.Number(1))])),
+                               $.Return(b)))),
+                    $.Expression($.Call(a, [$.Number(1001)])))
+                
+                var result = interpret.evaluate(root);
+            }],
+            */
         ]
     };
 });
