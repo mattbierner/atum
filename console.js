@@ -55,14 +55,18 @@ var printEnvironments = function(d, ctx) {
 /* 
  ******************************************************************************/
 var out = {
-    'write': function(x) {
-        model.push(x, false);
+    'write': function(x, ctx) {
+        return function() {
+            model.push(x, ctx, false);
+        };
     }
 };
 
 var errorOut = {
-    'write': function(x) {
-        model.push(x, true);
+    'write': function(x, ctx) {
+        return function() {
+            model.push(x, ctx, true);
+        };
     }
 };
 
@@ -70,10 +74,10 @@ var run = function (input, ok, err) {
     try {
         var lex = lexer.lexRegExp(input);
         var ast = parser.parseStream(lex);
-        return ok(interpret.evaluate(ast));
-    } catch (e) {
-        return err(e);
+    } catch(e) {
+        return err(e, null)();
     }
+    return interpret.interpret(ast, compute.ComputeContext.empty, ok, err);
 };
 
 var runContext = function (input, ctx, ok, err) {
@@ -90,7 +94,7 @@ var runContext = function (input, ctx, ok, err) {
 };
 
 
-/* 
+/* Code Mirror
  ******************************************************************************/
 var doc = CodeMirror(document.getElementById('input'), {
     'mode': 'javascript',
@@ -115,7 +119,21 @@ interactive.on('keyHandled', function(instance, name, event) {
 
 var interactiveDoc = interactive.doc;
 
-/* 
+/* ConsoleViewModel
+ ******************************************************************************/
+var AtumObject = function(d, x, ctx) {
+    var value = d.getValue(x);
+    
+    if (value.type && value.type === 'object') {
+        this.value = value;
+        this.children = [];
+    } else {
+        this.value = value;
+        this.children = [];
+    }
+}
+
+/* ConsoleViewModel
  ******************************************************************************/
 var ConsoleViewModel = function() {
     var self = this;
@@ -149,10 +167,9 @@ ConsoleViewModel.prototype.stepOut = function() {
     return this.debug(this.debug().stepOut());
 };
 
-
-ConsoleViewModel.prototype.push = function(value, error) {
+ConsoleViewModel.prototype.push = function(value, ctx, error) {
     this.output.push({
-        'value': value,
+        'value': new AtumObject(atum_debugger.Debugger.create(compute.just(value), ctx, interpret.noop, interpret.noop), value, ctx),
         'error': !!error
     });
     return this;
@@ -193,9 +210,9 @@ $(function(){
                 var p = semantics.mapSemantics(ast);
                 
                 var ctx = compute.ComputeContext.empty;
-                model.debug(atum_debugger.Debugger.create(p, ctx, 
-                    function(x, ctx){ return function() { out.write(x); }; },
-                    function(x, ctx){ return function() { errorOut.write(x); } }));
+                model.debug(atum_debugger.Debugger.create(p, ctx,
+                    function(x, ctx){ return function() { out.write(x, ctx); }; },
+                    function(x, ctx){ return function() { errorOut.write(x, ctx); } }));
                 
                 stopButton.attr("disabled", false);
                 runButton.attr("disabled", false);
