@@ -24,7 +24,7 @@ function($,
                     expect.type('number', +x.value)(interpret.evaluate(root));
                 });
             }],
-            ["new Number(x) unboxes to zero.",
+            ["new Number() unboxes to zero.",
             function(){
                 var root = $.Program(
                     $.Expression(
