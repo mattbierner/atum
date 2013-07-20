@@ -36,6 +36,17 @@ function($,
                          $.Add($.New(Number, []), $.String('abc'))));
                 expect.type('string', "0abc")(interpret.evaluate(root));
             }],
+            ["Set on number",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression(
+                             $.Assign(a, $.New(Number, []))),
+                         $.Expression(
+                             $.Assign($.Member(a, b), $.Number(10)))))
+                     .test($.Expression($.Add(a, $.Member(a, b))))
+                         .type('number', 10);
+            }],
         ]
     };
 });
