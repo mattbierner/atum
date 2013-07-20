@@ -274,9 +274,21 @@
         </li>
     </script>
     
+    <script type="text/html" id="object-template">
+        <div>
+            <span class='binding-name' data-bind="text: value"></span>
+            <ul data-bind="foreach: children">
+                <li>
+                    <span data-bind="text: key"></span>
+                    <div data-bind="template: { name: 'object-template', data: value}"></div>
+                </li>
+            </ul>
+        </div>
+    </script>
+    
     <script type="text/html" id="output-template">
         <li class='output-value' data-bind="css: { 'output-error': error }">
-            <span class='binding-name' data-bind="text: value.value"></span>
+            <div data-bind="template: { name: 'object-template', data: value }"></div>
         </li>
     </script>
     

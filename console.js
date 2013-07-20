@@ -119,17 +119,21 @@ interactive.on('keyHandled', function(instance, name, event) {
 
 var interactiveDoc = interactive.doc;
 
-/* ConsoleViewModel
+/* 
  ******************************************************************************/
 var AtumObject = function(d, x, ctx) {
     var value = d.getValue(x, function(x, ctx){ return x; }, function(x, ctx){ return x; });
     
+    this.value = ko.observable(value);
     if (value.type && value.type === 'object') {
-        this.value = value;
-        this.children = [];
+        this.children = ko.observableArray(Object.keys(value.properties).map(function(key) {
+            return {
+                'key': key,
+                'value': AtumObject(d, value.properties[key], ctx)
+            };
+        }));
     } else {
-        this.value = value;
-        this.children = [];
+        this.children = ko.observableArray();
     }
 }
 
