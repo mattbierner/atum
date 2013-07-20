@@ -47,6 +47,23 @@ function($,
                      .test($.Expression($.Add(a, $.Member(a, b))))
                          .type('number', 10);
             }],
+            ["`Number.prototype.valueOf`",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression(
+                             $.Assign(a, $.New(Number, [$.Number(3)]))),
+                         $.Expression(
+                             $.Assign(b, $.Number(10)))))
+                     .test($.Expression($.Call($.Member(a, $.Id('valueOf')), [])))
+                         .type('number', 3)
+                     .test(
+                         $.Expression(
+                             $.Call(
+                                 $.Member($.Member($.Member(Number, $.Id('prototype')), $.Id('valueOf')), $.Id('call')),
+                                 [b])))
+                         .type('number', 10);
+            }],
         ]
     };
 });
