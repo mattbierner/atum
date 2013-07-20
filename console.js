@@ -42,10 +42,10 @@ var printFrame = function(d, lex) {
 var printEnvironments = function(d, ctx) {
     var environments = [];
     if (ctx.userData) {
-        var environment = d.getValue(ctx.userData.lexicalEnvironment);
+        var environment = d.getValue(ctx.userData.lexicalEnvironment, function(x, ctx) { return x; }, function(x, ctx) { return x; });
         do {
             environments.push(printFrame(d, environment));
-            environment = d.getValue(environment.outer);
+            environment = d.getValue(environment.outer, function(x, ctx) { return x; }, function(x, ctx) { return x; });
         } while (environment);
     };
     return environments;
@@ -122,7 +122,7 @@ var interactiveDoc = interactive.doc;
 /* ConsoleViewModel
  ******************************************************************************/
 var AtumObject = function(d, x, ctx) {
-    var value = d.getValue(x);
+    var value = d.getValue(x, function(x, ctx){ return x; }, function(x, ctx){ return x; });
     
     if (value.type && value.type === 'object') {
         this.value = value;
@@ -153,6 +153,10 @@ var ConsoleViewModel = function() {
             self.debug().ctx.userData.stack :
             [])
     });
+};
+
+ConsoleViewModel.prototype.run = function() {
+    return this.debug(this.debug().finish());
 };
 
 ConsoleViewModel.prototype.stepOver = function() {
@@ -211,8 +215,8 @@ $(function(){
                 
                 var ctx = compute.ComputeContext.empty;
                 model.debug(atum_debugger.Debugger.create(p, ctx,
-                    function(x, ctx){ return function() { out.write(x, ctx); }; },
-                    function(x, ctx){ return function() { errorOut.write(x, ctx); } }));
+                    out.write,
+                    errorOut.write));
                 
                 stopButton.attr("disabled", false);
                 runButton.attr("disabled", false);
@@ -236,7 +240,7 @@ $(function(){
         .button()
         .attr("disabled", true)
         .click(function(e){
-            model.step();
+            model.run();
         });
     
     stepButton
