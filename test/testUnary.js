@@ -1,10 +1,6 @@
 define(['$',
-        'ecma/ast/value',
-        'ecma/ast/expression',
         'atum/interpret'],
 function($,
-        value,
-        expression,
         interpret){
     
     var a = $.Id('a'),
@@ -40,7 +36,7 @@ function($,
             function(){
                  ([10, -10, 1e6, -1e6, 1.5, -1.5])
                     .forEach(function(x) {
-                        var root = new expression.UnaryExpression(null, '+', new value.Literal(null, x, "number"));
+                        var root = $.Plus($.Number(x));
                         var result = interpret.evaluate(root);
                         assert.equal(result.type, 'number');
                         assert.equal(result.value, x);
@@ -51,7 +47,7 @@ function($,
            function(){
                  ([10, -10, 1e6, -1e6, 1.5, -1.5])
                     .forEach(function(x) {
-                        var root = new expression.UnaryExpression(null, '-', new value.Literal(null, x, "number"));
+                        var root = $.Negate($.Number(x));
                         var result = interpret.evaluate(root);
                         assert.equal(result.type, 'number');
                         assert.equal(result.value, -x);
@@ -63,7 +59,7 @@ function($,
              function(){
                  ([true, false])
                     .forEach(function(x) {
-                        var root = new expression.UnaryExpression(null, '!', new value.Literal(null, x, "boolean"));
+                        var root = $.LogicalNot($.Boolean(x));
                         var result = interpret.evaluate(root);
                         assert.equal(result.type, 'boolean');
                         assert.equal(result.value, !x);
@@ -73,12 +69,12 @@ function($,
         // Bitwise Not
             ["Bitwise Not",
              function(){
-                ([new value.Literal(null, 1, "number"),
-                   new value.Literal(null, 1.5, "number"),
-                   new value.Literal(null, -1, "number"),
-                   new value.Literal(null, "1", "string")])
+                ([$.Number(1),
+                  $.Number(1.5),
+                  $.Number(-1),
+                  $.String("1")])
                    .forEach(function(x) {
-                        var root = new expression.UnaryExpression(null, '~', x);
+                        var root = $.BitwiseNot(x);
                         var result = interpret.evaluate(root);
                         assert.equal(result.type, 'number');
                         assert.equal(result.value, ~x.value);
@@ -88,7 +84,7 @@ function($,
         // Typeof 
             ["Typeof string",
              function(){
-                var root = new expression.UnaryExpression(null, 'typeof', new value.Literal(null, "", "string"));
+                var root = $.Typeof($.String(""));
                 var result = interpret.evaluate(root);
                 assert.equal(result.type, 'string');
                 assert.equal(result.value, "string");

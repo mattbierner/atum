@@ -1,9 +1,9 @@
-define(['ecma/ast/clause',
-        'ecma/ast/declaration',
-        'ecma/ast/expression',
-        'ecma/ast/statement',
-        'ecma/ast/program',
-        'ecma/ast/value'],
+define(['ecma_ast/clause',
+        'ecma_ast/declaration',
+        'ecma_ast/expression',
+        'ecma_ast/statement',
+        'ecma_ast/program',
+        'ecma_ast/value'],
 function(clause,
         declaration,
         expression,
@@ -39,7 +39,7 @@ var update = function(op, prefix) {
 
 var literal = function(type) {
     return function(val) {
-        return new value.Literal(null, val, type);
+        return new value.Literal(null, type, val);
     };
 };
 
@@ -138,6 +138,9 @@ var This = function() {
 
 var Plus = unary('+');
 var Negate = unary('-');
+var Typeof = unary('typeof');
+var BitwiseNot = unary('~');
+var LogicalNot = unary('!');
 
 var Void = unary('void');
 
@@ -229,7 +232,10 @@ return {
     
     'Plus': Plus,
     'Negate': Negate,
-    
+    'Typeof': Typeof,
+    'BitwiseNot': BitwiseNot,
+    'LogicalNot': LogicalNot,
+
     'Void': Void,
     
     'Add': Add,
