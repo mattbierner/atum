@@ -122,20 +122,33 @@ var interactiveDoc = interactive.doc;
 /* 
  ******************************************************************************/
 var AtumObject = function(d, x, ctx) {
+    var self = this;
     var value = d.getValue(x, function(x, ctx){ return x; }, function(x, ctx){ return x; });
     
-    this.value = ko.observable(value);
-    if (value.type && value.type === 'object') {
-        this.children = ko.observableArray(Object.keys(value.properties).map(function(key) {
-            return {
-                'key': key,
-                'value': AtumObject(d, value.properties[key], ctx)
-            };
-        }));
-    } else {
-        this.children = ko.observableArray();
-    }
-}
+    self.value = ko.observable(value);
+    self.children = ko.observableArray();
+    
+    self.getChildren = function(data) {
+        var value = data.value().value();
+        if (data.value().children().length < Object.keys(value.properties).length) {
+            if (value.type && value.type === 'object') {
+                Object.keys(value.properties).map(function(key) {
+                    data.value().children.push(
+                        new AtumChild(key, new AtumObject(d, value.properties[key].value, ctx)));
+                });
+            }
+        }
+        $('.object-browser').accordion()
+            .accordion('refresh');
+    };
+};
+
+var AtumChild = function(key, value) {
+    var self = this;
+
+    self.key = ko.observable(key);
+    self.value = ko.observable(value);
+};
 
 /* ConsoleViewModel
  ******************************************************************************/
@@ -176,8 +189,10 @@ ConsoleViewModel.prototype.stepOut = function() {
 };
 
 ConsoleViewModel.prototype.push = function(value, ctx, error) {
+    var obj = new AtumObject(atum_debugger.Debugger.create(compute.just(value), ctx, interpret.noop, interpret.noop), value, ctx);
+    obj.getChildren({'key':'', 'value': ko.observable(obj) });
     this.output.push({
-        'value': new AtumObject(atum_debugger.Debugger.create(compute.just(value), ctx, interpret.noop, interpret.noop), value, ctx),
+        'value': obj,
         'error': !!error
     });
     return this;
@@ -205,7 +220,15 @@ $(function(){
         .button()
         .click(function(e){
             run(doc.getValue(), out.write, errorOut.write);
+                $('.object-browser')
+                    .accordion({
+                        'collapsible': true,
+                        'animate': 100
+                    });
         });
+    
+    $('.object-browser')
+        .accordion();
     
     $('button#debug-button')
         .button()

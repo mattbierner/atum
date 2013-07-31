@@ -1,7 +1,6 @@
 # Atum - Functional Javascript Interpreter in Javascript #
 
-## About ##
-Atum is a Javascript interpreter written in functional style Javascript. 
+Atum is a Javascript interpreter written in functional style Javascript.
 
 Atum's functional implementation differentiates it from existing Javascript self
 interpreters such as Narcissus. Additionally, Atum aims to provide a high degree

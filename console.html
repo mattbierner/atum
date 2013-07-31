@@ -119,8 +119,8 @@
         }
         
         .ui-widget {
-            font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
-        }
+            font:inherit;
+            }
         
         .ui-corner-all {
             border-radius: 0;
@@ -217,6 +217,7 @@
             padding-bottom: 18px;
             overflow-y: scroll;
             list-style: none;
+            margin: 0;
         }
         
         .output-interactive {
@@ -235,7 +236,30 @@
             display: none;
         }
         
+        .object-browser {
+            font-size: 1em;
+        }
         
+        .object-children > .object-value {
+            display: inline-block;
+        }
+        
+        .ui-accordion-header,
+        .ui-accordion .ui-accordion-header {
+            color: black;
+            border: 0;
+            padding-right: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        
+        .ui-accordion  .ui-accordion-content {
+            border: none;
+            background: none;
+            margin: 0;
+            margin-left: 1em;
+            padding: 0;
+        }
         
         
     /* CodeMirror*/
@@ -275,11 +299,11 @@
     </script>
     
     <script type="text/html" id="object-template">
-        <div>
-            <span class='binding-name' data-bind="text: value"></span>
-            <ul data-bind="foreach: children">
+        <div class='object-browser'>
+            <span class='object-value' data-bind="text: value"></span>
+            <ul class='object-children' data-bind="foreach: children">
                 <li>
-                    <span data-bind="text: key"></span>
+                    <a class='child-key' data-bind="text: key, click: $parent.getChildren"></a>
                     <div data-bind="template: { name: 'object-template', data: value}"></div>
                 </li>
             </ul>
@@ -314,7 +338,7 @@
                         <button id='step-out-button' title='step out'><span class="ui-icon ui-icon-arrowstop-1-n"></span></button>
                     </div>
                 </div>
-            </div><div class='output'>
+            </div><div class='output code'>
                 <ul id='output-console' data-bind="template: { name: 'output-template', foreach: output }"></ul>
                 <div class='output-interactive cf'>
                     <div id='output-interactive-textarea'></div>
