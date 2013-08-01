@@ -50,7 +50,17 @@ function($,
                     .test($.Expression($.Member(b, length)))
                         .type('number', 3);
             }],
-
+            ["Array add increases length",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a,
+                             $.Array($.Number(0), $.Number(1), $.Number(2)))),
+                         $.Expression($.Assign($.ComputedMember(a, $.Number(3)),
+                             $.Number(3)))))
+                    .test($.Expression($.Member(a, length)))
+                        .type('number', 4);
+            }],
         ]
     };
 });
