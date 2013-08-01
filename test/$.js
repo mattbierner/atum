@@ -197,6 +197,10 @@ var Object = function(/*...*/) {
     return new expression.ObjectExpression(null, arguments);
 };
 
+var Array = function(/*...*/) {
+    return new expression.ArrayExpression(null, arguments);
+};
+
 return {
     'Program': Program,
     
@@ -262,6 +266,7 @@ return {
     'Call': Call,
     'New': New,
     'FunctionExpression': FunctionExpression,
-    'Object': Object
+    'Object': Object,
+    'Array': Array
 };
 });
