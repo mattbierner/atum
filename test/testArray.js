@@ -58,8 +58,10 @@ function($,
                              $.Array($.Number(0), $.Number(1), $.Number(2)))),
                          $.Expression($.Assign($.ComputedMember(a, $.Number(3)),
                              $.Number(3)))))
+                     
                     .test($.Expression($.Member(a, length)))
                         .type('number', 4)
+                        
                     .test($.Expression($.ComputedMember(a, $.Number(3))))
                         .type('number', 3);
             }],
@@ -72,12 +74,16 @@ function($,
                          $.Expression($.Assign($.ComputedMember(a, $.Number(10)),
                              $.Number(10))),
                          $.Expression($.Assign(b, $.Call(keys, [a])))))
+                         
                     .test($.Expression($.Member(a, length)))
                         .type('number', 11)
+                        
                     .test($.Expression($.ComputedMember(a, $.Number(6))))
                         .type('undefined')
+                        
                     .test($.Expression($.ComputedMember(a, $.Number(10))))
                         .type('number', 10)
+                        
                     .test($.Expression($.Member(b, length)))
                         .type('number', 4)
             }],
