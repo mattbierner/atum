@@ -131,7 +131,7 @@ var AtumObject = function(d, x, ctx) {
     self.getChildren = function(data) {
         var value = data.value().value();
         if (data.value().children().length === 0) {
-            if (value.type && value.type === 'object') {
+            if (value && value.type && value.type === 'object') {
                 Object.keys(value.properties).map(function(key) {
                     data.value().children.push(
                         new AtumChild(key, new AtumObject(d, value.properties[key].value, ctx)));
