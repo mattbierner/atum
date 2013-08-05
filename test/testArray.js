@@ -88,6 +88,18 @@ function($,
                         .type('number', 4)
             }],
             
+            ["Array set larger length",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a,
+                             $.Array($.Number(0), $.Number(1), $.Number(2)))),
+                         $.Expression($.Assign($.Member(a, length),
+                             $.Number(10)))))
+                     
+                    .test($.Expression($.Member(a, length)))
+                        .type('number', 10)
+            }],
         ]
     };
 });
