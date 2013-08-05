@@ -110,7 +110,7 @@ function($,
                                             $.Expression($.AddAssign($.Member($.This(), c), b)),
                                             $.Return(b)))
                                 })])))))
-
+                    
                     .test($.Expression($.Member(a, b)))
                         .type('undefined')
                     
