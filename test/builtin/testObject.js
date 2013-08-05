@@ -83,6 +83,46 @@ function($,
                     
                     .test($.Expression($.Member(a, b)))
                         .type('number', 432)
+                        
+                    .test($.Expression($.Member($.Call(keys, [a]), length)))
+                        .type('number', 1)
+                    
+                    .test($.Expression($.ComputedMember($.Call(keys, [a]), $.Number(0))))
+                        .type('string', 'c');
+            }],
+            ["Object.defineProperty setter",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a,
+                            $.Call(defineProperty, [
+                                $.Object({
+                                    'kind': 'init',
+                                    'key': $.String('c'),
+                                    'value': $.Number(5)
+                                }),
+                                $.String('b'),
+                                $.Object({
+                                    'kind': 'init',
+                                    'key': $.String('set'),
+                                    'value': $.FunctionExpression(null, [b],
+                                        $.Block(
+                                            $.Expression($.AddAssign($.Member($.This(), c), b)),
+                                            $.Return(b)))
+                                })])))))
+
+                    .test($.Expression($.Member(a, b)))
+                        .type('undefined')
+                    
+                    .test($.Expression($.Assign($.Member(a, b), $.Number(100))))
+                        .type('number', 100)
+                        
+                    .test(
+                        $.Expression(
+                            $.Sequence(
+                                $.Assign($.Member(a, b), $.Number(100)),
+                                $.Member(a, c))))
+                        .type('number', 105)
                     
                     .test($.Expression($.ComputedMember($.Call(keys, [a]), $.Number(0))))
                         .type('string', 'c');
