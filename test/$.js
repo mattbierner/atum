@@ -157,6 +157,9 @@ var Gte = binary('>=');
 var Equals = binary('==');
 var StrictEquals = binary('===');
 
+var In = binary('in');
+var Instanceof = binary('instanceof');
+
 var LogicalAnd = logical('&&');
 var LogicalOr = logical('||');
 
@@ -247,6 +250,8 @@ return {
     'Mul': Mul,
     'Div': Div,
     'Mod': Mod,
+    'In': In,
+    'Instanceof': Instanceof,
     'Lt': Lt,
     'Lte': Lte,
     'Gt': Gt,
@@ -259,6 +264,7 @@ return {
     'PostIncrement': PostIncrement,
     'PreDecrement': PreDecrement,
     'PostDecrement': PostDecrement,
+
     'Assign': Assign,
     'AddAssign': AddAssign,
     'ComputedMember': ComputedMember,
