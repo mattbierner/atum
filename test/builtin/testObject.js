@@ -7,7 +7,9 @@ function($,
         b = $.Id('b'),
         c = $.Id('c'),
         Object = $.Id('Object'),
-        defineProperty = $.Member(Object, $.Id('defineProperty'));
+        defineProperty = $.Member(Object, $.Id('defineProperty')),
+        keys = $.Member(Object, $.Id('keys'));
+
 
     return {
         'module': "Builtin Object",
@@ -26,6 +28,9 @@ function($,
                                     'key': $.String('value'),
                                     'value': $.Number(1)
                                 })])))))
+                    
+                    .test($.Expression($.Member(a, b)))
+                        .type('number', 1)
                     
                     .test($.Expression($.Member(a, b)))
                         .type('number', 1);
