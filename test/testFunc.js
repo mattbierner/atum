@@ -1,6 +1,8 @@
 define(['$',
+        'expect',
         'atum/interpret'],
 function($,
+        expect,
         interpret){
     
     var a = $.Id('a');
@@ -262,6 +264,36 @@ function($,
                 var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 11);
+            }],
+            ["Throw in function",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [b],
+                            $.Block(
+                               $.Throw(b))),
+                        $.Try(
+                            $.Expression($.Call(a, [$.Number(11)])),
+                        $.Catch(c,
+                            $.Expression(c)))))
+                        
+                    .testResult()
+                        .type('number', 11);
+            }],
+            ["Error in function",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [],
+                            $.Block(
+                               $.Return(b))),
+                        $.Try(
+                            $.Expression($.Call(a, [])),
+                        $.Catch(c,
+                            $.Expression($.Number(13))))))
+                        
+                    .testResult()
+                        .type('number', 13);
             }],
             
             /*
