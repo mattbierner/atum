@@ -5,9 +5,11 @@ function($,
         expect,
         interpret){
     
-    var a = $.Id('a');
-    var b = $.Id('b');
-    var c = $.Id('c');
+    var a = $.Id('a'),
+        b = $.Id('b'),
+        c = $.Id('c'),
+        Object = $.Id('Object'),
+        defineProperty = $.Member(Object, $.Id('defineProperty'));
 
     return {
         'module': "In operator",
@@ -57,7 +59,41 @@ function($,
                  .test($.Expression($.In($.String('toString'), a)))
                      .type('boolean', true);
             }],
-
+            
+            ["In non enumerable",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression(
+                            $.Assign(a, $.Call(defineProperty, [
+                                $.Object(),
+                                $.String('b'),
+                                $.Object({
+                                    'kind': 'init',
+                                    'key': $.String('value'),
+                                    'value': $.Number(10)
+                                }, {
+                                    'kind': 'init',
+                                    'key': $.String('enumerable'),
+                                    'value': $.Boolean(false)
+                                })])))))
+                 
+                 .test($.Expression($.In($.String('b'), a)))
+                     .type('boolean', true);
+            }],
+            ["In undefined",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression(
+                            $.Assign(a, $.Call(defineProperty, [
+                                $.Object(),
+                                $.String('b'),
+                                $.Object()])))))
+                 
+                 .test($.Expression($.In($.String('b'), a)))
+                     .type('boolean', true);
+            }],
         ]
     };
 });
