@@ -33,19 +33,39 @@ function($,
             function(){
                 expect.run(
                     $.Program(
+                        $.FunctionDeclaration(a, [], $.Block()),
+                        $.FunctionDeclaration(b, [], $.Block()),
                         $.Expression(
-                            $.Assign(a, $.Object())),
+                            $.Assign($.Member(b, $.Id('prototype')), $.New(a, []))),
                         $.Expression(
-                            $.Assign(b, $.Call(create, [a])))))
+                            $.Assign(c,
+                                $.New(b, [])))))
                  
                  .test($.Expression($.Instanceof(b, a)))
-                     .type('boolean', true)
+                     .type('boolean', false)
                 
-                 .test($.Expression($.Instanceof(b, Object)))
+                 .test($.Expression($.Instanceof(c, Object)))
                          .type('boolean', true)
                 
-                 .test($.Expression($.Instanceof(b, a)))
-                         .type('boolean', false);
+                 .test($.Expression($.Instanceof(c, a)))
+                         .type('boolean', true)
+                 
+                 .test($.Expression($.Instanceof(c, b)))
+                         .type('boolean', true);
+            }],
+            ["Builtin",
+            function(){
+                expect.run(
+                    $.Program())
+                 
+                 .test($.Expression($.Instanceof(Number, Number)))
+                     .type('boolean', false)
+                
+                 .test($.Expression($.Instanceof($.Number(5), Number)))
+                     .type('boolean', false)
+                
+                 .test($.Expression($.Instanceof($.New(Number, []), Number)))
+                     .type('boolean', true);
             }],
         ]
     };
