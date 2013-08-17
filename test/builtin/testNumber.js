@@ -55,8 +55,10 @@ function($,
                              $.Assign(a, $.New(Number, [$.Number(3)]))),
                          $.Expression(
                              $.Assign(b, $.Number(10)))))
+                     
                      .test($.Expression($.Call($.Member(a, $.Id('valueOf')), [])))
                          .type('number', 3)
+                     
                      .test(
                          $.Expression(
                              $.Call(
