@@ -57,6 +57,20 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 3);
             }],
+            ["Hiding Variable Declaration",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Var(
+                             $.Declarator(a, $.Number(1))),
+                         $.Var(
+                             $.Declarator(b, a),
+                             $.Declarator(a, $.Number(2)))))
+                    .test($.Expression(a))
+                        .type('number', 2)
+                    .test($.Expression(b))
+                        .type('number', 1);
+            }],
             
             ["Var Declaration init to undefined",
             function(){
@@ -81,6 +95,19 @@ function($,
                         $.Expression($.Delete(a)),
                         $.Expression(a)))
                     .isError();
+            }],
+            ["Delete reassign",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Var(
+                             $.Declarator(a, $.Number(10))),
+                        $.Expression($.Delete(a)),
+                        $.Var(
+                             $.Declarator(a, $.Number(15))),
+                        $.Expression(a)))
+                    .testResult()
+                        .type('number', 15);
             }],
             
         // Global
