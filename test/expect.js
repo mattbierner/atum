@@ -36,7 +36,7 @@ Context.prototype.testResult = function(/*...*/) {
 };
 
 var Result = function(isError, value, ctx) {
-    this.isError = isError;
+    this.error = isError;
     this.value = value;
     this.ctx = ctx;
 };
@@ -62,6 +62,11 @@ Result.prototype.testResult = function() {
 
 Result.prototype.type = function(expr, t, v) {
     type(t, v)(this.run(expr).value.value);
+    return this;
+};
+
+Result.prototype.isError = function() {
+    assert.ok(this.error);
     return this;
 };
 

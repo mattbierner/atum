@@ -143,6 +143,7 @@ var BitwiseNot = unary('~');
 var LogicalNot = unary('!');
 
 var Void = unary('void');
+var Delete = unary('delete');
 
 var Add = binary('+');
 var Sub = binary('-');
@@ -244,6 +245,7 @@ return {
     'LogicalNot': LogicalNot,
 
     'Void': Void,
+    'Delete': Delete,
     
     'Add': Add,
     'Sub': Sub,

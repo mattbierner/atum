@@ -9,7 +9,7 @@ function($,
     var b = $.Id('b');
     
     return {
-        'module': "Binding Tests",
+        'module': "Environment",
         'tests': [
             ["Simple Undefined Var",
             function(){
@@ -70,6 +70,17 @@ function($,
                 var result = interpret.evaluate(root);
                 assert.equal(result.type, 'undefined');
                 assert.equal(result.value, undefined);
+            }],
+            
+            ["Delete var removes binding",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Var(
+                             $.Declarator(a, $.Number(10))),
+                        $.Expression($.Delete(a)),
+                        $.Expression(a)))
+                    .isError();
             }],
             
         // Global
