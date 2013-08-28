@@ -295,7 +295,20 @@ function($,
                     .testResult()
                         .type('number', 13);
             }],
-            
+            ["Func Declaration Recursive Call",
+            function(){
+                var root = $.Program(
+                    $.FunctionDeclaration(a, [b],
+                        $.Block(
+                            $.If($.Gt(b, $.Number(1)),
+                                $.Return($.Call(a, [$.Sub(b, $.Number(1))]))),
+                            $.Return(b))),
+                    $.Expression($.Call(a, [$.Number(5)])));
+                
+                var result = interpret.evaluate(root);
+                assert.equal(result.type, 'number');
+                assert.equal(result.value, 1);
+            }],
             /*
             ["Max Stack",
             function(){

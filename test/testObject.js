@@ -11,7 +11,7 @@ function($,
         d = $.Id('d');
 
     return {
-        'module': "Object Tests",
+        'module': "Object",
         'tests': [
             ["Simple Object Expression",
             function(){
@@ -172,6 +172,43 @@ function($,
                 var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 123);
+            }],
+            
+            ["Delete property",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Var(
+                            $.Declarator(a,
+                                $.Object({
+                                     'kind': 'init',
+                                     'key': $.String('b'),
+                                     'value': $.Number(1)
+                                 }))),
+                         $.Expression(
+                             $.Delete($.Member(a, b)))))
+                     
+                     .testResult()
+                         .type('boolean', true)
+                         
+                     .test($.Expression($.Member(a, b)))
+                         .type('undefined', undefined);
+            }],
+            ["Delete undefined property",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Var(
+                            $.Declarator(a,
+                                $.Object())),
+                         $.Expression(
+                             $.Delete($.Member(a, b)))))
+                             
+                      .testResult()
+                         .type('boolean', true)
+                     
+                     .test($.Expression($.Member(a, b)))
+                         .type('undefined', undefined);
             }],
         ]
     };

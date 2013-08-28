@@ -66,24 +66,25 @@ function($,
                          $.Var(
                              $.Declarator(b, a),
                              $.Declarator(a, $.Number(2)))))
+                     
                     .test($.Expression(a))
                         .type('number', 2)
+                    
                     .test($.Expression(b))
                         .type('number', 1);
             }],
             
             ["Var Declaration init to undefined",
             function(){
-                var root = $.Program(
-                    $.Var(
-                        $.Declarator(a, b)),
-                     $.Var(
-                         $.Declarator(b)),
-                    $.Expression(a));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'undefined');
-                assert.equal(result.value, undefined);
+                expect.run(
+                    $.Program(
+                        $.Var(
+                            $.Declarator(a, b)),
+                         $.Var(
+                             $.Declarator(b))))
+                     
+                    .test($.Expression(a))
+                        .type('undefined', undefined);
             }],
             
             ["Delete var removes binding",
@@ -108,6 +109,32 @@ function($,
                         $.Expression(a)))
                     .testResult()
                         .type('number', 15);
+            }],
+            ["Delete var return type",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Var(
+                             $.Declarator(a, $.Number(10))),
+                        $.Expression($.Delete(a))))
+                    .testResult()
+                        .type('boolean', true);
+            }],
+            ["Delete non var",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Delete($.Number(1)))))
+                    .testResult()
+                        .type('boolean', true);
+            }],
+            ["Delete undefined var",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Delete(a))))
+                    .testResult()
+                        .type('boolean', true);
             }],
             
         // Global
