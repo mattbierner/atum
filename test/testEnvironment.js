@@ -5,8 +5,9 @@ function($,
         expect,
         interpret){
     
-    var a = $.Id('a');
-    var b = $.Id('b');
+    var a = $.Id('a'),
+        b = $.Id('b'),
+        c = $.Id('c');
     
     return {
         'module': "Environment",
@@ -161,6 +162,30 @@ function($,
                 var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
+            }],
+            ["Assign Global to value",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a, $.This())),
+                        $.Expression($.Assign($.Member(a, b), $.Number(1)))))
+                    
+                    .test($.Expression(b))
+                        .type('number', 1);
+            }],
+            ["Assign Global to value",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Assign(b, $.Number(1)),
+                        $.Expression($.Assign(a, $.This())),
+                        $.Assign(c, $.Number(2))))
+                    
+                    .test($.Expression($.Member(a, b)))
+                        .type('number', 1)
+                    
+                    .test($.Expression($.Member(a, c)))
+                        .type('number', 2);
             }],
         ]
     };
