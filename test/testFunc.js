@@ -309,20 +309,40 @@ function($,
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 1);
             }],
-            /*
+            ["Delete Func Declaration",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [],
+                            $.Block(
+                                $.Return($.Number(13)))),
+                        $.Expression($.Assign(b, $.Call(a, []))),
+                        $.Expression($.Assign(c, $.Delete(a))),
+                        $.Expression($.Call(a, []))))
+                    
+                    .isError()
+                    
+                    .test($.Expression(b))
+                        .type('number', 13)
+                    
+                    .test($.Expression(c))
+                        .type('boolean', true);
+            }],
+            
+            /* This test takes to long to be regularly included
             ["Max Stack",
             function(){
-                var root = $.Program(
-                    $.FunctionDeclaration(a, [b],
-                        $.Block(
-                           $.If($.Gt(b, $.Number(0)),
-                               $.Return($.Call(a, [$.Sub(b, $.Number(1))])),
-                               $.Return(b)))),
-                    $.Expression($.Call(a, [$.Number(1001)])))
-                
-                var result = interpret.evaluate(root);
-            }],
-            */
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [b],
+                            $.Block(
+                               $.If($.Gt(b, $.Number(0)),
+                                   $.Return($.Call(a, [$.Sub(b, $.Number(1))])),
+                                   $.Return(b)))),
+                        $.Expression($.Call(a, [$.Number(1001)]))))
+                    .isError();
+            }],*/
+            
         ]
     };
 });
