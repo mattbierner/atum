@@ -70,6 +70,10 @@ var If = function(test, consequent, alternate) {
     return new statement.IfStatement(null, test, consequent, alternate);
 };
 
+var With = function(obj, body) {
+    return new statement.WithStatement(null, obj, body);
+};
+
 var While = function(test, body) {
     return new statement.WhileStatement(null, test, body);
 };
@@ -217,6 +221,7 @@ return {
     'Block': Block,
     'Expression': Expression,
     'If': If,
+    'With': With,
     'While': While,
     'For': For,
     'Try': Try,
