@@ -16,7 +16,7 @@ function($,
             ["Simple Object Expression",
             function(){
                 var f = function(extract) {
-                    return  $.Program(
+                    return $.Program(
                         $.Expression($.Assign(a, 
                             $.Object({
                                  'kind': 'init',
