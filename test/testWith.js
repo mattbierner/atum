@@ -28,6 +28,17 @@ function($,
                     .testResult()
                         .type('number', 1);
             }],
+            ["Simple With",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a, $.Number(1))),
+                         $.With($.This(), $.Block(
+                             $.Expression(a)))))
+                     
+                    .testResult()
+                        .type('number', 1);
+            }],
             ["Delete ",
             function(){
                 expect.run(
