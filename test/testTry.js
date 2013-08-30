@@ -1,6 +1,8 @@
 define(['$',
+        'expect',
         'atum/interpret'],
 function($,
+        expect,
         interpret){
     
     var a = $.Id('a');
@@ -271,6 +273,24 @@ function($,
                 var result = interpret.evaluate(root);
                 assert.equal(result.type, 'number');
                 assert.equal(result.value, 2);
+            }],
+             ["State Try throw, catch, finally",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Assign(a, $.Number(1)),
+                        $.Try(
+                            $.Block(
+                                $.Expression($.PostIncrement(a)),
+                                $.Throw($.Number(1)),
+                                $.Expression($.PostIncrement(a))),
+                            $.Catch(b,
+                                $.Block()),
+                            $.Block(
+                                $.Expression(a)))))
+                        
+                        .testResult()
+                            .type('number', 2);
             }],
         ]
     };

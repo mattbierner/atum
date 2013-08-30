@@ -28,7 +28,7 @@ function($,
                     .testResult()
                         .type('number', 1);
             }],
-            ["Simple With",
+            ["Simple global this",
             function(){
                 expect.run(
                     $.Program(
@@ -39,7 +39,7 @@ function($,
                     .testResult()
                         .type('number', 1);
             }],
-            ["Delete ",
+            ["Delete",
             function(){
                 expect.run(
                     $.Program(
