@@ -179,7 +179,7 @@ function($,
                         $.FunctionDeclaration(a, [], $.Block()),
                         $.Expression($.Assign($.Member($.Member(a, prototype), x), $.Number(1))),
                         $.Expression($.Assign($.Member($.Member(a, prototype), y), $.Number(5))),
-
+                        
                         $.Expression($.Assign(b, $.New(a, []))),
                         $.Expression($.Assign($.Member(b, x), $.Number(14))),
                         $.Expression($.Assign($.Member(b, z), $.Number(5)))))
