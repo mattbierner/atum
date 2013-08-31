@@ -6,8 +6,13 @@ function($,
     var a = $.Id('a'),
         b = $.Id('b'),
         c = $.Id('c'),
+        x = $.Id('x'),
+        y = $.Id('y'),
+        z = $.Id('z'),
         Object = $.Id('Object'),
+        prototype = $.Id('prototype'),
         defineProperty = $.Member(Object, $.Id('defineProperty')),
+        hasOwnProperty = $.Id('hasOwnProperty'),
         length = $.Id('length');
         keys = $.Member(Object, $.Id('keys'));
 
@@ -126,6 +131,67 @@ function($,
                     
                     .test($.Expression($.ComputedMember($.Call(keys, [a]), $.Number(0))))
                         .type('string', 'c');
+            }],
+            
+            // Object.prototype.hasOwnProperty
+            ["Object.prototype.hasOwnProperty",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a,
+                            $.Object({
+                                'kind': 'init',
+                                'key': $.String('b'),
+                                'value': $.Number(1)
+                            })))))
+                    
+                    .test($.Expression($.Call($.Member(a, hasOwnProperty), [$.String('x')])))
+                        .type('boolean', false)
+                    
+                    .test($.Expression($.Call($.Member(a, hasOwnProperty), [$.String('b')])))
+                        .type('boolean', true);
+            }],
+            ["Object.prototype.hasOwnProperty enumerable",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a,
+                            $.Call(defineProperty, [
+                                $.Object(),
+                                $.String('b'),
+                                $.Object({
+                                    'kind': 'init',
+                                    'key': $.String('value'),
+                                    'value': $.Number(1)
+                                }, {
+                                    'kind': 'init',
+                                    'key': $.String('enumerable'),
+                                    'value': $.Boolean(false)
+                                })])))))
+                    
+                    .test($.Expression($.Call($.Member(a, hasOwnProperty), [$.String('b')])))
+                        .type('boolean', true);
+            }],
+            ["Object.prototype.hasOwnProperty inheritance",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [], $.Block()),
+                        $.Expression($.Assign($.Member($.Member(a, prototype), x), $.Number(1))),
+                        $.Expression($.Assign($.Member($.Member(a, prototype), y), $.Number(5))),
+
+                        $.Expression($.Assign(b, $.New(a, []))),
+                        $.Expression($.Assign($.Member(b, x), $.Number(14))),
+                        $.Expression($.Assign($.Member(b, z), $.Number(5)))))
+                       
+                    .test($.Expression($.Call($.Member(b, hasOwnProperty), [$.String('x')])))
+                        .type('boolean', true)
+                        
+                    .test($.Expression($.Call($.Member(b, hasOwnProperty), [$.String('y')])))
+                        .type('boolean', false)
+                        
+                    .test($.Expression($.Call($.Member(b, hasOwnProperty), [$.String('z')])))
+                        .type('boolean', true);
             }],
         ]
     };
