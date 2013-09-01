@@ -10,6 +10,7 @@ function($,
         c = $.Id('c'),
         d = $.Id('d'),
         Object = $.Id('Object'),
+        bind = $.Id('bind'),
         call = $.Id('call'),
         apply = $.Id('apply'),
         prototype = $.Id('prototype'),
@@ -70,6 +71,7 @@ function($,
                     .type('number', 2);
             }],
             
+        // Apply
             ["function.prototype.apply on language function",
             function(){
                 expect.run(
@@ -89,6 +91,109 @@ function($,
                     $.Expression(
                         $.Call($.Member(a, apply), [$.Null(), $.Array($.Number(2))])))
                     .type('number', -1);
+            }],
+            
+        // Bind
+            ["function.prototype.bind args",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [b, c, d],
+                            $.Block(
+                                $.Return($.Div($.Add(b, c), d)))),
+                        $.Expression($.Assign(b, $.Call($.Member(a, bind), [$.Null(), $.Number(1), $.Number(3)])))))
+                
+                .test(
+                    $.Expression(
+                        $.Call(b, [$.Number(2)])))
+                    .type('number', 2);
+            }],
+            ["function.prototype.bind this",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [],
+                            $.Block(
+                                $.Return($.Member($.This(), c)))),
+                        $.Expression(
+                            $.Assign(b,
+                                $.Call(
+                                    $.Member(a, bind),
+                                    [$.Object({
+                                        'kind': 'init',
+                                        'key': $.String('c'),
+                                        'value': $.Number(4)
+                                    })])))))
+                
+                .test(
+                    $.Expression(
+                        $.Call(b, [])))
+                    .type('number', 4);
+            }],
+            ["function.prototype.bind non object this",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [],
+                            $.Block(
+                                $.Return($.Member($.This(), $.Id('toString'))))),
+                        $.Expression(
+                            $.Assign(b,
+                                $.Call(
+                                    $.Member(a, bind),
+                                    [$.Number(1)])))))
+                
+                .test(
+                    $.Expression(
+                        $.Equals(
+                            $.Call(b, []),
+                            $.Member($.Member($.Id('Number'), prototype), $.Id('toString')))))
+                    .type('boolean', true);
+            }],
+            ["function.prototype.bind construct",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [b, c],
+                            $.Block(
+                                $.Assign($.Member($.This(), c), $.Add(b, c)))),
+                        $.Expression(
+                            $.Assign(b,
+                                $.Call(
+                                    $.Member(a, bind),
+                                    [$.Null(), $.Number(4)])))))
+                
+                .test(
+                    $.Expression(
+                        $.Member($.New(b, [$.Number(3)]), c)))
+                    .type('number', 7);
+            }],
+             ["function.prototype.bind multi bind args",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [b, c, d],
+                            $.Block(
+                                $.Return($.Div($.Mul($.Add(b, c), d), $.ComputedMember($.This(), $.String('x')))))),
+                        $.Expression(
+                            $.Assign(b,
+                                $.Call(
+                                    $.Member(a, bind),
+                                    [$.Object({
+                                        'kind': 'init',
+                                        'key': $.String('x'),
+                                        'value': $.Number(2)
+                                    }), $.Number(6)]))),
+                        $.Expression(
+                            $.Assign(c,
+                                $.Call(
+                                    $.Member(b, bind),
+                                    [$.Null(), $.Number(4)])))))
+                
+                .test(
+                    $.Expression(
+                        $.Call(c, [$.Number(1)])))
+                    .type('number', 5);
             }],
         ]
     };
