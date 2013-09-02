@@ -5,17 +5,23 @@ require(['knockout-2.2.1',
         'nu/stream',
         'atum/interpret',
         'atum/compute',
+        'atum/builtin/global',
         'atum/semantics/semantics',
+        'atum/semantics/program',
         'atum/debug/debugger',
-        'ecma/lex/lexer', 'ecma/parse/parser'],
+        'ecma/lex/lexer',
+        'ecma/parse/parser'],
 function(ko,
         parse,
         stream,
         interpret,
         compute,
+        global,
         semantics,
+        program,
         atum_debugger,
-        lexer, parser) {
+        lexer,
+        parser) {
 
 var reduce = Function.prototype.call.bind(Array.prototype.reduce);
 
@@ -77,7 +83,7 @@ var run = function (input, ok, err) {
     } catch(e) {
         return err(e, null)();
     }
-    return interpret.interpret(ast, compute.ComputeContext.empty, ok, err);
+    return interpret.complete(program.programBody(semantics.sourceElements(ast.body)), globalCtx, ok, err);
 };
 
 var runContext = function (input, ctx, ok, err) {
@@ -206,6 +212,15 @@ ConsoleViewModel.prototype.stop = function() {
  ******************************************************************************/
 var model = new ConsoleViewModel();
 ko.applyBindings(model);
+
+var globalCtx = interpret.complete(
+    compute.sequence(
+        global.initialize(),
+        global.enterGlobal(),
+        compute.getComputeContext()),
+    compute.ComputeContext.empty,
+    function(x) { return function(){ return x }; },
+    function(x) { return function(){ return x }; });
 
 $(function(){
     var stopButton = $('button#stop-button'),

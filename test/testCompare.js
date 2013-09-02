@@ -1,23 +1,23 @@
 define(['$',
-        'atum/interpret'],
+        'expect'],
 function($,
-        interpret){
+        expect){
     
     var compareValue = function(a, b) {
-        return interpret.evaluate(
+        return expect.run(
             $.Program(
                 $.Expression($.Equals(a, b))));
     };
     
     var compareValues = function(input) {
         input.forEach(function(x) {
-            var lResult = compareValue(x[0], x[1]);
-            assert.equal(lResult.type, 'boolean');
-            assert.equal(lResult.value, x[2]);
+            compareValue(x[0], x[1])
+                .testResult()
+                    .type('boolean', x[2]);
             
-            var rResult = compareValue(x[1], x[0]);
-            assert.equal(rResult.type, 'boolean');
-            assert.equal(rResult.value, x[2]);
+            compareValue(x[1], x[0])
+                .testResult()
+                    .type('boolean', x[2]);
         });
     };
     
@@ -193,13 +193,13 @@ function($,
                   [$.Object(), $.Object(), false],
                   [$.Object({'key': 'x', 'value': $.Number(4), 'kind': 'init'}), $.Object({'key': 'x', 'value': $.Number(4), 'kind': 'init'}), false],]);
                 
-                var result = interpret.evaluate(
+                expect.run(
                     $.Program(
                         $.Expression($.Assign($.Id('a'), $.Object())),
                         $.Expression($.Assign($.Id('b'), $.Id('a'))),
-                        $.Expression($.Equals($.Id('a'), $.Id('b')))));
-                assert.equal(result.type, 'boolean');
-                assert.equal(result.value, true);
+                        $.Expression($.Equals($.Id('a'), $.Id('b')))))
+                    .testResult()
+                        .type('boolean', true);
             }],
         ],
     };

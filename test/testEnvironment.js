@@ -1,9 +1,7 @@
 define(['$',
-        'expect',
-        'atum/interpret'],
+        'expect'],
 function($,
-        expect,
-        interpret){
+        expect){
     
     var a = $.Id('a'),
         b = $.Id('b'),
@@ -24,39 +22,36 @@ function($,
             }],
             ["Simple Init Var",
             function(){
-                var root = $.Program(
-                    $.Var(
-                         $.Declarator(a, $.Number(10))),
-                    $.Expression(a));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 10);
+                expect.run(
+                    $.Program(
+                        $.Var(
+                             $.Declarator(a, $.Number(10)))))
+                     
+                    .test($.Expression(a))
+                        .type('number', 10);
             }],
             ["Multiple Variable Declaration",
             function(){
-                var root = $.Program(
-                    $.Var(
-                         $.Declarator(a, $.Number(1)),
-                         $.Declarator(b, $.Number(2))),
-                    $.Expression($.Add(a, b)));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 3);
+                expect.run(
+                    $.Program(
+                        $.Var(
+                             $.Declarator(a, $.Number(1)),
+                             $.Declarator(b, $.Number(2)))))
+                     
+                     .test($.Expression($.Add(a, b)))
+                         .type('number', 3);
             }],
             ["Multiple Variable Declaration",
             function(){
-                var root = $.Program(
-                    $.Var(
-                         $.Declarator(a, $.Number(1))),
-                     $.Var(
-                         $.Declarator(b, $.Number(2))),
-                    $.Expression($.Add(a, b)));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 3);
+                expect.run(
+                    $.Program(
+                        $.Var(
+                             $.Declarator(a, $.Number(1))),
+                         $.Var(
+                             $.Declarator(b, $.Number(2)))))
+                         
+                     .test($.Expression($.Add(a, b)))
+                         .type('number', 3);
             }],
             ["Hiding Variable Declaration",
             function(){
@@ -141,27 +136,25 @@ function($,
         // Global
             ["Global assignment",
             function(){
-                var root = $.Program(
-                    $.Expression(
-                        $.Assign( a, $.Number(1))),
-                    $.Expression(a));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 1);
+                expect.run(
+                    $.Program(
+                        $.Expression(
+                            $.Assign( a, $.Number(1)))))
+                            
+                    .test($.Expression(a))
+                        .type('number', 1);
             }],
             ["Global this assignment",
             function(){
-                var root = $.Program(
-                    $.Expression(
-                        $.Assign(
-                            $.Member($.This(), a),
-                            $.Number(1))),
-                    $.Expression(a));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 1);
+                expect.run(
+                    $.Program(
+                        $.Expression(
+                            $.Assign(
+                                $.Member($.This(), a),
+                                $.Number(1)))))
+                    
+                    .test($.Expression(a))
+                        .type('number', 1);
             }],
             ["Assign Global to value",
             function(){

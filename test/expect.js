@@ -1,10 +1,14 @@
 define(['atum/compute',
         'atum/interpret',
-        'atum/semantics/program'],
+        'atum/semantics/program',
+        'atum/semantics/semantics',
+        'atum/builtin/global'],
 function(compute,
         interpret,
-        program){
-"use strict";
+        program,
+        semantics,
+        global){
+//"use strict";
 
 var Context = function(parent, value, ctx) {
     this.parent = parent;
@@ -70,8 +74,17 @@ Result.prototype.isError = function() {
     return this;
 };
 
+var globalCtx = interpret.complete(
+    compute.sequence(
+        global.initialize(),
+        global.enterGlobal(),
+        compute.getComputeContext()),
+    compute.ComputeContext.empty,
+    function(x) { return function(){ return x }; },
+    function(x) { return function(){ return x }; });
+
 var run = function(root) {
-    return interpret.interpret(root, compute.ComputeContext.empty,
+    return interpret.complete(program.programBody(semantics.sourceElements(root.body)), globalCtx,
         function(x, ctx){ return function(){ return new Result(false, x, ctx); }; },
         function(x, ctx){ return function(){ return new Result(true, x, ctx); }; });
 };
