@@ -1,13 +1,11 @@
 define(['$',
-        'expect',
-        'atum/interpret'],
+        'expect'],
 function($,
-        expect,
-        interpret){
+        expect){
     
-    var a = $.Id('a');
-    var b = $.Id('b');
-    var c = $.Id('c');
+    var a = $.Id('a'),
+        b = $.Id('b'),
+        c = $.Id('c');
 
     var Number = $.Id('Number');
     
@@ -17,24 +15,32 @@ function($,
             ["Number(x) converts to number",
             function(){
                 [$.Number(1), $.String("10", $.String('abc')), $.Boolean(false)].forEach(function(x){
-                    var root = $.Program(
-                        $.Expression(
-                             $.Call(Number, [x])));
-                    
-                    expect.type('number', +x.value)(interpret.evaluate(root));
+                    expect.run(
+                        $.Program(
+                            $.Expression(
+                                 $.Call(Number, [x]))))
+                         
+                         .testResult()
+                             .type('number', +x.value);
                 });
             }],
             ["new Number() unboxes to zero.",
             function(){
-                var root = $.Program(
-                    $.Expression(
-                         $.Add($.New(Number, []), $.Number(100))));
-                expect.type('number', 100)(interpret.evaluate(root));
+                expect.run(
+                    $.Program(
+                        $.Expression(
+                             $.Add($.New(Number, []), $.Number(100)))))
+                         
+                    .testResult()
+                        .type('number', 100);
                 
-                var root = $.Program(
-                    $.Expression(
-                         $.Add($.New(Number, []), $.String('abc'))));
-                expect.type('string', "0abc")(interpret.evaluate(root));
+                expect.run(
+                    $.Program(
+                        $.Expression(
+                             $.Add($.New(Number, []), $.String('abc')))))
+                             
+                    .testResult()
+                        .type('string', "0abc");
             }],
             ["Set on number",
             function(){

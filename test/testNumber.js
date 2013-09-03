@@ -1,7 +1,7 @@
 define(['$',
-        'atum/interpret'],
+        'expect'],
 function($,
-        interpret){
+        expect){
    
     return {
         'module': "Number",
@@ -9,27 +9,33 @@ function($,
             ["Number Literal",
             function(){
                 ([10, -10, 1e6, -1e6, 1.5, -1.5]).forEach(function(x) {
-                    var result = interpret.evaluate($.Number(x));
-                    assert.equal(result.type, 'number');
-                    assert.equal(result.value, x);
+                    expect.run(
+                        $.Program(
+                            $.Expression($.Number(x))))
+                        .testResult()
+                            .type('number', x);
                 });
             }],
             ["Binary Plus Number",
             function(){
                  ([10, -10, 1e6, -1e6, 1.5, -1.5]).forEach(function(x) {
-                    var root = $.Add($.Number(x), $.Number(10));
-                    var result = interpret.evaluate(root);
-                    assert.equal(result.type, 'number');
-                    assert.equal(result.value, x + 10);
+                    expect.run(
+                        $.Program(
+                            $.Expression($.Add($.Number(x), $.Number(10)))))
+                            
+                        .testResult()
+                            .type('number', x + 10);
                 });
             }],
             ["String->Number",
             function(){
                 ([["3.3e10", 3.3e10], ["  10  ", 10]]).forEach(function(x) {
-                    var root = $.Plus($.String(x[0]));
-                    var result = interpret.evaluate(root);
-                    assert.equal(result.type, 'number');
-                    assert.equal(result.value, x[1]);
+                    expect.run(
+                        $.Program(
+                            $.Expression($.Plus($.String(x[0])))))
+                            
+                        .testResult()
+                            .type('number', x[1]);
                 });
             }],
       

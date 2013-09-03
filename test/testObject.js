@@ -1,9 +1,7 @@
 define(['$',
-        'expect',
-        'atum/interpret'],
+        'expect'],
 function($,
-        expect,
-        interpret){
+        expect){
     
     var a = $.Id('a'),
         b = $.Id('b'),
@@ -15,163 +13,151 @@ function($,
         'tests': [
             ["Simple Object Expression",
             function(){
-                var f = function(extract) {
-                    return $.Program(
+                expect.run(
+                    $.Program(
                         $.Expression($.Assign(a, 
                             $.Object({
                                  'kind': 'init',
                                  'key': $.String('ab'),
                                  'value': $.Number(1)
-                             }))),
-                        $.Expression(extract));
-                };
-                
-                expect.type('number', 1)(
-                    interpret.evaluate(f($.Member(a, $.Id('ab')))));
-                
-                expect.type('number', 1)(
-                    interpret.evaluate(f($.ComputedMember(a, $.Add($.String('a'), $.String('b'))))));
+                             })))))
+                             
+                    .test($.Expression($.Member(a, $.Id('ab'))))
+                        .type('number', 1)
+                        
+                    .test($.Expression($.ComputedMember(a, $.Add($.String('a'), $.String('b')))))
+                        .type('number', 1);
             }],
             ["Non Member Object Expression",
             function(){
-                var root = $.Program(
-                    $.Var(
-                        $.Declarator(a, $.Object())),
-                    $.Expression(
-                        $.Member(a, b)));
-                
-                expect.type('undefined', undefined)(
-                    interpret.evaluate(root));
+                expect.run(
+                    $.Program(
+                        $.Var(
+                            $.Declarator(a, $.Object()))))
+                    
+                    .test($.Expression($.Member(a, b)))
+                        .type('undefined', undefined);
             }],
             ["Multiple Properties Member Object Literal",
             function(){
-                var root = $.Program(
-                    $.Var(
-                        $.Declarator(a,
-                            $.Object({
-                                 'kind': 'init',
-                                 'key': $.String('b'),
-                                 'value': $.Number(1)
-                             }, {
-                                 'kind': 'init',
-                                 'key': $.String('c'),
-                                 'value': $.Number(2)
-                             }))),
-                    $.Expression(
+                expect.run(
+                    $.Program(
+                        $.Var(
+                            $.Declarator(a,
+                                $.Object({
+                                     'kind': 'init',
+                                     'key': $.String('b'),
+                                     'value': $.Number(1)
+                                 }, {
+                                     'kind': 'init',
+                                     'key': $.String('c'),
+                                     'value': $.Number(2)
+                                 })))))
+                     
+                    .test($.Expression(
                         $.Add(
                             $.Member(a, b),
-                            $.Member(a, c))));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 3);
+                            $.Member(a, c))))
+                        .type('number', 3);
             }],
             ["Multiple Duplicate Property Member Object Expression",
             function(){
-                var root = $.Program(
-                    $.Var(
-                        $.Declarator(a,
-                            $.Object({
-                                 'kind': 'init',
-                                 'key': $.String('b'),
-                                 'value': $.Number(1)
-                             }, {
-                                 'kind': 'init',
-                                 'key': $.String('b'),
-                                 'value': $.Number(2)
-                             }))),
-                    $.Expression(
-                        $.Member(a, b)));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 2);
+                expect.run(
+                    $.Program(
+                        $.Var(
+                            $.Declarator(a,
+                                $.Object({
+                                     'kind': 'init',
+                                     'key': $.String('b'),
+                                     'value': $.Number(1)
+                                 }, {
+                                     'kind': 'init',
+                                     'key': $.String('b'),
+                                     'value': $.Number(2)
+                                 })))))
+                                 
+                    .test($.Expression($.Member(a, b)))
+                        .type('number', 2);
             }],
             ["Getter Property Member Object Expression",
             function(){
-                var root = $.Program(
-                    $.Var(
-                        $.Declarator(a,
-                            $.Object({
-                                 'kind': 'get',
-                                 'key': $.String('b'),
-                                 'value': $.FunctionExpression(null, [],
-                                     $.Block(
-                                        $.Return($.Number(1))))
-                             }))),
-                    $.Expression(
-                        $.Member(a, b)));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 1);
+                expect.run(
+                    $.Program(
+                        $.Var(
+                            $.Declarator(a,
+                                $.Object({
+                                     'kind': 'get',
+                                     'key': $.String('b'),
+                                     'value': $.FunctionExpression(null, [],
+                                         $.Block(
+                                            $.Return($.Number(1))))
+                                 })))))
+                    
+                     .test($.Expression($.Member(a, b)))
+                         .type('number', 1);
             }],
             ["Getter This Property Member Object Expression",
             function(){
-                var root = $.Program(
-                    $.Var(
-                        $.Declarator(a,
-                            $.Object({
-                                 'kind': 'init',
-                                 'key': $.String('c'),
-                                 'value': $.Number(1)
-                             }, {
-                                 'kind': 'get',
-                                 'key': $.String('b'),
-                                 'value': $.FunctionExpression(null, [],
-                                     $.Block(
-                                        $.Return(
-                                            $.Member($.This(), c))))
-                             }))),
-                    $.Expression(
-                        $.Member(a, b)));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 1);
+                expect.run(
+                    $.Program(
+                        $.Var(
+                            $.Declarator(a,
+                                $.Object({
+                                     'kind': 'init',
+                                     'key': $.String('c'),
+                                     'value': $.Number(1)
+                                 }, {
+                                     'kind': 'get',
+                                     'key': $.String('b'),
+                                     'value': $.FunctionExpression(null, [],
+                                         $.Block(
+                                            $.Return(
+                                                $.Member($.This(), c))))
+                                 })))))
+                                 
+                    .test($.Expression($.Member(a, b)))
+                        .type('number', 1);
             }],
             
             ["Objects passed by reference",
             function(){
-                var root = $.Program(
-                    $.Var(
-                        $.Declarator(a,
-                            $.Object({
-                                 'kind': 'init',
-                                 'key': $.String('c'),
-                                 'value': $.Number(1)
-                             })),
-                             $.Declarator(b, a)),
-                     $.Expression(
-                         $.Assign(
-                             $.Member(a, c),
-                             $.Number(2))),
-                    $.Expression(
-                        $.Member(b, c)));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 2);
+                expect.run(
+                    $.Program(
+                        $.Var(
+                            $.Declarator(a,
+                                $.Object({
+                                     'kind': 'init',
+                                     'key': $.String('c'),
+                                     'value': $.Number(1)
+                                 })),
+                                 $.Declarator(b, a)),
+                         $.Expression(
+                             $.Assign(
+                                 $.Member(a, c),
+                                 $.Number(2)))))
+                                 
+                    .test($.Expression($.Member(b, c)))
+                        .type('number', 2);
             }],
             
             ["setter yields set value",
             function(){
-                var root = $.Program(
-                    $.Expression($.Assign(a, $.Object({
-                        'kind': 'set',
-                        'key': $.String('b'),
-                        'value': $.FunctionExpression(null, [c],
-                             $.Block(
-                                $.Expression($.Assign($.Member($.This(), d), $.Number(23))),
-                                $.Return($.Number(13))))
-                    }))),
-                    $.Expression($.Add(
-                        $.Assign($.Member(a, b), $.Number(100)),
-                        $.Member(a, d))));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 123);
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a, $.Object({
+                            'kind': 'set',
+                            'key': $.String('b'),
+                            'value': $.FunctionExpression(null, [c],
+                                 $.Block(
+                                    $.Expression($.Assign($.Member($.This(), d), $.Number(23))),
+                                    $.Return($.Number(13))))
+                        })))))
+
+                    .test($.Expression(
+                        $.Add(
+                            $.Assign($.Member(a, b), $.Number(100)),
+                            $.Member(a, d))))
+                        .type('number', 123);
             }],
             
             ["Delete property",

@@ -1,7 +1,7 @@
 define(['$',
-        'atum/interpret'],
+        'expect'],
 function($,
-        interpret){
+        expect){
     
     var a = $.Id('a');
     
@@ -10,155 +10,154 @@ function($,
         'tests': [
             ["Empty Switch",
             function(){
-                var root = $.Program(
-                    $.Switch($.Number(0)));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'undefined');
-                assert.equal(result.value, undefined);
+                expect.run(
+                    $.Program(
+                        $.Switch($.Number(0))))
+                        
+                    .testResult()
+                        .type('undefined', undefined);
             }],
             ["Not Covered Case Switch",
             function(){
-                var root = $.Program(
-                    $.Switch($.Number(0),
-                        $.Case($.Number(5),
-                            $.Number(100),
-                            $.Break())));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'undefined');
-                assert.equal(result.value, undefined);
+                expect.run(
+                    $.Program(
+                        $.Switch($.Number(0),
+                            $.Case($.Number(5),
+                                $.Number(100),
+                                $.Break()))))
+                            
+                    .testResult()
+                        .type('undefined', undefined);
             }],
             ["Covered Case",
             function(){
-                var root = $.Program(
-                    $.Expression(
-                        $.Assign(a, $.Number(5))),
-                    $.Switch(a,
-                        $.Case($.Number(1),
-                            $.Expression(
-                                $.Assign(a, $.Number(0))),
-                            $.Break()),
-                        $.Case($.Number(5),
-                            $.Expression(
-                                $.Assign(a, $.Number(1))),
-                            $.Break()),
-                        $.Case($.Number(10),
-                            $.Expression(
-                                $.Assign(a, $.Number(2))),
-                            $.Break())),
-                    $.Expression(a));
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 1);
+                expect.run(
+                    $.Program(
+                        $.Expression(
+                            $.Assign(a, $.Number(5))),
+                        $.Switch(a,
+                            $.Case($.Number(1),
+                                $.Expression(
+                                    $.Assign(a, $.Number(0))),
+                                $.Break()),
+                            $.Case($.Number(5),
+                                $.Expression(
+                                    $.Assign(a, $.Number(1))),
+                                $.Break()),
+                            $.Case($.Number(10),
+                                $.Expression(
+                                    $.Assign(a, $.Number(2))),
+                                $.Break()))))
+                            
+                    .test($.Expression(a))
+                        .type('number', 1);
             }],
             ["Multiple Covered Cases",
             function(){
-                var root = $.Program(
-                    $.Switch($.Number(0),
-                        $.Case($.Boolean(false),
-                            $.Expression(
-                                $.Number(0)),
-                            $.Break()),
-                        $.Case($.Number(0),
-                            $.Expression(
-                                $.Number(1)),
-                            $.Break()),
-                        $.Case($.String(""),
-                            $.Expression(
-                                $.Number(2)),
-                            $.Break()),
-                        $.Case(null,
-                            $.Expression(
-                                $.Number(2)),
-                            $.Break())));
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 1);
+                expect.run(
+                    $.Program(
+                        $.Switch($.Number(0),
+                            $.Case($.Boolean(false),
+                                $.Expression(
+                                    $.Number(0)),
+                                $.Break()),
+                            $.Case($.Number(0),
+                                $.Expression(
+                                    $.Number(1)),
+                                $.Break()),
+                            $.Case($.String(""),
+                                $.Expression(
+                                    $.Number(2)),
+                                $.Break()),
+                            $.Case(null,
+                                $.Expression(
+                                    $.Number(2)),
+                                $.Break()))))
+                                
+                    .testResult()
+                        .type('number', 1);
             }],
             ["Break Return Last Value",
             function(){
-                var root = $.Program(
-                    $.Switch($.Number(5),
-                        $.Case($.Number(1),
-                            $.Expression($.Number(0)),
-                            $.Break()),
-                        $.Case($.Number(5),
-                             $.Expression($.Number(1)),
-                            $.Break()),
-                        $.Case($.Number(10),
-                             $.Expression($.Number(2)),
-                             $.Break())));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 1);
+                expect.run(
+                    $.Program(
+                        $.Switch($.Number(5),
+                            $.Case($.Number(1),
+                                $.Expression($.Number(0)),
+                                $.Break()),
+                            $.Case($.Number(5),
+                                 $.Expression($.Number(1)),
+                                $.Break()),
+                            $.Case($.Number(10),
+                                 $.Expression($.Number(2)),
+                                 $.Break()))))
+                                 
+                     .testResult()
+                         .type('number', 1);
             }],
             ["Covered Case Fall",
             function(){
-                var root = $.Program(
-                    $.Expression(
-                        $.Assign(a, $.Number(5))),
-                    $.Switch(a,
-                        $.Case($.Number(1),
-                            $.Expression(
-                                $.Assign(a, $.Number(0)))),
-                        $.Case($.Number(5),
-                            $.Expression(
-                                $.AddAssign(a, $.Number(1)))),
-                        $.Case($.Number(10),
-                            $.Expression(
-                                $.AddAssign(a, $.Number(2))))),
-                    $.Expression(a));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 8);
+                expect.run(
+                    $.Program(
+                        $.Expression(
+                            $.Assign(a, $.Number(5))),
+                        $.Switch(a,
+                            $.Case($.Number(1),
+                                $.Expression(
+                                    $.Assign(a, $.Number(0)))),
+                            $.Case($.Number(5),
+                                $.Expression(
+                                    $.AddAssign(a, $.Number(1)))),
+                            $.Case($.Number(10),
+                                $.Expression(
+                                    $.AddAssign(a, $.Number(2)))))))
+                                    
+                    .test($.Expression(a))
+                        .type('number', 8);
             }],
             ["Default Case",
             function(){
-                var root = $.Program(
-                    $.Expression(
-                        $.Assign(a, $.Number(5))),
-                    $.Switch(a,
-                        $.Case($.Number(1),
-                            $.Expression(
-                                $.Assign(a, $.Number(0))),
-                            $.Break()),
-                        $.Case(null,
-                            $.Expression(
-                                $.Assign(a, $.Number(1))),
-                            $.Break()),
-                        $.Case($.Number(10),
-                            $.Expression(
-                                $.Assign(a, $.Number(2))),
-                                $.Break())),
-                    $.Expression(a));
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 1);
+                expect.run(
+                    $.Program(
+                        $.Expression(
+                            $.Assign(a, $.Number(5))),
+                        $.Switch(a,
+                            $.Case($.Number(1),
+                                $.Expression(
+                                    $.Assign(a, $.Number(0))),
+                                $.Break()),
+                            $.Case(null,
+                                $.Expression(
+                                    $.Assign(a, $.Number(1))),
+                                $.Break()),
+                            $.Case($.Number(10),
+                                $.Expression(
+                                    $.Assign(a, $.Number(2))),
+                                    $.Break()))))
+                                    
+                    .test($.Expression(a))
+                        .type('number', 1);
             }],
             ["Default Case Fall",
             function(){
-                var root = $.Program(
-                    $.Expression(
-                        $.Assign(a, $.Number(5))),
-                    $.Switch(a,
-                        $.Case($.Number(1),
-                            $.Expression(
-                                $.Assign(a, $.Number(0))),
-                            $.Break()),
-                        $.Case(null,
-                            $.Expression(
-                                $.AddAssign(a, $.Number(1)))),
-                        $.Case($.Number(10),
-                            $.Expression(
-                                $.AddAssign(a, $.Number(2))))),
-                    $.Expression(a));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 8);
+                expect.run(
+                    $.Program(
+                        $.Expression(
+                            $.Assign(a, $.Number(5))),
+                        $.Switch(a,
+                            $.Case($.Number(1),
+                                $.Expression(
+                                    $.Assign(a, $.Number(0))),
+                                $.Break()),
+                            $.Case(null,
+                                $.Expression(
+                                    $.AddAssign(a, $.Number(1)))),
+                            $.Case($.Number(10),
+                                $.Expression(
+                                    $.AddAssign(a, $.Number(2)))))))
+                                    
+                    .test($.Expression(a))
+                        .type('number', 8);
             }],
         ],
     };

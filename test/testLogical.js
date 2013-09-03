@@ -1,9 +1,7 @@
 define(['$',
-        'expect',
-        'atum/interpret'],
+        'expect'],
 function($,
-        expect,
-        interpret){
+        expect){
     
     var a = $.Id('a'),
         b = $.Id('b'),

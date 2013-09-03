@@ -1,7 +1,7 @@
 define(['$',
-        'atum/interpret'],
+        'expect'],
 function($,
-        interpret){
+        expect){
     
     var a = $.Id('a'),
         b = $.Id('b'),
@@ -13,33 +13,36 @@ function($,
         // void
             ["Void",
             function(){
-                var root = $.Program(
-                    $.Void($.Number(10)));
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'undefined');
-                assert.equal(result.value, undefined);
+                expect.run(
+                    $.Program(
+                        $.Void($.Number(10))))
+                        
+                    .testResult()
+                        .type('undefined', undefined);
             }],
             ["Void Side Effects",
             function(){
-                var root = $.Program(
-                    $.Expression($.Sequence(
-                        $.Assign(a, $.Number(0)),
-                        $.Void($.PreIncrement(a)),
-                        a)));
-                
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'number');
-                assert.equal(result.value, 1);
+                expect.run(
+                    $.Program(
+                        $.Expression($.Sequence(
+                            $.Assign(a, $.Number(0)),
+                            $.Void($.PreIncrement(a)),
+                            a))))
+                            
+                    .testResult()
+                        .type('number', 1);
             }],
         // Unary plus
             ["Unary Plus Number",
             function(){
                  ([10, -10, 1e6, -1e6, 1.5, -1.5])
                     .forEach(function(x) {
-                        var root = $.Plus($.Number(x));
-                        var result = interpret.evaluate(root);
-                        assert.equal(result.type, 'number');
-                        assert.equal(result.value, x);
+                          expect.run(
+                              $.Program(
+                                  $.Expression($.Plus($.Number(x)))))
+                                  
+                              .testResult()
+                                  .type('number', x);
                     });
             }],
         // Unary Minus
@@ -47,10 +50,13 @@ function($,
            function(){
                  ([10, -10, 1e6, -1e6, 1.5, -1.5])
                     .forEach(function(x) {
-                        var root = $.Negate($.Number(x));
-                        var result = interpret.evaluate(root);
-                        assert.equal(result.type, 'number');
-                        assert.equal(result.value, -x);
+                        expect.run(
+                            $.Program(
+                                $.Expression($.Negate($.Number(x)))))
+                                
+                            .testResult()
+                                .type('number', -x);
+
                     });
             }],
         
@@ -59,10 +65,12 @@ function($,
              function(){
                  ([true, false])
                     .forEach(function(x) {
-                        var root = $.LogicalNot($.Boolean(x));
-                        var result = interpret.evaluate(root);
-                        assert.equal(result.type, 'boolean');
-                        assert.equal(result.value, !x);
+                        expect.run(
+                            $.Program(
+                                $.Expression($.LogicalNot($.Boolean(x)))))
+                                
+                            .testResult()
+                                .type('boolean', !x);
                     });
             }],
         
@@ -74,20 +82,24 @@ function($,
                   $.Number(-1),
                   $.String("1")])
                    .forEach(function(x) {
-                        var root = $.BitwiseNot(x);
-                        var result = interpret.evaluate(root);
-                        assert.equal(result.type, 'number');
-                        assert.equal(result.value, ~x.value);
+                        expect.run(
+                            $.Program(
+                                $.Expression($.BitwiseNot(x))))
+                            
+                            .testResult()
+                                .type('number', ~x.value);
                     });
             }],
             
         // Typeof 
             ["Typeof string",
              function(){
-                var root = $.Typeof($.String(""));
-                var result = interpret.evaluate(root);
-                assert.equal(result.type, 'string');
-                assert.equal(result.value, "string");
+                expect.run(
+                    $.Program(
+                        $.Expression($.Typeof($.String("")))))
+                        
+                    .testResult()
+                        .type('string', 'string');
             }],
         ],
     };

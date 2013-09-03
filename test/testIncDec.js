@@ -1,7 +1,7 @@
 define(['$',
-        'atum/interpret'],
+        'expect'],
 function($,
-        interpret){
+        expect){
     
     var a = $.Id('a');
     
@@ -19,30 +19,29 @@ function($,
             ["Prefix Increment Changes Value",
             function(){
                 set.forEach(function(x){
-                    var root = $.Program(
-                        $.Var(
-                             $.Declarator(a, x)),
-                        $.Expression( 
-                            $.PreIncrement(a)),
-                        $.Expression(a));
-                    
-                    var result = interpret.evaluate(root);
-                    assert.equal(result.type, 'number');
-                    assert.equal(result.value, +x.value + 1);
+                    expect.run(
+                        $.Program(
+                            $.Var(
+                                 $.Declarator(a, x)),
+                            $.Expression( 
+                                $.PreIncrement(a))))
+                                
+                        .test($.Expression(a))
+                            .type('number', +x.value + 1);
                 });
             }],
             ["Prefix Increment Return Value",
             function(){
                 set.forEach(function(x){
-                    var root = $.Program(
-                        $.Var(
-                             $.Declarator(a, x)),
-                        $.Expression( 
-                            $.PreIncrement(a)));
-                    
-                    var result = interpret.evaluate(root);
-                    assert.equal(result.type, 'number');
-                    assert.equal(result.value, +x.value + 1);
+                   expect.run(
+                        $.Program(
+                            $.Var(
+                                 $.Declarator(a, x)),
+                            $.Expression( 
+                                $.PreIncrement(a))))
+                                
+                        .testResult()
+                            .type('number', +x.value + 1);
                 });
             }],
             
@@ -50,30 +49,28 @@ function($,
             ["Prefix Decrement Changes Value",
             function(){
                 set.forEach(function(x){
-                    var root = $.Program(
-                        $.Var(
-                             $.Declarator(a, x)),
-                        $.Expression( 
-                            $.PreDecrement(a)),
-                        $.Expression( a));
-                    
-                    var result = interpret.evaluate(root);
-                    assert.equal(result.type, 'number');
-                    assert.equal(result.value, +x.value - 1);
+                    expect.run(
+                        $.Program(
+                            $.Var(
+                                 $.Declarator(a, x)),
+                            $.Expression( 
+                                $.PreDecrement(a))))
+                        .test($.Expression(a))
+                            .type('number', +x.value - 1);
                 });
             }],
             ["Prefix Decrement Return Value",
             function(){
                 set.forEach(function(x){
-                    var root = $.Program(
-                        $.Var(
-                             $.Declarator(a, x)),
-                        $.Expression( 
-                            $.PreDecrement(a)));
-                    
-                    var result = interpret.evaluate(root);
-                    assert.equal(result.type, 'number');
-                    assert.equal(result.value, +x.value - 1);
+                    expect.run(
+                        $.Program(
+                            $.Var(
+                                 $.Declarator(a, x)),
+                            $.Expression( 
+                                $.PreDecrement(a))))
+                                
+                        .testResult()
+                            .type('number', +x.value - 1);
                 });
             }],
             
@@ -81,30 +78,29 @@ function($,
             ["Postfix Increment Changes Value",
             function(){
                 set.forEach(function(x){
-                    var root = $.Program(
-                        $.Var(
-                             $.Declarator(a, x)),
-                        $.Expression( 
-                            $.PostIncrement(a)),
-                        $.Expression( a));
-                    
-                    var result = interpret.evaluate(root);
-                    assert.equal(result.type, 'number');
-                    assert.equal(result.value, +x.value + 1);
+                    expect.run(
+                        $.Program(
+                            $.Var(
+                                 $.Declarator(a, x)),
+                            $.Expression( 
+                                $.PostIncrement(a))))
+                        
+                        .test($.Expression(a))
+                            .type('number', +x.value + 1);
                 });
             }],
             ["Postfix Increment Return Value",
             function(){
                 set.forEach(function(x){
-                    var root = $.Program(
-                        $.Var(
-                             $.Declarator(a, x)),
-                        $.Expression( 
-                            $.PostIncrement(a)));
-                    
-                    var result = interpret.evaluate(root);
-                    assert.equal(result.type, 'number');
-                    assert.equal(result.value, +x.value);
+                    expect.run(
+                        $.Program(
+                            $.Var(
+                                 $.Declarator(a, x)),
+                            $.Expression( 
+                                $.PostIncrement(a))))
+                                
+                        .testResult()
+                            .type('number', +x.value);
                 });
             }],
             
@@ -112,30 +108,29 @@ function($,
             ["Postfix Decrement Changes Value",
             function(){
                set.forEach(function(x){
-                    var root = $.Program(
-                        $.Var(
-                             $.Declarator(a, x)),
-                        $.Expression( 
-                            $.PostDecrement(a)),
-                        $.Expression( a));
-                    
-                    var result = interpret.evaluate(root);
-                    assert.equal(result.type, 'number');
-                    assert.equal(result.value, +x.value - 1);
+                    expect.run(
+                        $.Program(
+                            $.Var(
+                                 $.Declarator(a, x)),
+                            $.Expression( 
+                                $.PostDecrement(a))))
+                                
+                        .test($.Expression(a))
+                            .type('number', +x.value - 1);
                 });
             }],
             ["Postfix Decrement Return Value",
             function(){
                 set.forEach(function(x){
-                    var root = $.Program(
-                        $.Var(
-                             $.Declarator(a, x)),
-                        $.Expression(
-                            $.PostDecrement(a)));
-                    
-                    var result = interpret.evaluate(root);
-                    assert.equal(result.type, 'number');
-                    assert.equal(result.value, +x.value);
+                    expect.run(
+                        $.Program(
+                            $.Var(
+                                 $.Declarator(a, x)),
+                            $.Expression(
+                                $.PostDecrement(a))))
+                                
+                        .testResult()
+                            .type('number', +x.value);
                 });
             }],
         ],
