@@ -76,8 +76,8 @@ Result.prototype.isError = function() {
 
 var globalCtx = interpret.complete(
     compute.sequence(
-        global.initialize(),
         global.enterGlobal(),
+        global.initialize(),
         compute.getComputeContext()),
     compute.ComputeContext.empty,
     function(x) { return function(){ return x }; },
