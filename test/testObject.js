@@ -196,6 +196,22 @@ function($,
                      .test($.Expression($.Member(a, b)))
                          .type('undefined', undefined);
             }],
+            
+            ["Access member on literal",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Var(
+                            $.Declarator(a,
+                                $.Number(1)))))
+                             
+                      .test(
+                          $.Expression(
+                              $.Equals(
+                                  $.Member(a, $.Id('toString')),
+                                  $.Member($.Member($.Id('Number'), $.Id('prototype')), $.Id('toString')))))
+                         .type('boolean', true);
+            }],
         ]
     };
 });
