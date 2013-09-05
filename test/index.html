@@ -23,6 +23,13 @@
                 'nu': '../dependencies/nu/lib',
                 'ecma': '../dependencies/parse-ecma/lib',
                 'ecma_ast': '../dependencies/ecma-ast/lib'
+            },
+            config: {
+                text: {
+                    useXhr: function (url, protocol, hostname, port) {
+                        return true;
+                    }
+                }
             }
         });
         require(

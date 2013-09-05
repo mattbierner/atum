@@ -29,6 +29,7 @@ A few major project goals:
     cd atum
     git submodule update --init
 
+
 ### Dependencies
 Direct dependencies included in the project as submodules:
 
@@ -43,12 +44,29 @@ Indirect dependencies, used for testing or UI or some other supporting part of
 the project. They are included as source files.
 
 * [Require.js][requirejs] - Default AMD implementation used by Atum
+* [Require.js Text][requirejstext] - Loading text files
 * [jQuery][jquery] - Webpages
 * [jQuery UI][jqueryui] - Console interface presentation
 * [jQuery Layout][jquerylayout] - Console pane layout
 * [CodeMirror][codemirror] - Console interface text editor
 * [Knockout][knockout] - Console interface data layer
 * [Qunit][qunit] - Unit testing
+
+### Running
+
+Atum uses require.js text to load hosted language files implementing hosted
+language builtins. Directly running from the file system works on Safari but
+generates cross origin errors in Chrome and Firefox.
+
+To get around this, either access run atum off a webserver or disable this security
+restriction for development in the browser. A server using node connect is
+included as server.js at the top level.
+
+    cd atum
+    node server.js
+    
+    // navigate to: http://localhost:8080/console.js
+
 
 ## Status
 Atum is being actively developed and is not feature complete. Take a look at the
