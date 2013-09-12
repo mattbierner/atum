@@ -253,9 +253,9 @@ $(function(){
             try {
                 var lex = lexer.lexRegExp(input);
                 var ast = parser.parseStream(lex);
-                var p = semantics.mapSemantics(ast);
+                var p = program.programBody(semantics.sourceElements(ast.body));
                 
-                var ctx = compute.ComputeContext.empty;
+                var ctx = globalCtx;
                 model.debug(atum_debugger.Debugger.create(p, ctx,
                     out.write,
                     errorOut.write));
