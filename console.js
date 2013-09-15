@@ -78,8 +78,7 @@ var errorOut = {
 
 var run = function (input, ok, err) {
     try {
-        var lex = lexer.lexRegExp(input);
-        var ast = parser.parseStream(lex);
+        var ast = parser.parse(input);
     } catch(e) {
         return err(e, null)();
     }
@@ -251,8 +250,7 @@ $(function(){
             var input = doc.getValue();
             
             try {
-                var lex = lexer.lexRegExp(input);
-                var ast = parser.parseStream(lex);
+                var ast = parser.parse(input);
                 var p = program.programBody(semantics.sourceElements(ast.body));
                 
                 var ctx = globalCtx;
