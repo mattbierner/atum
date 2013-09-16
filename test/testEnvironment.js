@@ -180,6 +180,15 @@ function($,
                     .test($.Expression($.Member(a, c)))
                         .type('number', 2);
             }],
+            
+            ["Typeof unbound",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Typeof(a))))
+                    .testResult()
+                        .type('string', 'undefined');
+            }],
         ]
     };
 });
