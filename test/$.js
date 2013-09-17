@@ -82,6 +82,11 @@ var For = function(init, test, update, body) {
     return new statement.ForStatement(null, init, test, update, body);
 };
 
+var ForIn = function(lhs, rhs, body) {
+    return new statement.ForInStatement(null, lhs, rhs, body);
+};
+
+
 var Try = function(body, handler, finalizer) {
     return new statement.TryStatement(null, body, handler, finalizer);
 };
@@ -224,6 +229,7 @@ return {
     'With': With,
     'While': While,
     'For': For,
+    'ForIn': ForIn,
     'Try': Try,
     'Switch': Switch,
     'Break': Break,
