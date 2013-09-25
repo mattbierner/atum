@@ -309,6 +309,15 @@ function($,
                         .type('boolean', true);
             }],
             
+            ["Language Function to string",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [],
+                            $.Block())))
+                    .test($.Expression($.Add(a, $.String('x'))))
+                        .type('string');
+            }],
             /* This test takes to long to be regularly included
             ["Max Stack",
             function(){
