@@ -10,6 +10,7 @@ function($,
         y = $.Id('y'),
         z = $.Id('z'),
         Object = $.Id('Object'),
+        create = $.Member(Object, $.Id('create')),
         prototype = $.Id('prototype'),
         defineProperty = $.Member(Object, $.Id('defineProperty')),
         hasOwnProperty = $.Id('hasOwnProperty'),
@@ -132,8 +133,83 @@ function($,
                     .test($.Expression($.ComputedMember($.Call(keys, [a]), $.Number(0))))
                         .type('string', 'c');
             }],
-            
-            // Object.prototype.hasOwnProperty
+        // Object.create
+            ["Object.create simple",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a,
+                            $.Call(create, [
+                                $.Object(),
+                                $.Object({
+                                    'kind': 'init',
+                                    'key': $.String('b'),
+                                    'value': $.Object({
+                                        'kind': 'init',
+                                        'key': $.String('value'),
+                                        'value': $.Number(1)
+                                    })
+                                })])))))
+                    
+                    .test($.Expression($.Member(a, b)))
+                        .type('number', 1);
+            }],
+            ["Object.create inherited",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a,
+                            $.Call(create, [
+                                $.Object({
+                                    'kind': 'init',
+                                    'key': $.String('b'),
+                                    'value': $.Number(1)
+                                },
+                                {
+                                    'kind': 'init',
+                                    'key': $.String('c'),
+                                    'value': $.Number(5)
+                                }),
+                                $.Object({
+                                    'kind': 'init',
+                                    'key': $.String('b'),
+                                    'value':$.Object({
+                                        'kind': 'init',
+                                        'key': $.String('value'),
+                                        'value': $.Number(3)
+                                    })
+                                })])))))
+                    
+                    .test($.Expression($.Member(a, b)))
+                        .type('number', 3)
+                        
+                    .test($.Expression($.Member(a, c)))
+                        .type('number', 5);
+            }],
+             ["Object.create null does not inherit Object.prototype",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a,
+                            $.Call(create, [
+                                $.Null(),
+                                $.Object({
+                                    'kind': 'init',
+                                    'key': $.String('b'),
+                                    'value': $.Object({
+                                        'kind': 'init',
+                                        'key': $.String('value'),
+                                        'value': $.Number(1)
+                                    })
+                                })])))))
+                    
+                    .test($.Expression($.Member(a, b)))
+                        .type('number', 1)
+                        
+                    .test($.Expression($.In($.String('hasOwnProperty'), a)))
+                        .type('boolean', false);
+            }],
+        // Object.prototype.hasOwnProperty
             ["Object.prototype.hasOwnProperty",
             function(){
                 expect.run(

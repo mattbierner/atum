@@ -189,6 +189,24 @@ function($,
                     .testResult()
                         .type('string', 'undefined');
             }],
+            
+        // strict mode
+            ["Strict assign to unbound",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.String('use strict')),
+                        $.Expression($.Assign(a, $.Number(10)))))
+                    .isError();
+            }],
+            ["var using reserved strict word",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.String('use strict')),
+                        $.Var($.Declarator($.Id('eval')))))
+                    .isError();
+            }],
         ]
     };
 });
