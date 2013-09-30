@@ -100,6 +100,34 @@ function($,
                     .test($.Expression($.Member(a, length)))
                         .type('number', 10)
             }],
+            
+            ["Array set smaller length deletes",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a,
+                             $.Array($.Number(0), $.Number(1), $.Number(2), $.Number(3)))),
+                         $.Expression($.Assign($.Member(a, length),
+                             $.Number(2)))))
+                     
+                     .testResult()
+                         .type('number', 2)
+                     
+                    .test($.Expression($.Member(a, length)))
+                        .type('number', 2)
+                        
+                    .test($.Expression($.ComputedMember(a, $.Number(0))))
+                        .type('number', 0)
+                        
+                    .test($.Expression($.ComputedMember(a, $.Number(1))))
+                        .type('number', 1)
+                    
+                    .test($.Expression($.ComputedMember(a, $.Number(2))))
+                        .type('undefined', undefined)
+                        
+                    .test($.Expression($.ComputedMember(a, $.Number(3))))
+                        .type('undefined', undefined)
+            }],
         ]
     };
 });
