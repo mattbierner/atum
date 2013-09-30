@@ -212,8 +212,7 @@ function($,
                     $.Program(
                         $.FunctionDeclaration(a, [b],
                             $.Block(
-                               $.Expression($.Assign($.Member($.This(), c), b)),
-                               $.Return($.Number(1)))),
+                               $.Expression($.Assign($.Member($.This(), c), b)))),
                         $.Expression($.Call(a, [$.Number(10)]))))
                     
                     .test($.Expression($.Member($.This(), c)))

@@ -172,7 +172,7 @@ var ConsoleViewModel = function() {
     
     this.stack = ko.computed(function(){
         return (self.debug() && self.debug().ctx.userData ? 
-            self.debug().ctx.userData.stack :
+            self.debug().ctx.userData.metadata.stack :
             [])
     });
 };
@@ -216,7 +216,7 @@ var globalCtx = interpret.complete(
     compute.sequence(
         global.enterGlobal(),
         global.initialize(),
-        compute.getComputeContext()),
+        compute.computeContext),
     compute.ComputeContext.empty,
     function(x) { return function(){ return x }; },
     function(x) { return function(){ return x }; });
