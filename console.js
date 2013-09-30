@@ -177,8 +177,12 @@ var ConsoleViewModel = function() {
     });
 };
 
-ConsoleViewModel.prototype.run = function() {
+ConsoleViewModel.prototype.finish = function() {
     return this.debug(this.debug().finish());
+};
+
+ConsoleViewModel.prototype.run = function() {
+    return this.debug(this.debug().stepToDebugger());
 };
 
 ConsoleViewModel.prototype.stepOver = function() {
@@ -279,8 +283,12 @@ $(function(){
     runButton
         .button()
         .attr("disabled", true)
-        .click(function(e){
-            model.run();
+        .click(function(e) {
+            if (model.debug()) {
+                model.run();
+            } else {
+                model.finish();
+            }
         });
     
     stepButton
