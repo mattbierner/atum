@@ -32,6 +32,10 @@ var get = function(p, c) {
 /* 
  ******************************************************************************/
 var printBindings = function(d, record) {
+    if (record.ref) {
+        var obj = d.getValue(record, function(x, ctx) { return x; }, function(x, ctx) { return x; });
+        record = obj.properties;
+    }
     return Object.keys(record).reduce(function(p, c) {
         p.push({'name': c, 'value': record[c] });
         return p;
