@@ -89,16 +89,13 @@ var run = function (input, ok, err) {
     return interpret.complete(program.programBody(semantics.sourceElements(ast.body)), globalCtx, ok, err);
 };
 
-var runContext = function (input, ctx, ok, err) {
+var runContext = function(input, ctx, ok, err) {
     try {
-        var lex = lexer.lexRegExp(input);
-        var ast = parser.parseStream(lex);
+        var ast = parser.parse(input);
         var p = semantics.sourceElements(ast.body);
-        return model.debug().run(p,
-            function(x, ctx){ return function(){ return ok(x); }},
-            function(x, ctx){ return function(){ return err(x); }});
+        return interpret.complete(program.programBody(semantics.sourceElements(ast.body)), ctx, ok, err);
     } catch (e) {
-        return err(e);
+        return err(e, null);
     }
 };
 
