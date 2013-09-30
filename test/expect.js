@@ -78,7 +78,7 @@ var globalCtx = interpret.complete(
     compute.sequence(
         global.enterGlobal(),
         global.initialize(),
-        compute.getComputeContext()),
+        compute.computeContext),
     compute.ComputeContext.empty,
     function(x) { return function(){ return x }; },
     function(x) { return function(){ return x }; });
