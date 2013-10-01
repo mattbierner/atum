@@ -7,70 +7,66 @@ function($,
         b = $.Id('b'),
         c = $.Id('c');
 
-    var Number = $.Id('Number');
+    var String = $.Id('String');
     
     return {
-        'module': "Builtin Number",
+        'module': "Builtin String",
         'tests': [
-            ["Number(x) converts to number",
+            ["String(x) converts to string",
             function(){
-                [$.Number(1), $.String("10", $.String('abc')), $.Boolean(false)].forEach(function(x){
+                [[$.String('abc'), 'abc'],
+                 [$.Number(10), '10'],
+                 [$.Boolean(false), 'false'],
+                 [$.Object(), '[object Object]']].forEach(function(x){
                     expect.run(
                         $.Program(
                             $.Expression(
-                                 $.Call(Number, [x]))))
+                                 $.Call(String, [x[0]]))))
                          
                          .testResult()
-                             .type('number', +x.value);
+                             .type('string', x[1]);
                 });
             }],
-            ["new Number() unboxes to zero.",
+            ["new String() unboxes to empty string.",
             function(){
                 expect.run(
                     $.Program(
                         $.Expression(
-                             $.Add($.New(Number, []), $.Number(100)))))
+                             $.Add($.New(String, []), $.String('abc')))))
                          
                     .testResult()
-                        .type('number', 100);
-                
-                expect.run(
-                    $.Program(
-                        $.Expression(
-                             $.Add($.New(Number, []), $.String('abc')))))
-                             
-                    .testResult()
-                        .type('string', "0abc");
+                        .type('string', 'abc');
             }],
-            ["Set on number",
+            ["Set on String",
             function(){
                 expect.run(
                     $.Program(
                         $.Expression(
-                             $.Assign(a, $.New(Number, []))),
+                             $.Assign(a, $.New(String, [$.String('abc')]))),
                          $.Expression(
-                             $.Assign($.Member(a, b), $.Number(10)))))
+                             $.Assign($.Member(a, b), $.String('xyz')))))
+                     
                      .test($.Expression($.Add(a, $.Member(a, b))))
-                         .type('number', 10);
+                         .type('string', 'abcxyz');
             }],
-            ["`Number.prototype.valueOf`",
+            ["`String.prototype.valueOf`",
             function(){
                 expect.run(
                     $.Program(
                         $.Expression(
-                             $.Assign(a, $.New(Number, [$.Number(3)]))),
+                             $.Assign(a, $.New(String, [$.String('abc')]))),
                          $.Expression(
-                             $.Assign(b, $.Number(10)))))
+                             $.Assign(b, $.String('xyz')))))
                      
                      .test($.Expression($.Call($.Member(a, $.Id('valueOf')), [])))
-                         .type('number', 3)
+                         .type('string','abc')
                      
                      .test(
                          $.Expression(
                              $.Call(
-                                 $.Member($.Member($.Member(Number, $.Id('prototype')), $.Id('valueOf')), $.Id('call')),
+                                 $.Member($.Member($.Member(String, $.Id('prototype')), $.Id('valueOf')), $.Id('call')),
                                  [b])))
-                         .type('number', 10);
+                         .type('string', 'xyz');
             }],
         ]
     };

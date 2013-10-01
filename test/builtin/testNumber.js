@@ -16,7 +16,6 @@ function($,
             function(){
                 [[$.Number(1), 1],
                 [$.String("10"), 10],
-                [$.String('abc'), NaN],
                 [$.Boolean(false), 0]].forEach(function(x){
                     expect.run(
                         $.Program(

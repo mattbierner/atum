@@ -36,7 +36,6 @@
         });
         require(
             ['testArray',
-            'builtin/testBuiltins',
             'testCompare',
             'testEnvironment',
             'testFor',
@@ -62,6 +61,7 @@
                     m.tests.forEach(function(e){ test.apply(this, e); });
                 });
             });
+        require(['builtin/testBuiltins'], function(){})
     </script>
 
 </body>
