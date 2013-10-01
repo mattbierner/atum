@@ -43,6 +43,12 @@ var literal = function(type) {
     };
 };
 
+var assign = function(op) {
+    return function(l, r) {
+        return new expression.AssignmentExpression(null, op, l, r);
+    };
+};
+
 /*
  ******************************************************************************/
 var Program = function(/*...*/) {
@@ -178,13 +184,12 @@ var PostIncrement = update('++', false);
 var PreDecrement = update('--', true);
 var PostDecrement = update('--', false);
 
-var Assign = function(l, r) {
-    return new expression.AssignmentExpression(null, '=', l, r);
-};
-
-var AddAssign = function(l, r) {
-    return new expression.AssignmentExpression(null, '+=', l, r);
-};
+var Assign = assign('=');
+var AddAssign = assign('+=');
+var SubAssign = assign('-=');
+var MulAssign = assign('*=');
+var DivAssign = assign('/=');
+var ModAssign = assign('%=');
 
 var Member = function(l, r) {
     return new expression.MemberExpression(null, l, r, false);
@@ -280,6 +285,11 @@ return {
 
     'Assign': Assign,
     'AddAssign': AddAssign,
+    'SubAssign': SubAssign,
+    'MulAssign': MulAssign,
+    'DivAssign': DivAssign,
+    'ModAssign': ModAssign,
+    
     'ComputedMember': ComputedMember,
     'Member': Member,
     'Call': Call,

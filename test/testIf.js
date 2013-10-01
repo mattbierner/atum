@@ -144,6 +144,33 @@ function($,
                     .test($.Expression(b))
                         .type(undefined, undefined);
             }],
+             
+            ["Expression taken consequent throws",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Try(
+                            $.If($.Assign(b, $.Number(3)),
+                                $.Block(
+                                    $.Expression(
+                                        $.AddAssign(b, $.Number(1))),
+                                    $.Throw($.String('c')),
+                                    $.Expression(
+                                        $.DivAssign(b, $.Number(2)))),
+                                $.Block(
+                                    $.Throw($.String('a')),
+                                    $.Expression(
+                                        $.AddAssign(b, $.Number(10))))),
+                            $.Catch($.Id('e'),
+                                $.Block(
+                                    $.Expression($.Id('e')))))))
+                    
+                    .testResult()
+                        .type('string', 'c')
+                    
+                    .test($.Expression(b))
+                        .type('number', 4);
+            }],
             
         ]
     };
