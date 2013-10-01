@@ -171,6 +171,32 @@ function($,
                     .test($.Expression(b))
                         .type('number', '12')
             }],
+            
+            ["Break",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(b, $.Number(0))),
+                        $.Expression($.Assign(c, $.Object(
+                                {'key':$.String('x'), 'kind': 'init', 'value': $.Number(1)},
+                                {'key':$.String('y'), 'kind': 'init', 'value': $.Number(2)},
+                                {'key':$.String('ya'), 'kind': 'init', 'value': $.Number(10)},
+                                {'key':$.String('z'), 'kind': 'init', 'value': $.Number(5)}))),
+                        $.ForIn(a, c,
+                            $.Block(
+                                $.If($.Equals(a, $.String('ya')),
+                                    $.Break(),
+                                    $.Expression($.AddAssign(b, $.ComputedMember(c, a))))))))
+                            
+                    .testResult()
+                        .type('number', '3')
+                        
+                    .test($.Expression(a))
+                        .type('string', 'ya')
+                        
+                    .test($.Expression(b))
+                        .type('number', '3')
+            }],
         ]
     };
 });
