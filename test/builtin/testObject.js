@@ -186,7 +186,7 @@ function($,
                     .test($.Expression($.Member(a, c)))
                         .type('number', 5);
             }],
-             ["Object.create null does not inherit Object.prototype",
+            ["Object.create null does not inherit Object.prototype",
             function(){
                 expect.run(
                     $.Program(
