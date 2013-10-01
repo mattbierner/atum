@@ -14,17 +14,14 @@ function($,
         'tests': [
             ["Number(x) converts to number",
             function(){
-                [[$.Number(1), 1],
-                [$.String("10"), 10],
-                [$.String('abc'), NaN],
-                [$.Boolean(false), 0]].forEach(function(x){
+                [$.Number(1), $.String("10", $.String('abc')), $.Boolean(false)].forEach(function(x){
                     expect.run(
                         $.Program(
                             $.Expression(
-                                 $.Call(Number, [x[0]]))))
+                                 $.Call(Number, [x]))))
                          
                          .testResult()
-                             .type('number', x[1]);
+                             .type('number', +x.value);
                 });
             }],
             ["new Number() unboxes to zero.",
