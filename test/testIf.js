@@ -8,7 +8,7 @@ function($,
         c = $.Id('c');
 
     return {
-        'module': "Conditional Tests",
+        'module': "If Statement",
         'tests': [
             ["Simple If True Statement",
             function(){
@@ -93,7 +93,7 @@ function($,
                     .test($.Expression(a))
                         .type('number', 10);
             }],
-            ["If Statement True Test Side Effects",
+            ["True Test Side Effects",
             function(){
                 expect.run(
                     $.Program(
@@ -109,7 +109,7 @@ function($,
                     .test($.Expression(a))
                         .type('number', 2);
             }],
-            ["If Statement False Test Side Effects",
+            ["False Test Side Effects",
             function(){
                 expect.run(
                     $.Program(
@@ -124,6 +124,25 @@ function($,
                                 
                     .test($.Expression(a))
                         .type('number', 11);
+            }],
+            
+            ["Expression throws",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [], $.Block($.Throw($.Null()))),
+                        $.Try(
+                            $.If($.LogicalAnd($.Call(a, []), $.Assign(b, $.Number(3))),
+                                $.Block(
+                                    $.Expression(
+                                        $.AddAssign(b, $.Number(1)))),
+                                $.Block(
+                                    $.Expression(
+                                        $.AddAssign(b, $.Number(10))))),
+                            $.Catch($.Id('e'), $.Block()))))
+                                
+                    .test($.Expression(b))
+                        .type(undefined, undefined);
             }],
             
         ]
