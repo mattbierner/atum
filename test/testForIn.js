@@ -43,6 +43,7 @@ function($,
                     .testResult()
                         .type('number', 10);
             }],
+            
             ["Simple Object Iteration",
             function(){
                 expect.run(
@@ -144,7 +145,32 @@ function($,
                     .test($.Expression(a))
                         .type('string', 'x')
             }],
-           
+            
+            ["Continue",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(b, $.Number(0))),
+                        $.Expression($.Assign(c, $.Object(
+                                {'key':$.String('x'), 'kind': 'init', 'value': $.Number(1)},
+                                {'key':$.String('y'), 'kind': 'init', 'value': $.Number(2)},
+                                {'key':$.String('ya'), 'kind': 'init', 'value': $.Number(10)},
+                                {'key':$.String('z'), 'kind': 'init', 'value': $.Number(3)}))),
+                        $.ForIn(a, c,
+                            $.Block(
+                                $.If($.Equals($.ComputedMember(a, $.Number(0)), $.String('y')),
+                                    $.Expression($.AddAssign(b, $.ComputedMember(c, a))),
+                                    $.Continue())))))
+                            
+                    .testResult()
+                        .type('number', '12')
+                        
+                    .test($.Expression(a))
+                        .type('string', 'z')
+                        
+                    .test($.Expression(b))
+                        .type('number', '12')
+            }],
         ]
     };
 });
