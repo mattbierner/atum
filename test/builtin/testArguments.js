@@ -16,7 +16,7 @@ function($,
         'module': "Arguments",
         'tests': [
             ["Index Access",
-            function(){
+            function(){ 
                 expect.run(
                     $.Program(
                         $.FunctionDeclaration(a, [b, c],
