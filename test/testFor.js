@@ -205,6 +205,58 @@ function($,
                         .type('number', 6);
             }],
             
+            ["Init throws",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [], $.Block($.Throw($.Null()))),
+                        $.Expression($.Assign(b, $.Number(6))),
+                        $.Try(
+                            $.For($.Call(a, []), $.Lt($.PreIncrement(b), $.Number(5)), $.PreIncrement(b),
+                                $.Expression($.PreIncrement(b))),
+                            $.Catch(c,
+                                $.Block()))))
+                            
+                    .testResult()
+                        .type('number', 6)
+                        
+                    .testResult($.Expression(b))
+                        .type('number', 6);
+            }],
+            ["Test throws",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [], $.Block($.Throw($.Null()))),
+                        $.Try(
+                            $.For($.Assign(b, $.Number(0)), $.Lt($.PreIncrement(b), $.Call(a, [])), $.AddAssign(b, $.Number(10)),
+                                $.Expression($.PreIncrement(b))),
+                            $.Catch(c,
+                                $.Block($.Expression($.String('abc')))))))
+                                            
+                    .testResult()
+                        .type('string', 'abc')
+                
+                    .test($.Expression(b))
+                        .type('number', 1);
+            }],
+            ["Update throws",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [], $.Block($.Throw($.Null()))),
+                        $.Try(
+                            $.For($.Assign(b, $.Number(0)), $.Lt(b, $.Number(10)), $.Call(a, []),
+                                $.Expression($.PreIncrement(b))),
+                            $.Catch(c,
+                                $.Block($.Expression($.String('abc')))))))
+                                            
+                    .testResult()
+                        .type('string', 'abc')
+                
+                    .test($.Expression(b))
+                        .type('number', 1);
+            }],
         ]
     };
 });
