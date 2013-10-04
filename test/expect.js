@@ -1,11 +1,9 @@
 define(['atum/compute',
         'atum/interpret',
-        'atum/semantics/program',
         'atum/semantics/semantics',
         'atum/builtin/impl/global'],
 function(compute,
         interpret,
-        program,
         semantics,
         global){
 //"use strict";
@@ -84,7 +82,9 @@ var globalCtx = interpret.complete(
     function(x) { return function(){ return x }; });
 
 var run = function(root) {
-    return interpret.complete(program.programBody(semantics.sourceElements(root.body)), globalCtx,
+    return interpret.complete(
+        compute.bounce(semantics.programBody(semantics.sourceElements(root.body))),
+        globalCtx,
         function(x, ctx){ return function(){ return new Result(false, x, ctx); }; },
         function(x, ctx){ return function(){ return new Result(true, x, ctx); }; });
 };

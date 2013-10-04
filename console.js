@@ -7,7 +7,6 @@ require(['knockout-2.2.1',
         'atum/compute',
         'atum/builtin/impl/global',
         'atum/semantics/semantics',
-        'atum/semantics/program',
         'atum/debug/debugger',
         'ecma/lex/lexer',
         'ecma/parse/parser'],
@@ -18,7 +17,6 @@ function(ko,
         compute,
         global,
         semantics,
-        program,
         atum_debugger,
         lexer,
         parser) {
@@ -86,14 +84,21 @@ var run = function (input, ok, err) {
     } catch(e) {
         return err(e, null)();
     }
-    return interpret.complete(program.programBody(semantics.sourceElements(ast.body)), globalCtx, ok, err);
+    return interpret.complete(
+        compute.bounce(semantics.programBody(semantics.sourceElements(ast.body))),
+        globalCtx,
+        ok,
+        err);
 };
 
 var runContext = function(input, ctx, ok, err) {
     try {
         var ast = parser.parse(input);
-        var p = semantics.sourceElements(ast.body);
-        return interpret.complete(program.programBody(semantics.sourceElements(ast.body)), ctx, ok, err);
+        return interpret.complete(
+            compute.bounce(semantics.programBody(semantics.sourceElements(ast.body))),
+            ctx,
+            ok,
+            err);
     } catch (e) {
         return err(e, null);
     }
@@ -256,7 +261,7 @@ $(function(){
             
             try {
                 var ast = parser.parse(input);
-                var p = program.programBody(semantics.sourceElements(ast.body));
+                var p = semantics.programBody(semantics.sourceElements(ast.body));
                 
                 var ctx = globalCtx;
                 model.debug(atum_debugger.Debugger.create(p, ctx,
