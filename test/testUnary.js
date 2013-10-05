@@ -15,7 +15,7 @@ function($,
             function(){
                 expect.run(
                     $.Program(
-                        $.Void($.Number(10))))
+                        $.Expression($.Void($.Number(10)))))
                         
                     .testResult()
                         .type('undefined', undefined);

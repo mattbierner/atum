@@ -75,7 +75,7 @@ function($,
             function(){
                 expect.run(
                     $.Program(
-                        $.Assign(b, $.Number(0)),
+                        $.Expression($.Assign(b, $.Number(0))),
                         $.For($.Assign(a, $.Number(0)), $.Lt(a, $.Number(10)), $.PreIncrement(a),
                             $.If($.Mod(a, $.Number(2)),
                                 $.Continue(),
@@ -127,7 +127,7 @@ function($,
             function(){
                 expect.run(
                     $.Program(
-                        $.Assign(b, $.Number(0)),
+                        $.Expression($.Assign(b, $.Number(0))),
                         $.For($.Assign(a, $.Number(0)), null, $.PreIncrement(a),
                             $.If($.Gt(a, $.Number(5)),
                                 $.Block(

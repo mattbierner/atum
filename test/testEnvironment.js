@@ -170,9 +170,9 @@ function($,
             function(){
                 expect.run(
                     $.Program(
-                        $.Assign(b, $.Number(1)),
+                        $.Expression($.Assign(b, $.Number(1))),
                         $.Expression($.Assign(a, $.This())),
-                        $.Assign(c, $.Number(2))))
+                        $.Expression($.Assign(c, $.Number(2)))))
                     
                     .test($.Expression($.Member(a, b)))
                         .type('number', 1)

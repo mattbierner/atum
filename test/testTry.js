@@ -42,7 +42,7 @@ function($,
             function(){
                 expect.run(
                     $.Program(
-                        $.Assign(b, $.Number(0)),
+                        $.Expression($.Assign(b, $.Number(0))),
                         $.Try(
                             $.Block(
                                 $.Expression($.PostIncrement(b)),
@@ -93,7 +93,7 @@ function($,
                                 $.Throw($.Number(3))),
                             $.Catch(a,
                                 $.Block(
-                                    $.AddAssign(a, a))))))
+                                    $.Expression($.AddAssign(a, a)))))))
                                     
                     .test($.Expression(a))
                         .type('number', 2);
@@ -108,7 +108,7 @@ function($,
                                 $.Throw($.Number(3))),
                             $.Catch(a,
                                 $.Block(
-                                    $.AddAssign($.Member($.This(), a), a))))))
+                                    $.Expression($.AddAssign($.Member($.This(), a), a)))))))
                                     
                     .test($.Expression(a))
                         .type('number', 5);
@@ -145,7 +145,7 @@ function($,
             function(){
                 expect.run(
                     $.Program(
-                        $.Assign(b, $.Number(1)),
+                        $.Expression($.Assign(b, $.Number(1))),
                         $.Try(
                             $.Block(
                                 $.Try(
@@ -165,7 +165,7 @@ function($,
             function(){
                 expect.run(
                     $.Program(
-                        $.Assign(b, $.Number(1)),
+                        $.Expression($.Assign(b, $.Number(1))),
                         $.Try(
                             $.Block(
                                 $.Try(
@@ -269,7 +269,7 @@ function($,
             function(){
                 expect.run(
                     $.Program(
-                        $.Assign(a, $.Number(1)),
+                        $.Expression($.Assign(a, $.Number(1))),
                         $.Try(
                             $.Block(
                                 $.Expression($.PostIncrement(a)),

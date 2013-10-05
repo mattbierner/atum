@@ -44,7 +44,9 @@ var Result = function(isError, value, ctx) {
 };
 
 Result.prototype.run = function(node) {
-    return interpret.interpret(node, this.ctx,
+    return interpret.complete(
+        compute.bounce(semantics.mapSemantics(node)),
+        this.ctx,
         function(x, ctx){ return function(){ return new Result(false, x, ctx); }; },
         function(x, ctx){ return function(){ return new Result(true, x, ctx); }; });
 };

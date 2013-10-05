@@ -154,7 +154,7 @@ function($,
                     $.Program(
                         $.FunctionDeclaration(a, [b, c],
                             $.Block(
-                                $.Assign($.Member($.This(), c), $.Add(b, c)))),
+                                $.Expression($.Assign($.Member($.This(), c), $.Add(b, c))))),
                         $.Expression(
                             $.Assign(b,
                                 $.Call(

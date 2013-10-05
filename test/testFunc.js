@@ -159,8 +159,8 @@ function($,
                             $.Assign(b, $.Number(0))),
                         $.FunctionDeclaration(a, [],
                             $.Block(
-                               $.Assign(b, $.Number(10)))),
-                        $.Call(a, [])))
+                               $.Expression($.Assign(b, $.Number(10))))),
+                        $.Expression($.Call(a, []))))
                     
                     .test($.Expression(b))
                         .type('number', 10);
@@ -176,10 +176,10 @@ function($,
                             a,
                             [b],
                             $.Block(
-                               $.Assign(b, $.Number(10)))),
+                               $.Expression($.Assign(b, $.Number(10))))),
                         $.Expression(
                             $.Assign(b, $.Number(2))),
-                        $.Call(a, [b])))
+                        $.Expression($.Call(a, [b]))))
                     
                     .test($.Expression(b))
                         .type('number', 2);
