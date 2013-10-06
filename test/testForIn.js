@@ -24,7 +24,7 @@ function($,
                 
                 expect.run(
                     $.Program(
-                        $.ForIn($.Var($.Declarator($.Id('a'))), $.Object(),
+                        $.ForIn($.Var($.Declarator(a)), $.Object(),
                             $.Expression($.Number(1)))))
                     
                     .testResult()
