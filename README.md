@@ -4,7 +4,7 @@ Javascript Interpreter in Functional-Style Javascript
 ### About
 Atum is a Javascript interpreter written in functional style Javascript. Atum is
 designed to be a platform for Javascript experimentation and explores the
-implementation and power of functional interpreters. It is part of Benben,
+implementation and power of functional interpreters. It is part of
 a project developing a complete Javascript implementation in functional style
 Javascript.
 
@@ -14,7 +14,7 @@ It also explores the functional implementation of imperative programming
 languages. As an academic project, performance is a low priority (Atum may even
 be the slowest Javascript implementation ever).
 
-A few major project goals:
+A few project goals:
 * Enable rapid prototyping and experimentation of the Javascript language.
 * Support substantial hosted language alterations with minimal code changes.
 * Functional style implementation.
