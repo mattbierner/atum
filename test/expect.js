@@ -85,7 +85,7 @@ var globalCtx = interpret.complete(
 
 var run = function(root) {
     return interpret.complete(
-        compute.bounce(semantics.programBody(semantics.sourceElements(root.body))),
+        semantics.programBody(semantics.sourceElements(root.body)),
         globalCtx,
         function(x, ctx){ return function(){ return new Result(false, x, ctx); }; },
         function(x, ctx){ return function(){ return new Result(true, x, ctx); }; });

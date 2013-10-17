@@ -85,7 +85,7 @@ var run = function (input, ok, err) {
         return err(e, null)();
     }
     return interpret.complete(
-        compute.bounce(semantics.programBody(semantics.sourceElements(ast.body))),
+        semantics.programBody(semantics.sourceElements(ast.body)),
         globalCtx,
         ok,
         err);
@@ -95,7 +95,7 @@ var runContext = function(input, ctx, ok, err) {
     try {
         var ast = parser.parse(input);
         return interpret.complete(
-            compute.bounce(semantics.programBody(semantics.sourceElements(ast.body))),
+            semantics.programBody(semantics.sourceElements(ast.body)),
             ctx,
             ok,
             err);
