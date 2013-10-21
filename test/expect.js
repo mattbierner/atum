@@ -47,8 +47,8 @@ Result.prototype.run = function(node) {
     return interpret.complete(
         semantics.mapSemantics(node),
         this.ctx,
-        function(x, ctx){ return function(){ return new Result(false, x, ctx); }; },
-        function(x, ctx){ return function(){ return new Result(true, x, ctx); }; });
+        function(x, ctx){ return new Result(false, x, ctx); },
+        function(x, ctx){ return new Result(true, x, ctx); });
 };
 
 Result.prototype.equal = function(expr, expected, msg) {
@@ -80,15 +80,15 @@ var globalCtx = interpret.complete(
         global.initialize(),
         compute.computeContext),
     compute.ComputeContext.empty,
-    function(x) { return function(){ return x }; },
-    function(x) { return function(){ return x }; });
+    function(x) { var z; return x; },
+    function(x) { var z2; return x; });
 
 var run = function(root) {
     return interpret.complete(
         semantics.programBody(semantics.sourceElements(root.body)),
         globalCtx,
-        function(x, ctx){ return function(){ return new Result(false, x, ctx); }; },
-        function(x, ctx){ return function(){ return new Result(true, x, ctx); }; });
+        function(x, ctx){ return new Result(false, x, ctx); },
+        function(x, ctx){ return new Result(true, x, ctx); });
 };
 
 
