@@ -36,6 +36,7 @@ Direct dependencies included in the project as submodules:
 * [amulet][amulet] - Helper library for working with immutable objects
 * [Nu][nu] - Functional streams
 * [parse.js][parsejs] - Base combinatory parsing library
+* [seshat][seshat] - Parser memoization utility.
 * [parse-ecma][parseecma] - Combinatory ECMAScript parser
 * [ecma-ast][ecmaast] - ECMAScript AST nodes
 
@@ -135,6 +136,7 @@ developing debuggers targeting Atum specifically.
 [amulet]: http://github.com/mattbierner/amulet
 [ecmaast]: http://github.com/mattbierner/ecma-ast
 [parse]: http://github.com/mattbierner/parse.js
+[seshat]: http://github.com/mattbierner/seshat
 [parseecma]: http://github.com/mattbierner/parse-ecma
 [nu]: http://github.com/mattbierner/nu
 
