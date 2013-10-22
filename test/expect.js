@@ -1,8 +1,10 @@
 define(['atum/compute',
+        'atum/compute/context',
         'atum/interpret',
         'atum/semantics/semantics',
         'atum/builtin/impl/global'],
 function(compute,
+        context,
         interpret,
         semantics,
         global){
@@ -79,9 +81,9 @@ var globalCtx = interpret.complete(
         global.enterGlobal(),
         global.initialize(),
         compute.computeContext),
-    compute.ComputeContext.empty,
-    function(x) { var z; return x; },
-    function(x) { var z2; return x; });
+    context.ComputeContext.empty,
+    function(x) { return x; },
+    function(x) { return x; });
 
 var run = function(root) {
     return interpret.complete(
