@@ -5,6 +5,7 @@ require(['knockout-2.2.1',
         'nu/stream',
         'atum/interpret',
         'atum/compute',
+        'atum/compute/context',
         'atum/builtin/impl/global',
         'atum/semantics/semantics',
         'atum/debug/debugger',
@@ -15,6 +16,7 @@ function(ko,
         stream,
         interpret,
         compute,
+        context,
         global,
         semantics,
         atum_debugger,
@@ -64,17 +66,13 @@ var printEnvironments = function(d, ctx) {
  ******************************************************************************/
 var out = {
     'write': function(x, ctx) {
-        return function() {
-            model.push(x, ctx, false);
-        };
+        model.push(x, ctx, false);
     }
 };
 
 var errorOut = {
     'write': function(x, ctx) {
-        return function() {
-            model.push(x, ctx, true);
-        };
+        model.push(x, ctx, true);
     }
 };
 
@@ -227,9 +225,9 @@ var globalCtx = interpret.complete(
         global.enterGlobal(),
         global.initialize(),
         compute.computeContext),
-    compute.ComputeContext.empty,
-    function(x) { return function(){ return x }; },
-    function(x) { return function(){ return x }; });
+    context.ComputeContext.empty,
+    function(x) { return x },
+    function(x) { return x });
 
 $(function(){
     var stopButton = $('button#stop-button'),
