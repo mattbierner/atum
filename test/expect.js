@@ -2,12 +2,14 @@ define(['atum/compute',
         'atum/compute/context',
         'atum/interpret',
         'atum/semantics/semantics',
-        'atum/builtin/impl/global'],
+        'atum/builtin/impl/global',
+        'atum/builtin/operations/global'],
 function(compute,
         context,
         interpret,
         semantics,
-        global){
+        global,
+        global_ops){
 //"use strict";
 
 var Context = function(parent, value, ctx) {
@@ -78,8 +80,8 @@ Result.prototype.isError = function() {
 
 var globalCtx = interpret.complete(
     compute.sequence(
-        global.enterGlobal(),
         global.initialize(),
+        global_ops.enterGlobal(),
         compute.computeContext),
     context.ComputeContext.empty,
     function(x) { return x; },
