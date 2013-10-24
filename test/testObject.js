@@ -6,7 +6,8 @@ function($,
     var a = $.Id('a'),
         b = $.Id('b'),
         c = $.Id('c'),
-        d = $.Id('d');
+        d = $.Id('d'),
+        create = $.Member($.Id('Object'), $.Id('create'));
 
     return {
         'module': "Object",
@@ -211,6 +212,72 @@ function($,
                                   $.Member(a, $.Id('toString')),
                                   $.Member($.Member($.Id('Number'), $.Id('prototype')), $.Id('toString')))))
                          .type('boolean', true);
+            }],
+            
+            ["Setting non writable property in non strict",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Var(
+                            $.Declarator(a,
+                                $.Call(create, [
+                                    $.Null(),
+                                    $.Object({
+                                        'kind': 'init',
+                                        'key': $.String('x'),
+                                        'value': $.Object({
+                                            'kind': 'init',
+                                            'key': $.String('value'),
+                                            'value': $.Number(3)
+                                        }, {
+                                            'kind': 'init',
+                                            'key': $.String('writable'),
+                                            'value': $.Boolean(false)
+                                        })
+                                    })]))),
+                        $.Expression(
+                            $.Assign(
+                                $.Member(a, $.Id('x')),
+                                $.Number(100)))))
+                      
+                      .testResult()
+                          .type('number', 100)
+                          
+                      .test($.Expression($.Member(a, $.Id('x'))))
+                         .type('number', 3);
+            }],
+            ["Setting non writable property in strict errors",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.String('use strict')),
+                        $.Var(
+                            $.Declarator(a,
+                                $.Call(create, [
+                                    $.Null(),
+                                    $.Object({
+                                        'kind': 'init',
+                                        'key': $.String('x'),
+                                        'value': $.Object({
+                                            'kind': 'init',
+                                            'key': $.String('value'),
+                                            'value': $.Number(3)
+                                        }, {
+                                            'kind': 'init',
+                                            'key': $.String('writable'),
+                                            'value': $.Boolean(false)
+                                        })
+                                    })]))),
+                        $.Expression(
+                            $.Assign(
+                                $.Member(a, $.Id('x')),
+                                $.Number(100)))))
+                      
+                      .isError()
+                      
+                          
+                      .test($.Expression($.Member(a, $.Id('x'))))
+                         .type('number', 3);
             }],
         ]
     };
