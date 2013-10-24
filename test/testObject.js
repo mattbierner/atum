@@ -119,6 +119,32 @@ function($,
                     .test($.Expression($.Member(a, b)))
                         .type('number', 1);
             }],
+            ["Set value for Getter only Property",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Var(
+                            $.Declarator(a,
+                                $.Object({
+                                     'kind': 'init',
+                                     'key': $.String('c'),
+                                     'value': $.Number(1)
+                                 }, {
+                                     'kind': 'get',
+                                     'key': $.String('b'),
+                                     'value': $.FunctionExpression(null, [],
+                                         $.Block(
+                                            $.Return(
+                                                $.Member($.This(), c))))
+                                 }))),
+                         $.Expression(
+                             $.Assign(
+                                 $.Member(a, b),
+                                 $.Number(100)))))
+                                 
+                    .test($.Expression($.Member(a, b)))
+                        .type('number', 1);
+            }],
             
             ["Objects passed by reference",
             function(){
