@@ -8,6 +8,7 @@ require(['knockout-2.2.1',
         'atum/compute/context',
         'atum/builtin/impl/global',
         'atum/builtin/operations/global',
+        'atum/operations/object',
         'atum/semantics/semantics',
         'atum/debug/debugger',
         'ecma/lex/lexer',
@@ -20,11 +21,13 @@ function(ko,
         context,
         global,
         global_operations,
+        object,
         semantics,
         atum_debugger,
         lexer,
         parser) {
 
+var map = Function.prototype.call.bind(Array.prototype.map);
 var reduce = Function.prototype.call.bind(Array.prototype.reduce);
 
 var get = function(p, c) {
@@ -178,7 +181,11 @@ var ConsoleViewModel = function() {
     
     this.stack = ko.computed(function(){
         return (self.debug() && self.debug().ctx.userData ? 
-            self.debug().ctx.userData.metadata.stack :
+            ko.utils.arrayMap(self.debug().ctx.userData.metadata.stack, function(x) {
+                return {
+                    'name': (x.func ? self.debug().run(object.get(x.func, 'name'), function(x){ return x.value; }) : '')
+                };
+            }) :
             [])
     });
 };
