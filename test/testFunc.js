@@ -317,6 +317,27 @@ function($,
                     .test($.Expression($.Add(a, $.String('x'))))
                         .type('string');
             }],
+            
+            ["Exception in function restores old env",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [b],
+                            $.Block(
+                                $.If($.Gt(b, $.Number(10)),
+                                    $.Throw($.Mul(b, $.Number(10)))),
+                                $.Return(
+                                    $.Call(a, [$.Add(b, $.Number(1))])))),
+                        $.Try(
+                            $.Block(
+                                $.Call(a, [$.Number(0)])),
+                            $.Catch(c,
+                                $.Block())),
+                        $.Expression(b)))
+                        
+                    .isError();
+            }],
+            
             /* This test takes to long to be regularly included
             ["Max Stack",
             function(){
