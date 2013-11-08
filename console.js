@@ -42,7 +42,11 @@ var printBindings = function(d, record) {
         record = obj.properties;
     }
     return Object.keys(record).reduce(function(p, c) {
-        p.push({'name': c, 'value': record[c] });
+        p.push({
+        'name': c,
+        'value': d.getValue(record[c].value,
+                function(x, ctx) { return x; },
+                function(x, ctx) { return x; })});
         return p;
     }, []);
 };
