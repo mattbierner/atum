@@ -223,6 +223,68 @@ function($,
                      .test($.Expression($.Member(a, b)))
                          .type('undefined', undefined);
             }],
+            ["Delete non configurable property in non strict",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Var(
+                            $.Declarator(a,
+                                $.Call(create, [
+                                    $.Null(),
+                                    $.Object({
+                                        'kind': 'init',
+                                        'key': $.String('x'),
+                                        'value': $.Object({
+                                            'kind': 'init',
+                                            'key': $.String('value'),
+                                            'value': $.Number(3)
+                                        }, {
+                                            'kind': 'init',
+                                            'key': $.String('configurable'),
+                                            'value': $.Boolean(false)
+                                        })
+                                    })]))),
+                        $.Expression(
+                            $.Delete(
+                                $.Member(a, $.Id('x'))))))
+                      
+                      .testResult()
+                          .type('boolean', false)
+                          
+                      .test($.Expression($.Member(a, $.Id('x'))))
+                         .type('number', 3);
+            }],
+            ["Delete non configurable property in strict",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.String('use strict')),
+                        $.Var(
+                            $.Declarator(a,
+                                $.Call(create, [
+                                    $.Null(),
+                                    $.Object({
+                                        'kind': 'init',
+                                        'key': $.String('x'),
+                                        'value': $.Object({
+                                            'kind': 'init',
+                                            'key': $.String('value'),
+                                            'value': $.Number(3)
+                                        }, {
+                                            'kind': 'init',
+                                            'key': $.String('configurable'),
+                                            'value': $.Boolean(false)
+                                        })
+                                    })]))),
+                        $.Expression(
+                            $.Delete(
+                                $.Member(a, $.Id('x'))))))
+                                
+                      .isError()
+                      
+                      .test($.Expression($.Member(a, $.Id('x'))))
+                         .type('number', 3);
+            }],
             
             ["Access member on literal",
             function(){
