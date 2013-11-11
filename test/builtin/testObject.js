@@ -14,9 +14,9 @@ function($,
         prototype = $.Id('prototype'),
         defineProperty = $.Member(Object, $.Id('defineProperty')),
         hasOwnProperty = $.Id('hasOwnProperty'),
+        getOwnPropertyDescriptor = $.Member(Object, $.Id('getOwnPropertyDescriptor')),
         length = $.Id('length');
         keys = $.Member(Object, $.Id('keys'));
-
 
     return {
         'module': "Builtin Object",
@@ -268,6 +268,109 @@ function($,
                         
                     .test($.Expression($.Call($.Member(b, hasOwnProperty), [$.String('z')])))
                         .type('boolean', true);
+            }],
+            
+        // Object.getOwnPropertyDescriptor
+            ["Object.getOwnPropertyDescriptor undefined property",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression(
+                            $.Call(getOwnPropertyDescriptor, [
+                                $.Object(),
+                                $.String('b')]))))
+                        
+                    .testResult()
+                        .type('undefined', undefined);
+            }],
+            ["Object.getOwnPropertyDescriptor simple property",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a, 
+                            $.Call(getOwnPropertyDescriptor, [
+                                $.Object({
+                                    'kind': 'init',
+                                    'key': $.String('b'),
+                                    'value': $.Number(3)
+                                }),
+                                $.String('b')])))))
+                        
+                    .test($.Expression($.Member(a, $.Id('value'))))
+                        .type('number', 3)
+                    
+                    .test($.Expression($.Member(a, $.Id('enumerable'))))
+                        .type('boolean', true)
+                    
+                    .test($.Expression($.Member(a, $.Id('writable'))))
+                        .type('boolean', true)
+                        
+                    .test($.Expression($.Member(a, $.Id('configurable'))))
+                        .type('boolean', true)
+                    
+                    .test($.Expression($.Member(a, $.Id('get'))))
+                        .type('undefined', undefined)
+                        
+                    .test($.Expression($.Member(a, $.Id('set'))))
+                        .type('undefined', undefined)
+            }],
+            ["Object.getOwnPropertyDescriptor getter property",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a, 
+                            $.Call(getOwnPropertyDescriptor, [
+                                $.Object({
+                                    'kind': 'get',
+                                    'key': $.String('b'),
+                                    'value': $.FunctionExpression(null, [], $.Block())
+                                }),
+                                $.String('b')])))))
+                        
+                    .test($.Expression($.Member(a, $.Id('value'))))
+                        .type('undefined', undefined)
+                    
+                    .test($.Expression($.Member(a, $.Id('enumerable'))))
+                        .type('boolean', true)
+                    
+                    .test($.Expression($.Member(a, $.Id('writable'))))
+                        .type('undefined', undefined)
+                        
+                    .test($.Expression($.Member(a, $.Id('configurable'))))
+                        .type('boolean', true)
+                    
+                    .test($.Expression($.Typeof($.Member(a, $.Id('get')))))
+                        .type('string', 'function')
+                        
+                    .test($.Expression($.Member(a, $.Id('set'))))
+                        .type('undefined', undefined)
+            }],
+            ["Object.getOwnPropertyDescriptor builtin Object",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.Expression($.Assign(a, 
+                            $.Call(getOwnPropertyDescriptor, [
+                                $.Id('Array'),
+                                $.String('isArray')])))))
+                        
+                    .test($.Expression($.Typeof($.Member(a, $.Id('value')))))
+                        .type('string', 'function')
+                    
+                    .test($.Expression($.Member(a, $.Id('enumerable'))))
+                        .type('boolean', false)
+                    
+                    .test($.Expression($.Member(a, $.Id('writable'))))
+                        .type('boolean', true)
+                        
+                    .test($.Expression($.Member(a, $.Id('configurable'))))
+                        .type('boolean', true)
+                    
+                    .test($.Expression($.Member(a, $.Id('get'))))
+                        .type('undefined', undefined)
+                        
+                    .test($.Expression($.Member(a, $.Id('set'))))
+                        .type('undefined', undefined)
             }],
         ]
     };
