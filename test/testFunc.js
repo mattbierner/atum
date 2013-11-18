@@ -148,7 +148,18 @@ function($,
                     .test($.Expression($.Call($.Call(a, []), [])))
                         .type('number', 1);
             }],
-            
+            ["Declaration Aliases Arugment",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [b],
+                            $.Block(
+                                $.Var(
+                                    $.Declarator(b)),
+                                $.Return(b)))))
+                    .test($.Expression($.Call(a, [$.Number(10)])))
+                        .type('number', 10);
+            }],
             ["External Assignment Check",
             function(){
                 // Checks that variable assignment for external scope modifies
