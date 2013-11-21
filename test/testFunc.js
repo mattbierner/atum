@@ -341,7 +341,7 @@ function($,
                                     $.Call(a, [$.Add(b, $.Number(1))])))),
                         $.Try(
                             $.Block(
-                                $.Call(a, [$.Number(0)])),
+                                $.Expression($.Call(a, [$.Number(0)]))),
                             $.Catch(c,
                                 $.Block())),
                         $.Expression(b)))
