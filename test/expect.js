@@ -48,7 +48,7 @@ var Result = function(isError, value, ctx) {
 };
 
 Result.prototype.run = function(node) {
-    return interpret.complete(
+    return interpret.exec(
         semantics.mapSemantics(node),
         this.ctx,
         function(x, ctx){ return new Result(false, x, ctx); },
@@ -78,7 +78,7 @@ Result.prototype.isError = function() {
     return this;
 };
 
-var globalCtx = interpret.complete(
+var globalCtx = interpret.exec(
     compute.sequence(
         global.initialize(),
         global_ops.enterGlobal(),
@@ -88,7 +88,7 @@ var globalCtx = interpret.complete(
     function(x) { return x; });
 
 var run = function(root) {
-    return interpret.complete(
+    return interpret.exec(
         semantics.programBody(semantics.sourceElements(root.body)),
         globalCtx,
         function(x, ctx){ return new Result(false, x, ctx); },
