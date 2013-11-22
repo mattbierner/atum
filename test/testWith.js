@@ -15,11 +15,8 @@ function($,
                 expect.run(
                     $.Program(
                         $.Expression($.Assign(a, 
-                            $.Object({
-                                 'kind': 'init',
-                                 'key': $.String('b'),
-                                 'value': $.Number(1)
-                             }))),
+                            $.Object(
+                                $.ObjectValue($.String('b'), $.Number(1))))),
                          $.With(a, $.Block(
                              $.Expression(b)))))
                      
@@ -42,11 +39,8 @@ function($,
                 expect.run(
                     $.Program(
                         $.Expression($.Assign(a, 
-                            $.Object({
-                                 'kind': 'init',
-                                 'key': $.String('b'),
-                                 'value': $.Number(1)
-                             }))),
+                            $.Object(
+                                $.ObjectValue($.String('b'), $.Number(1))))),
                          $.With(a, $.Block(
                              $.Expression($.Delete(b))))))
                      

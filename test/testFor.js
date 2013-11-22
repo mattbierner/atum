@@ -132,7 +132,7 @@ function($,
                             $.If($.Gt(a, $.Number(5)),
                                 $.Block(
                                     $.Break(),
-                                    $.Assign(a, $.Number(100))),
+                                    $.Expression($.Assign(a, $.Number(100)))),
                                 $.Expression($.PreIncrement(b))))))
                     
                     .test($.Expression(b))

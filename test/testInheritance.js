@@ -46,7 +46,7 @@ function($,
                         $.FunctionDeclaration(a, [],
                             $.Block(
                                $.Expression($.Assign($.Member($.This(), x), $.Number(10))),
-                               $.Return($.Object({'key': $.String('z'), 'kind': 'init', 'value': $.Number(20)}))))))
+                               $.Return($.Object($.ObjectValue($.String('z'), $.Number(20))))))))
                                
                     .test($.Expression($.Member($.New(a, []), $.Id('z'))))
                         .type('number', 20);

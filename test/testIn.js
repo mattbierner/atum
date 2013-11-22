@@ -17,11 +17,8 @@ function($,
                 expect.run(
                     $.Program(
                         $.Expression(
-                            $.Assign(a, $.Object({
-                                 'kind': 'init',
-                                 'key': $.String('b'),
-                                 'value': $.Number(1)
-                             })))))
+                            $.Assign(a, $.Object(
+                                $.ObjectValue($.String('b'), $.Number(1)))))))
                  
                  .test($.Expression($.In($.String('b'), a)))
                      .type('boolean', true)
@@ -66,15 +63,10 @@ function($,
                             $.Assign(a, $.Call(defineProperty, [
                                 $.Object(),
                                 $.String('b'),
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('value'),
-                                    'value': $.Number(10)
-                                }, {
-                                    'kind': 'init',
-                                    'key': $.String('enumerable'),
-                                    'value': $.Boolean(false)
-                                })])))))
+                                $.Object(
+                                    $.ObjectValue($.String('value'), $.Number(10)),
+                                     $.ObjectValue($.String('enumerable'), $.Number(false)))]
+                            )))))
                  
                  .test($.Expression($.In($.String('b'), a)))
                      .type('boolean', true);

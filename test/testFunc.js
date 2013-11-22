@@ -206,11 +206,8 @@ function($,
                             $.Block(
                                $.Expression($.Assign($.Member(b, c), $.Number(10))),
                                $.Expression($.Assign(b, $.Number(1))))),
-                        $.Expression($.Assign(b, $.Object({
-                             'kind': 'init',
-                             'key': $.String('c'),
-                             'value': $.Number(1)
-                         }))),
+                        $.Expression($.Assign(b, $.Object(
+                            $.ObjectValue($.String('c'), $.Number(1))))),
                          $.Expression($.Call(a, [b]))))
                          
                     .test($.Expression($.Member(b, c)))

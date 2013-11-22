@@ -117,11 +117,9 @@ function($,
                             $.Assign(b,
                                 $.Call(
                                     $.Member(a, bind),
-                                    [$.Object({
-                                        'kind': 'init',
-                                        'key': $.String('c'),
-                                        'value': $.Number(4)
-                                    })])))))
+                                    [$.Object(
+                                        $.ObjectValue($.String('c'),$.Number(4))
+                                    )])))))
                 
                 .test(
                     $.Expression(
@@ -177,11 +175,9 @@ function($,
                             $.Assign(b,
                                 $.Call(
                                     $.Member(a, bind),
-                                    [$.Object({
-                                        'kind': 'init',
-                                        'key': $.String('x'),
-                                        'value': $.Number(2)
-                                    }), $.Number(6)]))),
+                                    [$.Object(
+                                        $.ObjectValue($.String('x'), $.Number(2))),
+                                        $.Number(6)]))),
                         $.Expression(
                             $.Assign(c,
                                 $.Call(

@@ -191,7 +191,11 @@ function($,
             function(){
                 compareValues([
                   [$.Object(), $.Object(), false],
-                  [$.Object({'key': 'x', 'value': $.Number(4), 'kind': 'init'}), $.Object({'key': 'x', 'value': $.Number(4), 'kind': 'init'}), false],]);
+                  [$.Object(
+                      $.ObjectValue($.String('x'), $.Number(4))),
+                  $.Object(
+                      $.ObjectValue($.String('x'), $.Number(4))),
+                  false],]);
                 
                 expect.run(
                     $.Program(

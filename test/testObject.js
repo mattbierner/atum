@@ -17,11 +17,8 @@ function($,
                 expect.run(
                     $.Program(
                         $.Expression($.Assign(a, 
-                            $.Object({
-                                 'kind': 'init',
-                                 'key': $.String('ab'),
-                                 'value': $.Number(1)
-                             })))))
+                            $.Object(
+                                $.ObjectValue($.String('ab'), $.Number(1)))))))
                              
                     .test($.Expression($.Member(a, $.Id('ab'))))
                         .type('number', 1)
@@ -45,15 +42,9 @@ function($,
                     $.Program(
                         $.Var(
                             $.Declarator(a,
-                                $.Object({
-                                     'kind': 'init',
-                                     'key': $.String('b'),
-                                     'value': $.Number(1)
-                                 }, {
-                                     'kind': 'init',
-                                     'key': $.String('c'),
-                                     'value': $.Number(2)
-                                 })))))
+                                $.Object(
+                                     $.ObjectValue($.String('b'), $.Number(1)),
+                                         $.ObjectValue($.String('c'), $.Number(2)))))))
                      
                     .test($.Expression(
                         $.Add(
@@ -67,15 +58,9 @@ function($,
                     $.Program(
                         $.Var(
                             $.Declarator(a,
-                                $.Object({
-                                     'kind': 'init',
-                                     'key': $.String('b'),
-                                     'value': $.Number(1)
-                                 }, {
-                                     'kind': 'init',
-                                     'key': $.String('b'),
-                                     'value': $.Number(2)
-                                 })))))
+                                $.Object(
+                                     $.ObjectValue($.String('b'), $.Number(1)),
+                                     $.ObjectValue($.String('b'), $.Number(2)))))))
                                  
                     .test($.Expression($.Member(a, b)))
                         .type('number', 2);
@@ -86,13 +71,11 @@ function($,
                     $.Program(
                         $.Var(
                             $.Declarator(a,
-                                $.Object({
-                                     'kind': 'get',
-                                     'key': $.String('b'),
-                                     'value': $.FunctionExpression(null, [],
-                                         $.Block(
-                                            $.Return($.Number(1))))
-                                 })))))
+                                $.Object(
+                                    $.ObjectGetter($.String('b'),
+                                        $.FunctionExpression(null, [],
+                                            $.Block(
+                                                $.Return($.Number(1))))))))))
                     
                      .test($.Expression($.Member(a, b)))
                          .type('number', 1);
@@ -103,19 +86,14 @@ function($,
                     $.Program(
                         $.Var(
                             $.Declarator(a,
-                                $.Object({
-                                     'kind': 'init',
-                                     'key': $.String('c'),
-                                     'value': $.Number(1)
-                                 }, {
-                                     'kind': 'get',
-                                     'key': $.String('b'),
-                                     'value': $.FunctionExpression(null, [],
-                                         $.Block(
-                                            $.Return(
-                                                $.Member($.This(), c))))
-                                 })))))
-                                 
+                                $.Object(
+                                     $.ObjectValue($.String('c'), $.Number(1)),
+                                     $.ObjectGetter($.String('b'),
+                                         $.FunctionExpression(null, [],
+                                             $.Block(
+                                                $.Return(
+                                                    $.Member($.This(), c))))))))))
+                                                    
                     .test($.Expression($.Member(a, b)))
                         .type('number', 1);
             }],
@@ -125,18 +103,13 @@ function($,
                     $.Program(
                         $.Var(
                             $.Declarator(a,
-                                $.Object({
-                                     'kind': 'init',
-                                     'key': $.String('c'),
-                                     'value': $.Number(1)
-                                 }, {
-                                     'kind': 'get',
-                                     'key': $.String('b'),
-                                     'value': $.FunctionExpression(null, [],
-                                         $.Block(
-                                            $.Return(
-                                                $.Member($.This(), c))))
-                                 }))),
+                                $.Object(
+                                    $.ObjectValue($.String('c'), $.Number(1)),
+                                    $.ObjectGetter($.String('b'),
+                                         $.FunctionExpression(null, [],
+                                             $.Block(
+                                                $.Return(
+                                                    $.Member($.This(), c)))))))),
                          $.Expression(
                              $.Assign(
                                  $.Member(a, b),
@@ -152,12 +125,9 @@ function($,
                     $.Program(
                         $.Var(
                             $.Declarator(a,
-                                $.Object({
-                                     'kind': 'init',
-                                     'key': $.String('c'),
-                                     'value': $.Number(1)
-                                 })),
-                                 $.Declarator(b, a)),
+                                $.Object(
+                                    $.ObjectValue($.String('c'), $.Number(1)))),
+                                $.Declarator(b, a)),
                          $.Expression(
                              $.Assign(
                                  $.Member(a, c),
@@ -171,14 +141,12 @@ function($,
             function(){
                 expect.run(
                     $.Program(
-                        $.Expression($.Assign(a, $.Object({
-                            'kind': 'set',
-                            'key': $.String('b'),
-                            'value': $.FunctionExpression(null, [c],
-                                 $.Block(
-                                    $.Expression($.Assign($.Member($.This(), d), $.Number(23))),
-                                    $.Return($.Number(13))))
-                        })))))
+                        $.Expression($.Assign(a, $.Object(
+                            $.ObjectSetter($.String('b'),
+                                $.FunctionExpression(null, [c],
+                                     $.Block(
+                                        $.Expression($.Assign($.Member($.This(), d), $.Number(23))),
+                                        $.Return($.Number(13))))))))))
 
                     .test($.Expression(
                         $.Add(
@@ -193,11 +161,8 @@ function($,
                     $.Program(
                         $.Var(
                             $.Declarator(a,
-                                $.Object({
-                                     'kind': 'init',
-                                     'key': $.String('b'),
-                                     'value': $.Number(1)
-                                 }))),
+                                $.Object(
+                                    $.ObjectValue($.String('b'), $.Number(1))))),
                          $.Expression(
                              $.Delete($.Member(a, b)))))
                      
@@ -231,19 +196,11 @@ function($,
                             $.Declarator(a,
                                 $.Call(create, [
                                     $.Null(),
-                                    $.Object({
-                                        'kind': 'init',
-                                        'key': $.String('x'),
-                                        'value': $.Object({
-                                            'kind': 'init',
-                                            'key': $.String('value'),
-                                            'value': $.Number(3)
-                                        }, {
-                                            'kind': 'init',
-                                            'key': $.String('configurable'),
-                                            'value': $.Boolean(false)
-                                        })
-                                    })]))),
+                                    $.Object(
+                                        $.ObjectValue($.String('x'), $.Object(
+                                            $.ObjectValue($.String('value'), $.Number(3)),
+                                            $.ObjectValue($.String('configurable'), $.Boolean(false)))))
+                                        ]))),
                         $.Expression(
                             $.Delete(
                                 $.Member(a, $.Id('x'))))))
@@ -263,19 +220,11 @@ function($,
                             $.Declarator(a,
                                 $.Call(create, [
                                     $.Null(),
-                                    $.Object({
-                                        'kind': 'init',
-                                        'key': $.String('x'),
-                                        'value': $.Object({
-                                            'kind': 'init',
-                                            'key': $.String('value'),
-                                            'value': $.Number(3)
-                                        }, {
-                                            'kind': 'init',
-                                            'key': $.String('configurable'),
-                                            'value': $.Boolean(false)
-                                        })
-                                    })]))),
+                                    $.Object(
+                                        $.ObjectValue($.String('x'), $.Object(
+                                            $.ObjectValue($.String('value'), $.Number(3)),
+                                            $.ObjectValue($.String('configurable'),$.Boolean(false)))))
+                                        ]))),
                         $.Expression(
                             $.Delete(
                                 $.Member(a, $.Id('x'))))))
@@ -310,19 +259,11 @@ function($,
                             $.Declarator(a,
                                 $.Call(create, [
                                     $.Null(),
-                                    $.Object({
-                                        'kind': 'init',
-                                        'key': $.String('x'),
-                                        'value': $.Object({
-                                            'kind': 'init',
-                                            'key': $.String('value'),
-                                            'value': $.Number(3)
-                                        }, {
-                                            'kind': 'init',
-                                            'key': $.String('writable'),
-                                            'value': $.Boolean(false)
-                                        })
-                                    })]))),
+                                    $.Object(
+                                        $.ObjectValue($.String('x'), $.Object(
+                                            $.ObjectValue($.String('value'), $.Number(3)),
+                                            $.ObjectValue($.String('writable'), $.Boolean(false)))))
+                                        ]))),
                         $.Expression(
                             $.Assign(
                                 $.Member(a, $.Id('x')),
@@ -343,19 +284,11 @@ function($,
                             $.Declarator(a,
                                 $.Call(create, [
                                     $.Null(),
-                                    $.Object({
-                                        'kind': 'init',
-                                        'key': $.String('x'),
-                                        'value': $.Object({
-                                            'kind': 'init',
-                                            'key': $.String('value'),
-                                            'value': $.Number(3)
-                                        }, {
-                                            'kind': 'init',
-                                            'key': $.String('writable'),
-                                            'value': $.Boolean(false)
-                                        })
-                                    })]))),
+                                    $.Object(
+                                        $.ObjectValue($.String('x'), $.Object(
+                                            $.ObjectValue($.String('value'), $.Number(3)),
+                                            $.ObjectValue($.String('writable'), $.Boolean(false)))))
+                                        ]))),
                         $.Expression(
                             $.Assign(
                                 $.Member(a, $.Id('x')),

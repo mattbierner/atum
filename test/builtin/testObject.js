@@ -30,11 +30,9 @@ function($,
                             $.Call(defineProperty, [
                                 $.Object(),
                                 $.String('b'),
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('value'),
-                                    'value': $.Number(1)
-                                })])))))
+                                $.Object(
+                                    $.ObjectValue($.String('value'), $.Number(1))
+                                )])))))
                     
                     .test($.Expression($.Member(a, b)))
                         .type('number', 1)
@@ -50,15 +48,10 @@ function($,
                             $.Call(defineProperty, [
                                 $.Object(),
                                 $.String('b'),
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('value'),
-                                    'value': $.Number(1)
-                                }, {
-                                    'kind': 'init',
-                                    'key': $.String('enumerable'),
-                                    'value': $.Boolean(true)
-                                })])))))
+                                $.Object(
+                                    $.ObjectValue($.String('value'), $.Number(1)),
+                                    $.ObjectValue($.String('enumerable'), $.Boolean(true))
+                                )])))))
                     
                     .test($.Expression($.Member(a, b)))
                         .type('number', 1)
@@ -75,17 +68,15 @@ function($,
                     $.Program(
                         $.Expression($.Assign(a,
                             $.Call(defineProperty, [
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('c'),
-                                    'value': $.Number(432)
-                                }),
+                                $.Object(
+                                    $.ObjectValue($.String('c'), $.Number(432))),
                                 $.String('b'),
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('get'),
-                                    'value': $.FunctionExpression(null, [], $.Block($.Return($.Member($.This(), c))))
-                                })])))))
+                                $.Object(
+                                    $.ObjectValue($.String('get'),
+                                        $.FunctionExpression(null, [],
+                                            $.Block(
+                                                $.Return($.Member($.This(), c))))))
+                                ])))))
                     
                     .test($.Expression($.Member(a, b)))
                         .type('number', 432)
@@ -102,20 +93,15 @@ function($,
                     $.Program(
                         $.Expression($.Assign(a,
                             $.Call(defineProperty, [
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('c'),
-                                    'value': $.Number(5)
-                                }),
+                                $.Object(
+                                    $.ObjectValue($.String('c'), $.Number(5))),
                                 $.String('b'),
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('set'),
-                                    'value': $.FunctionExpression(null, [b],
+                                $.Object(
+                                    $.ObjectValue($.String('set'), $.FunctionExpression(null, [b],
                                         $.Block(
                                             $.Expression($.AddAssign($.Member($.This(), c), b)),
-                                            $.Return(b)))
-                                })])))))
+                                            $.Return(b)))))
+                                        ])))))
                     
                     .test($.Expression($.Member(a, b)))
                         .type('undefined')
@@ -141,15 +127,10 @@ function($,
                         $.Expression($.Assign(a,
                             $.Call(create, [
                                 $.Object(),
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('b'),
-                                    'value': $.Object({
-                                        'kind': 'init',
-                                        'key': $.String('value'),
-                                        'value': $.Number(1)
-                                    })
-                                })])))))
+                                $.Object(
+                                    $.ObjectValue($.String('b'), $.Object(
+                                        $.ObjectValue($.String('value'), $.Number(1)))))
+                                    ])))))
                     
                     .test($.Expression($.Member(a, b)))
                         .type('number', 1);
@@ -160,25 +141,13 @@ function($,
                     $.Program(
                         $.Expression($.Assign(a,
                             $.Call(create, [
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('b'),
-                                    'value': $.Number(1)
-                                },
-                                {
-                                    'kind': 'init',
-                                    'key': $.String('c'),
-                                    'value': $.Number(5)
-                                }),
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('b'),
-                                    'value':$.Object({
-                                        'kind': 'init',
-                                        'key': $.String('value'),
-                                        'value': $.Number(3)
-                                    })
-                                })])))))
+                                $.Object(
+                                     $.ObjectValue($.String('b'), $.Number(1)),
+                                     $.ObjectValue($.String('c'), $.Number(5))),
+                                $.Object(
+                                     $.ObjectValue($.String('b'), $.Object(
+                                          $.ObjectValue($.String('value'), $.Number(3)))))
+                                  ])))))
                     
                     .test($.Expression($.Member(a, b)))
                         .type('number', 3)
@@ -193,15 +162,10 @@ function($,
                         $.Expression($.Assign(a,
                             $.Call(create, [
                                 $.Null(),
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('b'),
-                                    'value': $.Object({
-                                        'kind': 'init',
-                                        'key': $.String('value'),
-                                        'value': $.Number(1)
-                                    })
-                                })])))))
+                                $.Object(
+                                    $.ObjectValue($.String('b'), $.Object(
+                                        $.ObjectValue($.String('value'), $.Number(1)))))
+                                ])))))
                     
                     .test($.Expression($.Member(a, b)))
                         .type('number', 1)
@@ -215,11 +179,8 @@ function($,
                 expect.run(
                     $.Program(
                         $.Expression($.Assign(a,
-                            $.Object({
-                                'kind': 'init',
-                                'key': $.String('b'),
-                                'value': $.Number(1)
-                            })))))
+                            $.Object(
+                                $.ObjectValue($.String('b'), $.Number(1)))))))
                     
                     .test($.Expression($.Call($.Member(a, hasOwnProperty), [$.String('x')])))
                         .type('boolean', false)
@@ -235,15 +196,10 @@ function($,
                             $.Call(defineProperty, [
                                 $.Object(),
                                 $.String('b'),
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('value'),
-                                    'value': $.Number(1)
-                                }, {
-                                    'kind': 'init',
-                                    'key': $.String('enumerable'),
-                                    'value': $.Boolean(false)
-                                })])))))
+                                $.Object(
+                                    $.ObjectValue($.String('value'), $.Number(1)),
+                                    $.ObjectValue($.String('enumerable'), $.Boolean(false))),
+                                ])))))
                     
                     .test($.Expression($.Call($.Member(a, hasOwnProperty), [$.String('b')])))
                         .type('boolean', true);
@@ -289,11 +245,8 @@ function($,
                     $.Program(
                         $.Expression($.Assign(a, 
                             $.Call(getOwnPropertyDescriptor, [
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('b'),
-                                    'value': $.Number(3)
-                                }),
+                                $.Object(
+                                    $.ObjectValue($.String('b'), $.Number(3))),
                                 $.String('b')])))))
                         
                     .test($.Expression($.Member(a, $.Id('value'))))
@@ -320,11 +273,10 @@ function($,
                     $.Program(
                         $.Expression($.Assign(a, 
                             $.Call(getOwnPropertyDescriptor, [
-                                $.Object({
-                                    'kind': 'get',
-                                    'key': $.String('b'),
-                                    'value': $.FunctionExpression(null, [], $.Block())
-                                }),
+                                $.Object(
+                                    $.ObjectGetter(
+                                        $.String('b'),
+                                        $.FunctionExpression(null, [], $.Block()))),
                                 $.String('b')])))))
                         
                     .test($.Expression($.Member(a, $.Id('value'))))

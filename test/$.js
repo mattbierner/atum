@@ -215,6 +215,18 @@ var Object = function(/*...*/) {
     return new expression.ObjectExpression(null, arguments);
 };
 
+var ObjectValue = function(key, v) {
+    return value.ObjectValue.create(null, key, v);
+};
+
+var ObjectGetter = function(key, v) {
+    return value.ObjectGetter.create(null, key, v);
+};
+
+var ObjectSetter = function(key, v) {
+    return value.ObjectSetter.create(null, key, v);
+};
+
 var Array = function(/*...*/) {
     return new expression.ArrayExpression(null, arguments);
 };
@@ -296,6 +308,10 @@ return {
     'New': New,
     'FunctionExpression': FunctionExpression,
     'Object': Object,
+    'ObjectValue': ObjectValue,
+    'ObjectSetter': ObjectSetter,
+    'ObjectGetter': ObjectGetter,
+    
     'Array': Array
 };
 });

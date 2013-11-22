@@ -50,8 +50,8 @@ function($,
                     $.Program(
                         $.Expression($.Assign(b, $.Number(0))),
                         $.Expression($.Assign(c, $.Object(
-                                {'key':$.String('x'), 'kind': 'init', 'value': $.Number(1)},
-                                {'key':$.String('y'), 'kind': 'init', 'value': $.Number(2)}))),
+                            $.ObjectValue($.String('x'), $.Number(1)),
+                            $.ObjectValue($.String('y'), $.Number(2))))),
                         $.ForIn(a, c,
                             $.Expression($.AddAssign(b, $.ComputedMember(c, a))))))
                             
@@ -68,8 +68,8 @@ function($,
                         $.Expression($.Assign(a, $.Object())),
                         $.Expression($.Assign(b, $.Number(0))),
                         $.Expression($.Assign(c, $.Object(
-                            {'key':$.String('x'), 'kind': 'init', 'value': $.Number(1)},
-                            {'key':$.String('y'), 'kind': 'init', 'value': $.Number(2)}))),
+                            $.ObjectValue($.String('x'), $.Number(1)),
+                            $.ObjectValue($.String('y'), $.Number(2))))),
                         $.ForIn($.Member(a, $.Id('i')), c,
                             $.Expression($.AddAssign(b, $.ComputedMember(c, $.Member(a, $.Id('i'))))))))
                             
@@ -86,8 +86,8 @@ function($,
                         $.Expression($.Assign($.Id('i'), $.Number(0))),
                         $.Expression($.Assign(a, $.Object())),
                         $.Expression($.Assign(c, $.Object(
-                            {'key':$.String('x'), 'kind': 'init', 'value': $.Number(1)},
-                            {'key':$.String('y'), 'kind': 'init', 'value': $.Number(2)}))),
+                                $.ObjectValue($.String('x'), $.Number(1)),
+                                $.ObjectValue($.String('y'), $.Number(2))))),
                         $.ForIn($.ComputedMember(a, $.PostIncrement($.Id('i'))), c,
                             $.Block())))
                         
@@ -104,19 +104,13 @@ function($,
                     $.Program(
                         $.Expression($.Assign($.Id('i'), $.Number(0))),
                         $.Expression($.Assign(c, $.Object(
-                            {'key': $.String('x'), 'kind': 'init', 'value': $.Number(1)}))),
+                            $.ObjectValue($.String('x'), $.Number(1))))),
                         $.Expression($.Call(defineProperty, [
                                 c,
                                 $.String('y'),
-                                $.Object({
-                                    'kind': 'init',
-                                    'key': $.String('value'),
-                                    'value': $.Number(2)
-                                }, {
-                                    'kind': 'init',
-                                    'key': $.String('enumerable'),
-                                    'value': $.Boolean(false)
-                                })])),
+                                $.Object(
+                                    $.ObjectValue($.String('value'), $.Number(2)),
+                                    $.ObjectValue($.String('enumerable'), $.Boolean(false)))])),
                         $.ForIn(a, c,
                             $.Expression($.PostIncrement($.Id('i'))))))
                         
@@ -152,10 +146,10 @@ function($,
                     $.Program(
                         $.Expression($.Assign(b, $.Number(0))),
                         $.Expression($.Assign(c, $.Object(
-                                {'key':$.String('x'), 'kind': 'init', 'value': $.Number(1)},
-                                {'key':$.String('y'), 'kind': 'init', 'value': $.Number(2)},
-                                {'key':$.String('ya'), 'kind': 'init', 'value': $.Number(10)},
-                                {'key':$.String('z'), 'kind': 'init', 'value': $.Number(3)}))),
+                                $.ObjectValue($.String('x'), $.Number(1)),
+                                $.ObjectValue($.String('y'), $.Number(2)),
+                                $.ObjectValue($.String('ya'), $.Number(10)),
+                                $.ObjectValue($.String('z'), $.Number(3))))),
                         $.ForIn(a, c,
                             $.Block(
                                 $.If($.Equals($.ComputedMember(a, $.Number(0)), $.String('y')),
@@ -178,10 +172,10 @@ function($,
                     $.Program(
                         $.Expression($.Assign(b, $.Number(0))),
                         $.Expression($.Assign(c, $.Object(
-                                {'key':$.String('x'), 'kind': 'init', 'value': $.Number(1)},
-                                {'key':$.String('y'), 'kind': 'init', 'value': $.Number(2)},
-                                {'key':$.String('ya'), 'kind': 'init', 'value': $.Number(10)},
-                                {'key':$.String('z'), 'kind': 'init', 'value': $.Number(5)}))),
+                                $.ObjectValue($.String('x'), $.Number(1)),
+                                $.ObjectValue($.String('y'), $.Number(2)),
+                                $.ObjectValue($.String('ya'), $.Number(10)),
+                                $.ObjectValue($.String('z'), $.Number(5))))),
                         $.ForIn(a, c,
                             $.Block(
                                 $.If($.Equals(a, $.String('ya')),
