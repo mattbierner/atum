@@ -72,7 +72,7 @@ function($,
                     $.Program(
                         $.FunctionDeclaration(a, [b],
                             $.Block()),
-                        $.Call(a, [$.Number(1)]),
+                        $.Expression($.Call(a, [$.Number(1)])),
                         $.Expression(b)))
                         
                     .isError();
@@ -87,7 +87,7 @@ function($,
                             $.Assign(b, $.Number(100))),
                         $.FunctionDeclaration(a, [b],
                             $.Block(
-                              $.Return(b)))))
+                                $.Return(b)))))
                               
                     .test($.Expression($.Call(a, [$.Number(1)])))
                         .type('number', 1);

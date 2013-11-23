@@ -23,7 +23,7 @@ function($,
                     $.Program(
                         $.Switch($.Number(0),
                             $.Case($.Number(5),
-                                $.Number(100),
+                                $.Expression($.Number(100)),
                                 $.Break()))))
                             
                     .testResult()
@@ -40,10 +40,12 @@ function($,
                                 $.Expression(
                                     $.Assign(a, $.Number(0))),
                                 $.Break()),
+                                
                             $.Case($.Number(5),
                                 $.Expression(
                                     $.Assign(a, $.Number(1))),
                                 $.Break()),
+                                
                             $.Case($.Number(10),
                                 $.Expression(
                                     $.Assign(a, $.Number(2))),
