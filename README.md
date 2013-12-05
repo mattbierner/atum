@@ -25,7 +25,7 @@ A few project goals:
 
 ### Example Supported Projects
 * [Sheut][sheut] - Functional style debugging library built using Atum.
-* [Jakala][jakal] - Browser based Javascript debugging interface built on
+* [Jakal][jakal] - Browser based Javascript debugging interface built on
   Sheut and Atum.
 
 
