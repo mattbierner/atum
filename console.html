@@ -281,38 +281,11 @@
 </head>
 
 <body lang="en">
-
-    <script type="text/html" id="environments-template">
-        <li>
-            <ul class='binding-list' data-bind="foreach: bindings">
-                <li class='binding code'>
-                    <span class='binding-name' data-bind="text: name"></span>:<span class='binding-value' data-bind="text: value"></span>
-                </li>
-            </ul>
-        </li>
-    </script>
     
-    <script type="text/html" id="stack-frame-template">
-        <li class='stack-frame'>
-            <span class='stack-frame-name' data-bind="text: name"></span>
-        </li>
-    </script>
-    
-    <script type="text/html" id="object-template">
-        <div class='object-browser'>
-            <span class='object-value' data-bind="text: value"></span>
-            <ul class='object-children' data-bind="foreach: children">
-                <li>
-                    <a class='child-key' data-bind="text: key, click: $parent.getChildren"></a>
-                    <div data-bind="template: { name: 'object-template', data: value}"></div>
-                </li>
-            </ul>
-        </div>
-    </script>
-    
+        
     <script type="text/html" id="output-template">
         <li class='output-value' data-bind="css: { 'output-error': error }">
-            <div data-bind="template: { name: 'object-template', data: value }"></div>
+            <div data-bind="text: value"></div>
         </li>
     </script>
     
@@ -328,14 +301,6 @@
                 <div class='controls cf'>
                     <div class='run-buttons cf'>
                         <button id='eval-button' title='Eval'>eval</button>
-                        <button id='debug-button' title='Debug'>debug</button>
-                    </div>
-                    <div class='debug-buttons cf'>
-                        <button id='stop-button' title='stop'><span class="ui-icon ui-icon-stop"></span></button>
-                        <button id='run-button' title='run'><span class="ui-icon ui-icon-play"></span></button>
-                        <button id='step-button' title='step over'><span class="ui-icon ui-icon-arrowstop-1-e"></span></button>
-                        <button id='step-into-button' title='step into'><span class="ui-icon ui-icon-arrowstop-1-s"></span></button>
-                        <button id='step-out-button' title='step out'><span class="ui-icon ui-icon-arrowstop-1-n"></span></button>
                     </div>
                 </div>
             </div><div class='output code'>
@@ -345,25 +310,6 @@
                 </div>
             </div>
         </div>
-        
-        <div class='debug pane ui-layout-east'>
-            <div class='pane-header'>
-                <h2 class='pane-title'>State</h2>
-            </div>
-            <div>
-                <ul class='environments' data-bind="template: { name: 'environments-template', foreach: environments }"></ul>
-            </div>
-        </div>
-        
-        <div class='callstack pane ui-layout-west'>
-            <div class='pane-header'>
-                <h2 class='pane-title'>Callstack</h2>
-            </div>
-            <div>
-                <ul class='callstack' data-bind="template: { name: 'stack-frame-template', foreach: stack }"></ul>
-            </div>
-        </div>
-        
     </div>
     
     
