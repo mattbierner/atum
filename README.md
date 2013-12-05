@@ -23,6 +23,12 @@ A few project goals:
 * Support powerful debugging.
 
 
+### Example Supported Projects
+* [Sheut][sheut] - Functional style debugging library built using Atum.
+* [Jakala][jakal] - Browser based Javascript debugging interface built on
+  Sheut and Atum.
+
+
 ### Cloning
 
     git clone https://github.com/mattbierner/atum atum
@@ -125,12 +131,6 @@ More commonplace debugging tools also gain new power. Complex queries, condition
 breakpoints, event logging, and stepping are easily supported and can be
 enhanced to take advantage of Atum's unique features.
 
-A very simple debugger based on the Webkit inspector is included in Atum. This
-was designed mainly to support development. Future projects will focus on
-developing debuggers targeting Atum specifically.
-
-
-
 
 
 [amulet]: http://github.com/mattbierner/amulet
@@ -149,3 +149,6 @@ developing debuggers targeting Atum specifically.
 [qunit]: http://qunitjs.com
 
 [atumissues]: https://github.com/mattbierner/atum/issues
+
+[sheut]: https://github.com/mattbierner/sheut/
+[jakal]: https://github.com/mattbierner/jakal-console/
