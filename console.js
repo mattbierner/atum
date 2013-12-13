@@ -1,36 +1,21 @@
 /**
  */
 require(['knockout-2.2.1',
-        'parse/parse',
-        'nu/stream',
         'atum/interpret',
         'atum/compute',
         'atum/compute/context',
         'atum/builtin/impl/global',
         'atum/builtin/operations/global',
-        'atum/operations/object',
+        'atum/operations/evaluation',
         'atum/semantics/semantics',
-        'ecma/lex/lexer',
         'ecma/parse/parser'],
 function(ko,
-        parse,
-        stream,
         interpret,
         compute,
         context,
         global,
         global_operations,
-        object,
-        semantics,
-        lexer,
-        parser) {
-
-var map = Function.prototype.call.bind(Array.prototype.map);
-var reduce = Function.prototype.call.bind(Array.prototype.reduce);
-
-var get = function(p, c) {
-    return p[c];
-};
+        evaluation) {
 
 /* 
  ******************************************************************************/
@@ -47,13 +32,8 @@ var errorOut = {
 };
 
 var run = function (input, ok, err) {
-    try {
-        var ast = parser.parse(input);
-    } catch(e) {
-        return err(e, null)();
-    }
     return interpret.exec(
-        semantics.programBody(semantics.sourceElements(ast.body)),
+        evaluation.evaluateText(input),
         globalCtx,
         ok,
         err);
@@ -89,7 +69,6 @@ ConsoleViewModel.prototype.push = function(error, value) {
     });
 };
 
-
 /* 
  ******************************************************************************/
 var model = new ConsoleViewModel();
@@ -105,18 +84,14 @@ var globalCtx = interpret.exec(
     function(x) { return x });
 
 $(function(){
-    $('#container').layout();
-
-    $('button#eval-button')
-        .button()
-        .click(function(e){
-            run(doc.getValue(), out.write, errorOut.write);
-                $('.object-browser')
-                    .accordion({
-                        'collapsible': true,
-                        'animate': 100
-                    });
-        });
+    $('button#eval-button').on('click', function(e){
+        run(doc.getValue(), out.write, errorOut.write);
+            $('.object-browser')
+                .accordion({
+                    'collapsible': true,
+                    'animate': 100
+                });
+    });
 });
 
 });
