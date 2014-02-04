@@ -16,3 +16,12 @@
 [submodule "dependencies/seshat"]
 	path = dependencies/seshat
 	url = git://github.com/mattbierner/seshat.git
+[submodule "dependencies/bennu"]
+	path = dependencies/bennu
+	url = https://github.com/mattbierner/bennu.git
+[submodule "dependencies/seshet"]
+	path = dependencies/seshet
+	url = https://github.com/mattbierner/seshet.git
+[submodule "dependencies/bes"]
+	path = dependencies/bes
+	url = https://github.com/mattbierner/bes.git
