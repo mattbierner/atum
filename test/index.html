@@ -57,12 +57,10 @@
             'testWhile',
             'testWith'],
             function() {
-                console.profile();
                 Array.prototype.forEach.call(arguments, function(m) {
                     m.module && module(m.module);
                     m.tests.forEach(function(e){ test.apply(this, e); });
                 });
-                console.profileEnd();
             });
         require(['builtin/testBuiltins'], function(){})
     </script>

@@ -78,6 +78,8 @@ Result.prototype.isError = function() {
     return this;
 };
 
+//console.profile();
+
 var globalCtx = interpret.exec(
     compute.sequence(
         global.initialize(),
@@ -86,6 +88,8 @@ var globalCtx = interpret.exec(
     context.ComputeContext.empty,
     function(x) { return x; },
     function(x) { return x; });
+
+//console.profileEnd();
 
 var run = function(root) {
     return interpret.exec(
