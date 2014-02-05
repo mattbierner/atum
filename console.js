@@ -32,10 +32,18 @@ var errorOut = {
 };
 
 var run = function (input, ok, err) {
+    console.profile();
     return interpret.exec(
         evaluation.evaluateText(input),
         globalCtx,
-        ok,
+        function(x, ctx) {
+            console.profileEnd();
+            return ok(x, ctx);
+        },
+        function(x, ctx) {
+            console.profileEnd();
+            return err(x, ctx);
+        },
         err);
 };
 
@@ -52,14 +60,6 @@ var ConsoleViewModel = function() {
     var self = this;
     
     this.output = ko.observableArray();
-};
-
-ConsoleViewModel.prototype.finish = function() {
-    return this.debug(this.debug().finish());
-};
-
-ConsoleViewModel.prototype.run = function() {
-    return this.debug(this.debug().stepToDebugger());
 };
 
 ConsoleViewModel.prototype.push = function(error, value) {
@@ -86,11 +86,6 @@ var globalCtx = interpret.exec(
 $(function(){
     $('button#eval-button').on('click', function(e){
         run(doc.getValue(), out.write, errorOut.write);
-            $('.object-browser')
-                .accordion({
-                    'collapsible': true,
-                    'animate': 100
-                });
     });
 });
 
