@@ -1,5 +1,3 @@
-/**
- */
 require(['atum/interpret',
         'atum/compute',
         'atum/compute/context',
