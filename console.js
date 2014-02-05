@@ -27,7 +27,7 @@ var out = {
 
 var errorOut = {
     'write': function(x, ctx) {
-        $('#output-console').append("<li class='output-value' class='output-error'>" +
+        $('#output-console').append("<li class='output-value output-error'>" +
             x +
         "</li>");
     }
