@@ -1,7 +1,6 @@
 /**
  */
-require(['knockout-2.2.1',
-        'atum/interpret',
+require(['atum/interpret',
         'atum/compute',
         'atum/compute/context',
         'atum/builtin/impl/global',
@@ -9,8 +8,7 @@ require(['knockout-2.2.1',
         'atum/operations/evaluation',
         'atum/semantics/semantics',
         'ecma/parse/parser'],
-function(ko,
-        interpret,
+function(interpret,
         compute,
         context,
         global,
@@ -21,13 +19,17 @@ function(ko,
  ******************************************************************************/
 var out = {
     'write': function(x, ctx) {
-        model.push(false, x);
+        $('#output-console').append("<li class='output-value'>" +
+            x +
+        "</li>");
     }
 };
 
 var errorOut = {
     'write': function(x, ctx) {
-        model.push(true, x);
+        $('#output-console').append("<li class='output-value' class='output-error'>" +
+            x +
+        "</li>");
     }
 };
 
@@ -54,26 +56,8 @@ var doc = CodeMirror(document.getElementById('input'), {
     'lineNumbers': true
 }).doc;
 
-/* ConsoleViewModel
- ******************************************************************************/
-var ConsoleViewModel = function() {
-    var self = this;
-    
-    this.output = ko.observableArray();
-};
-
-ConsoleViewModel.prototype.push = function(error, value) {
-    return this.output.push({
-        'error': error,
-        'value': value 
-    });
-};
-
 /* 
  ******************************************************************************/
-var model = new ConsoleViewModel();
-ko.applyBindings(model);
-
 var globalCtx = interpret.exec(
     compute.sequence(
         global.initialize(),

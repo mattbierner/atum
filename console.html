@@ -100,13 +100,6 @@
 </head>
 
 <body lang="en">
-    <script type="text/html" id="output-template">
-        <li class='output-value' data-bind="css: { 'output-error': error }">
-            <div data-bind="text: value"></div>
-        </li>
-    </script>
-    
-    
     <header id='page-header' class='cf'>
         <h1 id='page-title'>Atum</h1>
     </header>
@@ -120,7 +113,7 @@
                 </div>
             </div>
         </div><div class='output code'>
-            <ul id='output-console' data-bind="template: { name: 'output-template', foreach: output }"></ul>
+            <ul id='output-console'></ul>
             <div class='output-interactive cf'>
                 <div id='output-interactive-textarea'></div>
             </div>
@@ -142,8 +135,6 @@
                 'seshet': 'dependencies/seshet/dist/seshet',
                 'ecma': 'dependencies/parse-ecma/lib',
                 'ecma_ast': 'dependencies/ecma-ast/dist',
-                
-                'knockout-2.2.1': 'resources/knockout-2.2.1'
             }
         });
     </script>
@@ -152,7 +143,6 @@
     
     <script type="application/javascript" src="resources/codemirror-3.14/codemirror.js"></script>
     <script type="application/javascript" src="resources/codemirror-3.14/javascript.js"></script>
-    
     
     <script type="application/javascript" src="console.js"></script>
 </body>
