@@ -148,7 +148,7 @@ function($,
                     .test($.Expression($.Call($.Call(a, []), [])))
                         .type('number', 1);
             }],
-            ["Declaration Aliases Arugment",
+            ["Var Declaration Aliases Arugment",
             function(){
                 expect.run(
                     $.Program(
@@ -158,6 +158,19 @@ function($,
                                     $.Declarator(b)),
                                 $.Return(b)))))
                     .test($.Expression($.Call(a, [$.Number(10)])))
+                        .type('number', 10);
+            }],
+            ["FN Declaration Aliases Arugment",
+            function(){
+                expect.run(
+                    $.Program(
+                        $.FunctionDeclaration(a, [b],
+                            $.Block(
+                                $.FunctionDeclaration(b, [],
+                                    $.Block(
+                                        $.Return($.Number(10)))),
+                                $.Return(b)))))
+                    .test($.Expression($.Call($.Call(a, [$.Number(1)]), [])))
                         .type('number', 10);
             }],
             ["External Assignment Check",
