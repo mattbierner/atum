@@ -201,7 +201,6 @@ function($,
             }],
             ["var using reserved strict word",
             function(){
-                debugger;
                 expect.run(
                     $.Program(
                         $.Expression($.String('use strict')),
