@@ -12,7 +12,7 @@ function($,
         call = $.Id('call'),
         apply = $.Id('apply'),
         prototype = $.Id('prototype'),
-        toString = $.Id('toString')
+        toString = $.Id('toString'),
         Object_prototype_toString = $.Member($.Member(Object, prototype), toString);
     
     var Function = $.Id('Function');

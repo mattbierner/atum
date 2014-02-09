@@ -15,7 +15,7 @@ function($,
         defineProperty = $.Member(Object, $.Id('defineProperty')),
         hasOwnProperty = $.Id('hasOwnProperty'),
         getOwnPropertyDescriptor = $.Member(Object, $.Id('getOwnPropertyDescriptor')),
-        length = $.Id('length');
+        length = $.Id('length'),
         keys = $.Member(Object, $.Id('keys'));
 
     return {
