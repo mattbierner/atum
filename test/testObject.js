@@ -61,9 +61,7 @@ function($,
                                 $.Object(
                                      $.ObjectValue($.String('b'), $.Number(1)),
                                      $.ObjectValue($.String('b'), $.Number(2)))))))
-                                 
-                    .test($.Expression($.Member(a, b)))
-                        .type('number', 2);
+                     .isError();
             }],
             ["Getter Property Member Object Expression",
             function(){
