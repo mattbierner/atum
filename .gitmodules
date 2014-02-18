@@ -25,3 +25,6 @@
 [submodule "dependencies/bes"]
 	path = dependencies/bes
 	url = https://github.com/mattbierner/bes.git
+[submodule "dependencies/hashtrie"]
+	path = dependencies/hashtrie
+	url = https://github.com/mattbierner/hashtrie.git
