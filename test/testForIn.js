@@ -178,18 +178,16 @@ function($,
                                 $.ObjectValue($.String('z'), $.Number(5))))),
                         $.ForIn(a, c,
                             $.Block(
-                                $.If($.Equals(a, $.String('ya')),
+                                $.If($.Equals(b, $.Number(2)),
                                     $.Break(),
-                                    $.Expression($.AddAssign(b, $.ComputedMember(c, a))))))))
+                                    $.Expression($.AddAssign(b, $.Number(1))))))))
                             
                     .testResult()
-                        .type('number', '3')
+                        .type('number', 2)
                         
-                    .test($.Expression(a))
-                        .type('string', 'ya')
                         
                     .test($.Expression(b))
-                        .type('number', '3')
+                        .type('number', 2)
             }],
         ]
     };
