@@ -135,12 +135,13 @@ enhanced to take advantage of Atum's unique features.
 
 [amulet]: http://github.com/mattbierner/amulet
 [ecmaast]: http://github.com/mattbierner/ecma-ast
-[parse]: http://github.com/mattbierner/parse.js
+[parsejs]: http://github.com/mattbierner/parse.js
 [seshat]: http://github.com/mattbierner/seshat
 [parseecma]: http://github.com/mattbierner/parse-ecma
 [nu]: http://github.com/mattbierner/nu
 
 [requirejs]: http://requirejs.org
+[requirejstext]: https://github.com/requirejs/text
 [jquery]: http://jquery.com
 [jqueryui]: http://jqueryui.com
 [jquerylayout]: http://archive.plugins.jquery.com/project/Layout
